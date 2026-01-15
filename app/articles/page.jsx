@@ -219,7 +219,7 @@ export default function FreeNachosArticles() {
     ? articles 
     : articles.filter(a => a.category === selectedCategory);
 
-  // Components
+// Components
   const CartoonNacho = () => (
     <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(255, 179, 71, 0.4))' }}>
       <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#FFB347" stroke="#E09A30" strokeWidth="2"/>
@@ -247,41 +247,6 @@ export default function FreeNachosArticles() {
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
       <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8"/>
     </svg>
-  );
-
-  const LoginModal = () => (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '400px', margin: '20px', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Terminal size={20} color="#FFB347" />
-            <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: 0 }}>Admin Login</h2>
-          </div>
-          <button onClick={() => setShowLogin(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
-            <X size={18} color="rgba(255,255,255,0.6)" />
-          </button>
-        </div>
-        <form onSubmit={handleLogin}>
-          {loginError && (
-            <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertTriangle size={16} color="#ef4444" />
-              <span style={{ color: '#ef4444', fontSize: '13px' }}>{loginError}</span>
-            </div>
-          )}
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
-            <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
-          </div>
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Password</label>
-            <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
-          </div>
-          <button type="submit" disabled={loginLoading} style={{ width: '100%', background: loginLoading ? 'rgba(255, 179, 71, 0.5)' : '#FFB347', border: 'none', borderRadius: '8px', padding: '14px', color: '#0a0a0a', fontSize: '14px', fontWeight: '600', cursor: loginLoading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            {loginLoading ? (<><Loader size={16} className="spin" />Signing in...</>) : (<><LogIn size={16} />Sign In</>)}
-          </button>
-        </form>
-      </div>
-    </div>
   );
 
   const DeleteConfirmModal = ({ article }) => (
@@ -457,7 +422,40 @@ export default function FreeNachosArticles() {
 
   return (
     <div style={{minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
-      {showLogin && <LoginModal />}
+      {showLogin && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '400px', margin: '20px', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Terminal size={20} color="#FFB347" />
+                <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: 0 }}>Admin Login</h2>
+              </div>
+              <button onClick={() => setShowLogin(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
+                <X size={18} color="rgba(255,255,255,0.6)" />
+              </button>
+            </div>
+            <form onSubmit={handleLogin}>
+              {loginError && (
+                <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', padding: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <AlertTriangle size={16} color="#ef4444" />
+                  <span style={{ color: '#ef4444', fontSize: '13px' }}>{loginError}</span>
+                </div>
+              )}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
+                <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
+              </div>
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Password</label>
+                <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
+              </div>
+              <button type="submit" disabled={loginLoading} style={{ width: '100%', background: loginLoading ? 'rgba(255, 179, 71, 0.5)' : '#FFB347', border: 'none', borderRadius: '8px', padding: '14px', color: '#0a0a0a', fontSize: '14px', fontWeight: '600', cursor: loginLoading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {loginLoading ? (<><Loader size={16} className="spin" />Signing in...</>) : (<><LogIn size={16} />Sign In</>)}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
       {showDeleteConfirm && <DeleteConfirmModal article={showDeleteConfirm} />}
 
       <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1}}>
@@ -555,4 +553,3 @@ export default function FreeNachosArticles() {
     </div>
   );
 }
- 
