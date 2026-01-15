@@ -190,14 +190,10 @@ export default function FreeNachosArticles() {
     }
   };
 
-// Nacho Animation
+// Nacho Animation - eyes disabled on this page
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!showLogin) setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [showLogin]);
+    // Eye tracking disabled to prevent input focus issues
+  }, []);
 
   const getEyeOffset = () => {
     if (!nachoRef.current) return { x: 0, y: 0 };
