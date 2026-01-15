@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Calculator, LineChart, Users, DollarSign, FileText } from 'lucide-react';
+import { Home, Calculator, LineChart, Users, DollarSign, FileText, Zap } from 'lucide-react';
 
 const NachosPokerNavBar = () => {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ const NachosPokerNavBar = () => {
     { href: '/winrate', label: 'Win Rate', icon: LineChart },
     { href: '/seat', label: 'Seat Selection', icon: Users },
     { href: '/profits', label: 'Profits', icon: DollarSign },
+    { href: '/bbj', label: 'BBJ', icon: Zap },
     { href: '/articles', label: 'Articles', icon: FileText },
   ];
 
