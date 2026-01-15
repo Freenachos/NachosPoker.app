@@ -1068,9 +1068,7 @@ const BBJDashboard: React.FC = () => {
   // ============================================
 
   return (
-    <>
-      <NachosPokerNavBar />
-      <div style={{minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
+    <div style={{minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
       {/* Floating Nachos Background */}
       <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1}}>
         {nachos.map(nacho => (
@@ -1246,6 +1244,8 @@ const BBJDashboard: React.FC = () => {
       `}</style>
 
       <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '20px'}}>
+        <NachosPokerNavBar />
+        
         {/* Header Banner - CTA */}
         <div 
           className="card-hover spark-border"
@@ -2430,7 +2430,6 @@ const BBJDashboard: React.FC = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 
