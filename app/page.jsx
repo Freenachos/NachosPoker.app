@@ -721,8 +721,8 @@ The 3-month program consists of:
             width: '64px',
             height: '64px',
             borderRadius: '20px',
-            background: 'rgba(156, 122, 46, 0.08)',
-            border: '1px solid rgba(156, 122, 46, 0.25)',
+            background: 'rgba(166, 137, 66, 0.08)',
+            border: '1px solid rgba(166, 137, 66, 0.25)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -730,7 +730,7 @@ The 3-month program consists of:
             pointerEvents: 'none'
           }}
         >
-          <Icon size={28} color="#9C7A2E" strokeWidth={1.5} />
+          <Icon size={28} color="#A68942" strokeWidth={1.5} />
         </div>
         
         {/* Title */}
@@ -769,7 +769,7 @@ The 3-month program consists of:
         background: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(40px)',
         WebkitBackdropFilter: 'blur(40px)',
-        border: plan.featured ? '2px solid rgba(156, 122, 46, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
+        border: plan.featured ? '2px solid rgba(166, 137, 66, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '40px',
         padding: '48px 36px',
         position: 'relative',
@@ -778,7 +778,7 @@ The 3-month program consists of:
         flexDirection: 'column',
         overflow: 'visible',
         boxShadow: plan.featured 
-          ? '0 0 60px rgba(156, 122, 46, 0.15), 0 25px 60px rgba(0, 0, 0, 0.4)' 
+          ? '0 0 60px rgba(166, 137, 66, 0.15), 0 25px 60px rgba(0, 0, 0, 0.4)' 
           : '0 10px 40px rgba(0, 0, 0, 0.3)'
       }}
     >
@@ -788,7 +788,7 @@ The 3-month program consists of:
           position: 'absolute',
           top: '-16px',
           right: '24px',
-          background: 'linear-gradient(135deg, #9C7A2E 0%, #B38F2D 100%)',
+          background: 'linear-gradient(135deg, #A68942 0%, #B38F2D 100%)',
           color: '#0A0A0A',
           fontSize: '11px',
           fontWeight: '800',
@@ -797,7 +797,7 @@ The 3-month program consists of:
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
           whiteSpace: 'nowrap',
-          boxShadow: '0 6px 20px rgba(156, 122, 46, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
+          boxShadow: '0 6px 20px rgba(166, 137, 66, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
           zIndex: 10
         }}>
           {plan.badge}
@@ -806,7 +806,7 @@ The 3-month program consists of:
       
       {/* Plan Name */}
       <div style={{
-        color: '#9C7A2E',
+        color: '#A68942',
         fontSize: '13px',
         fontWeight: '700',
         marginBottom: '20px',
@@ -851,7 +851,7 @@ The 3-month program consists of:
       }}>
         {plan.savings && (
           <span style={{
-            color: '#9C7A2E',
+            color: '#A68942',
             fontSize: '14px',
             fontWeight: '700'
           }}>
@@ -863,7 +863,7 @@ The 3-month program consists of:
       {/* Divider */}
       <div style={{
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(156, 122, 46, 0.3), transparent)',
+        background: 'linear-gradient(90deg, transparent, rgba(166, 137, 66, 0.3), transparent)',
         marginBottom: '28px'
       }} />
       
@@ -885,13 +885,13 @@ The 3-month program consists of:
               width: '22px',
               height: '22px',
               borderRadius: '50%',
-              background: 'rgba(156, 122, 46, 0.15)',
+              background: 'rgba(166, 137, 66, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0
             }}>
-              <Check size={14} color="#9C7A2E" strokeWidth={3} />
+              <Check size={14} color="#A68942" strokeWidth={3} />
             </div>
             <span style={{
               color: 'rgba(240, 240, 240, 0.8)',
@@ -921,11 +921,11 @@ The 3-month program consists of:
           textDecoration: 'none',
           cursor: 'pointer',
           transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-          background: 'linear-gradient(135deg, #9C7A2E 0%, #C9A534 100%)',
+          background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
           color: '#0A0A0A',
           border: 'none',
           marginTop: 'auto',
-          boxShadow: '0 8px 24px rgba(156, 122, 46, 0.3)'
+          boxShadow: '0 8px 24px rgba(166, 137, 66, 0.3)'
         }}
       >
         {plan.buttonText}
@@ -938,7 +938,7 @@ The 3-month program consists of:
       className={`faq-console-item ${isExpanded ? 'expanded' : ''}`}
       style={{
         background: isExpanded ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-        borderBottom: '1px solid rgba(156, 122, 46, 0.15)',
+        borderBottom: '1px solid rgba(166, 137, 66, 0.15)',
         overflow: 'hidden',
         transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
       }}
@@ -959,7 +959,7 @@ The 3-month program consists of:
       >
         {/* Question Number */}
         <span style={{
-          color: '#9C7A2E',
+          color: '#A68942',
           fontSize: '14px',
           fontWeight: '700',
           fontFamily: 'monospace',
@@ -972,7 +972,7 @@ The 3-month program consists of:
         
         {/* Question Text */}
         <span style={{
-          color: isExpanded ? '#9C7A2E' : '#F0F0F0',
+          color: isExpanded ? '#A68942' : '#F0F0F0',
           fontSize: '17px',
           fontWeight: '600',
           flex: 1,
@@ -988,8 +988,8 @@ The 3-month program consists of:
           width: '36px',
           height: '36px',
           borderRadius: '50%',
-          background: isExpanded ? 'rgba(156, 122, 46, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-          border: `1px solid ${isExpanded ? 'rgba(156, 122, 46, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+          background: isExpanded ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+          border: `1px solid ${isExpanded ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -997,7 +997,7 @@ The 3-month program consists of:
           transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
         }}>
           <span style={{
-            color: '#9C7A2E',
+            color: '#A68942',
             fontSize: '20px',
             fontWeight: '300',
             lineHeight: 1,
@@ -1059,13 +1059,16 @@ The 3-month program consists of:
             href="https://discord.com/users/420357572109926411" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="sticky-cta-btn"
+            className="sticky-cta-btn discord-btn"
           >
-            <img 
-              src="https://e7.pngegg.com/pngimages/686/413/png-clipart-discord-computer-icons-android-android-smiley-online-chat.png" 
-              alt="Discord"
-              style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-            />
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="#FFFFFF"
+            >
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
             Discord DM
           </a>
         </div>
@@ -1215,8 +1218,8 @@ The 3-month program consists of:
         }
         
         .cta-primary:hover {
-          box-shadow: 0 0 25px rgba(156, 122, 46, 0.4), 0 12px 45px rgba(156, 122, 46, 0.35);
-          background: linear-gradient(135deg, #E0BC47 0%, #9C7A2E 100%);
+          box-shadow: 0 0 25px rgba(166, 137, 66, 0.4), 0 12px 45px rgba(166, 137, 66, 0.35);
+          background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%);
         }
 
         .sticky-cta {
@@ -1224,29 +1227,40 @@ The 3-month program consists of:
           bottom: 32px;
           right: 32px;
           z-index: 1000;
-          animation: fadeInUp 0.4s ease-out 1s both;
+          animation: fadeInUp 0.4s ease-out 1s both, discordShake 0.6s ease-in-out 1.5s;
+        }
+        
+        @keyframes discordShake {
+          0%, 100% { transform: rotate(0deg); }
+          15% { transform: rotate(-8deg); }
+          30% { transform: rotate(8deg); }
+          45% { transform: rotate(-6deg); }
+          60% { transform: rotate(6deg); }
+          75% { transform: rotate(-3deg); }
+          90% { transform: rotate(3deg); }
         }
 
         .sticky-cta-btn {
-          background: linear-gradient(135deg, #9C7A2E 0%, #C9A534 100%);
-          color: #0a0a0a;
-          padding: 16px 28px;
+          background: #5865F2;
+          color: #FFFFFF;
+          padding: 14px 24px;
           border-radius: 50px;
-          font-weight: 700;
+          font-weight: 600;
           font-size: 15px;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          box-shadow: 0 8px 32px rgba(156, 122, 46, 0.5), 0 0 0 4px rgba(156, 122, 46, 0.15);
+          box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4), 0 0 0 4px rgba(88, 101, 242, 0.15);
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
         }
 
         .sticky-cta-btn:hover {
+          background: #4752C4;
           transform: scale(1.05);
-          box-shadow: 0 12px 40px rgba(156, 122, 46, 0.6), 0 0 0 6px rgba(156, 122, 46, 0.2);
+          box-shadow: 0 12px 32px rgba(88, 101, 242, 0.5), 0 0 0 6px rgba(88, 101, 242, 0.2);
         }
         
         .spark-border {
@@ -1376,7 +1390,7 @@ The 3-month program consists of:
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(90deg, transparent, #9C7A2E, transparent);
+          background: linear-gradient(90deg, transparent, #A68942, transparent);
           opacity: 0;
           transition: opacity 0.4s ease;
         }
@@ -1386,8 +1400,8 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover {
-          border-color: rgba(156, 122, 46, 0.4);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(156, 122, 46, 0.1);
+          border-color: rgba(166, 137, 66, 0.4);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.1);
           transform: translateY(-6px);
         }
 
@@ -1396,9 +1410,9 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-icon {
-          background: rgba(156, 122, 46, 0.15);
-          border-color: rgba(156, 122, 46, 0.5);
-          box-shadow: 0 0 30px rgba(156, 122, 46, 0.25);
+          background: rgba(166, 137, 66, 0.15);
+          border-color: rgba(166, 137, 66, 0.5);
+          box-shadow: 0 0 30px rgba(166, 137, 66, 0.25);
         }
 
         .benefit-card .benefit-title {
@@ -1406,7 +1420,7 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-title {
-          color: #9C7A2E;
+          color: #A68942;
         }
 
         .script-title {
@@ -2107,7 +2121,7 @@ The 3-month program consists of:
                 rel="noopener noreferrer"
                 className="btn-hover cta-primary"
                 style={{
-                  background: 'linear-gradient(135deg, #9C7A2E 0%, #C9A534 100%)',
+                  background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
                   color: '#0a0a0a',
                   padding: '20px 44px',
                   borderRadius: '14px',
@@ -2117,7 +2131,7 @@ The 3-month program consists of:
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '12px',
-                  boxShadow: '0 8px 35px rgba(156, 122, 46, 0.4)',
+                  boxShadow: '0 8px 35px rgba(166, 137, 66, 0.4)',
                   letterSpacing: '0.01em',
                   transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
@@ -2219,8 +2233,8 @@ The 3-month program consists of:
               >
                 The Coach Behind{' '}
                 <span style={{ 
-                  color: '#9C7A2E',
-                  textShadow: '0 0 50px rgba(156, 122, 46, 0.35)'
+                  color: '#A68942',
+                  textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
                 }}>$5M+ in Student Profits</span>
               </h2>
               
@@ -2232,7 +2246,7 @@ The 3-month program consists of:
                 marginBottom: '24px',
                 letterSpacing: '0.01em'
               }}>
-                My students have generated over <strong style={{ color: '#9C7A2E' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#9C7A2E' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This is not theory. It is a system that produces results.
+                My students have generated over <strong style={{ color: '#A68942' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#A68942' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This is not theory. It is a system that produces results.
               </p>
               
               {/* Paragraph 2: The Method */}
@@ -2243,7 +2257,7 @@ The 3-month program consists of:
                 marginBottom: '24px',
                 letterSpacing: '0.01em'
               }}>
-                I do not teach you to memorize solver outputs. I teach you to <strong style={{ color: '#9C7A2E' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
+                I do not teach you to memorize solver outputs. I teach you to <strong style={{ color: '#A68942' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
               </p>
               
               {/* Paragraph 3: The Journey */}
@@ -2266,7 +2280,7 @@ The 3-month program consists of:
                   className="coach-cta-btn"
                   style={{
                     background: 'transparent',
-                    color: '#9C7A2E',
+                    color: '#A68942',
                     padding: '20px 40px',
                     borderRadius: '16px',
                     fontWeight: '600',
@@ -2275,7 +2289,7 @@ The 3-month program consists of:
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '12px',
-                    border: '2px solid rgba(156, 122, 46, 0.4)',
+                    border: '2px solid rgba(166, 137, 66, 0.4)',
                     transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                     position: 'relative'
                   }}
@@ -2301,7 +2315,7 @@ The 3-month program consists of:
                 style={{
                   position: 'absolute',
                   inset: '-50px',
-                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(156, 122, 46, 0.2) 0%, rgba(156, 122, 46, 0.08) 50%, transparent 70%)',
+                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(166, 137, 66, 0.2) 0%, rgba(166, 137, 66, 0.08) 50%, transparent 70%)',
                   opacity: 0,
                   filter: 'blur(40px)',
                   transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -2337,7 +2351,7 @@ The 3-month program consists of:
                     position: 'absolute',
                     inset: 0,
                     borderRadius: '40px',
-                    boxShadow: 'inset 0 0 80px rgba(156, 122, 46, 0)',
+                    boxShadow: 'inset 0 0 80px rgba(166, 137, 66, 0)',
                     transition: 'box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
                     pointerEvents: 'none',
                     zIndex: 10
@@ -2397,7 +2411,7 @@ The 3-month program consists of:
                         backdropFilter: 'blur(12px)',
                         padding: '10px 18px',
                         borderRadius: '30px',
-                        border: '1px solid rgba(156, 122, 46, 0.4)',
+                        border: '1px solid rgba(166, 137, 66, 0.4)',
                         opacity: 0,
                         transform: 'translateY(12px) scale(0.95)',
                         transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -2407,15 +2421,15 @@ The 3-month program consists of:
                         width: '20px',
                         height: '20px',
                         borderRadius: '50%',
-                        background: 'rgba(156, 122, 46, 0.2)',
-                        border: '2px solid #9C7A2E',
+                        background: 'rgba(166, 137, 66, 0.2)',
+                        border: '2px solid #A68942',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}>
-                        <span style={{ color: '#9C7A2E', fontSize: '14px', fontWeight: '700' }}>+</span>
+                        <span style={{ color: '#A68942', fontSize: '14px', fontWeight: '700' }}>+</span>
                       </div>
-                      <span style={{ color: '#9C7A2E', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
+                      <span style={{ color: '#A68942', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
                     </div>
                   </div>
                   
@@ -2456,7 +2470,7 @@ The 3-month program consists of:
                         style={{ 
                           fontSize: '24px', 
                           fontWeight: '800', 
-                          color: '#9C7A2E',
+                          color: '#A68942',
                           marginBottom: '6px',
                           letterSpacing: '-0.02em',
                           transition: 'all 0.6s ease'
@@ -2480,7 +2494,7 @@ The 3-month program consists of:
             </div>
           </div>
 
-          {/* Coach Section Styles - Luxury Metallic #9C7A2E */}
+          {/* Coach Section Styles - Luxury Metallic #A68942 */}
           <style>{`
             /* Authority Artifact Hover States */
             .authority-artifact:hover .artifact-bloom {
@@ -2488,16 +2502,16 @@ The 3-month program consists of:
             }
             
             .authority-artifact:hover .artifact-frame {
-              border-color: rgba(156, 122, 46, 0.3) !important;
+              border-color: rgba(166, 137, 66, 0.3) !important;
               box-shadow: 
                 0 30px 100px rgba(0, 0, 0, 0.5), 
-                0 0 80px rgba(156, 122, 46, 0.15),
+                0 0 80px rgba(166, 137, 66, 0.15),
                 inset 0 1px 0 rgba(255,255,255,0.08) !important;
               transform: translateY(-4px);
             }
             
             .authority-artifact:hover .inner-luminance {
-              box-shadow: inset 0 0 80px rgba(156, 122, 46, 0.12) !important;
+              box-shadow: inset 0 0 80px rgba(166, 137, 66, 0.12) !important;
             }
             
             .authority-artifact:hover .stealth-graph {
@@ -2511,19 +2525,19 @@ The 3-month program consists of:
             }
             
             .authority-artifact:hover .stat-value {
-              text-shadow: 0 0 25px rgba(156, 122, 46, 0.5);
+              text-shadow: 0 0 25px rgba(166, 137, 66, 0.5);
             }
             
             .authority-artifact:hover .stats-bar {
-              background: rgba(156, 122, 46, 0.03);
+              background: rgba(166, 137, 66, 0.03);
             }
             
             /* CTA Button Hover - Luxury Metallic Glow */
             .coach-cta-btn:hover {
-              border-color: rgba(156, 122, 46, 0.7) !important;
-              box-shadow: 0 0 50px rgba(156, 122, 46, 0.2);
+              border-color: rgba(166, 137, 66, 0.7) !important;
+              box-shadow: 0 0 50px rgba(166, 137, 66, 0.2);
               transform: translateY(-2px);
-              background: rgba(156, 122, 46, 0.08);
+              background: rgba(166, 137, 66, 0.08);
             }
             
             /* Responsive */
@@ -2572,8 +2586,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>What You </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.3)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.3)'
               }}>Get</span>
             </h2>
             <p style={{
@@ -2622,7 +2636,7 @@ The 3-month program consists of:
                     right: '24px',
                     fontSize: '12px',
                     fontWeight: '700',
-                    color: '#9C7A2E',
+                    color: '#A68942',
                     letterSpacing: '0.1em',
                     opacity: 0.6
                   }}>
@@ -2634,15 +2648,15 @@ The 3-month program consists of:
                     width: '64px',
                     height: '64px',
                     borderRadius: '20px',
-                    background: 'rgba(156, 122, 46, 0.08)',
-                    border: '1px solid rgba(156, 122, 46, 0.25)',
+                    background: 'rgba(166, 137, 66, 0.08)',
+                    border: '1px solid rgba(166, 137, 66, 0.25)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: '28px',
                     transition: 'all 0.5s ease'
                   }} className="obsidian-icon">
-                    <Icon size={28} color="#9C7A2E" strokeWidth={1.5} />
+                    <Icon size={28} color="#A68942" strokeWidth={1.5} />
                   </div>
                   
                   {/* Title */}
@@ -2681,21 +2695,21 @@ The 3-month program consists of:
             }
             
             .obsidian-card:hover {
-              border-color: rgba(156, 122, 46, 0.4) !important;
+              border-color: rgba(166, 137, 66, 0.4) !important;
               box-shadow: 
                 0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 40px rgba(156, 122, 46, 0.1) !important;
+                0 0 40px rgba(166, 137, 66, 0.1) !important;
               transform: translateY(-6px);
             }
             
             .obsidian-card:hover .obsidian-icon {
-              background: rgba(156, 122, 46, 0.15) !important;
-              border-color: rgba(156, 122, 46, 0.5) !important;
-              box-shadow: 0 0 30px rgba(156, 122, 46, 0.25);
+              background: rgba(166, 137, 66, 0.15) !important;
+              border-color: rgba(166, 137, 66, 0.5) !important;
+              box-shadow: 0 0 30px rgba(166, 137, 66, 0.25);
             }
             
             .obsidian-card:hover .obsidian-title {
-              color: #9C7A2E !important;
+              color: #A68942 !important;
             }
             
             @media (max-width: 1024px) {
@@ -2737,8 +2751,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>What My Students </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.3)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.3)'
               }}>Say</span>
             </h2>
             <p style={{
@@ -2790,7 +2804,7 @@ The 3-month program consists of:
                 zIndex: 10
               }}
             >
-              <ChevronLeft size={24} color="#9C7A2E" />
+              <ChevronLeft size={24} color="#A68942" />
             </button>
 
             {/* Left Preview Card */}
@@ -2822,7 +2836,7 @@ The 3-month program consists of:
                 marginBottom: '16px',
                 height: '100px',
                 flexShrink: 0,
-                border: '1px solid rgba(156, 122, 46, 0.15)'
+                border: '1px solid rgba(166, 137, 66, 0.15)'
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].image || testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].imageAfter} 
@@ -2886,13 +2900,13 @@ The 3-month program consists of:
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                background: 'rgba(156, 122, 46, 0.1)',
-                border: '1px solid rgba(156, 122, 46, 0.3)',
+                background: 'rgba(166, 137, 66, 0.1)',
+                border: '1px solid rgba(166, 137, 66, 0.3)',
                 borderRadius: '20px',
                 padding: '6px 14px'
               }}>
-                <CheckCircle size={14} color="#9C7A2E" />
-                <span style={{ color: '#9C7A2E', fontSize: '11px', fontWeight: '600', letterSpacing: '0.05em' }}>
+                <CheckCircle size={14} color="#A68942" />
+                <span style={{ color: '#A68942', fontSize: '11px', fontWeight: '600', letterSpacing: '0.05em' }}>
                   VERIFIED
                 </span>
               </div>
@@ -2924,7 +2938,7 @@ The 3-month program consists of:
                   marginBottom: '28px',
                   height: '180px',
                   flexShrink: 0,
-                  border: '1px solid rgba(156, 122, 46, 0.2)',
+                  border: '1px solid rgba(166, 137, 66, 0.2)',
                   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
                   cursor: 'pointer',
                   position: 'relative',
@@ -2954,13 +2968,13 @@ The 3-month program consists of:
                     backdropFilter: 'blur(12px)',
                     padding: '8px 14px',
                     borderRadius: '20px',
-                    border: '1px solid rgba(156, 122, 46, 0.4)',
+                    border: '1px solid rgba(166, 137, 66, 0.4)',
                     opacity: 0,
                     transform: 'translateY(8px)',
                     transition: 'all 0.4s ease'
                   }}
                 >
-                  <span style={{ color: '#9C7A2E', fontSize: '11px', fontWeight: '600' }}>Click to Expand</span>
+                  <span style={{ color: '#A68942', fontSize: '11px', fontWeight: '600' }}>Click to Expand</span>
                 </div>
               </div>
 
@@ -2976,7 +2990,7 @@ The 3-month program consists of:
                   top: '-8px',
                   left: '-8px',
                   fontSize: '72px',
-                  color: 'rgba(156, 122, 46, 0.15)',
+                  color: 'rgba(166, 137, 66, 0.15)',
                   fontFamily: 'Georgia, serif',
                   lineHeight: 1,
                   pointerEvents: 'none'
@@ -3002,7 +3016,7 @@ The 3-month program consists of:
                 marginBottom: '20px'
               }}>
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={18} fill="#9C7A2E" color="#9C7A2E" />
+                  <Star key={star} size={18} fill="#A68942" color="#A68942" />
                 ))}
               </div>
 
@@ -3019,8 +3033,8 @@ The 3-month program consists of:
                   height: '52px',
                   borderRadius: '50%',
                   padding: '2px',
-                  background: 'linear-gradient(135deg, #9C7A2E 0%, rgba(156, 122, 46, 0.5) 100%)',
-                  boxShadow: '0 0 20px rgba(156, 122, 46, 0.25)'
+                  background: 'linear-gradient(135deg, #A68942 0%, rgba(166, 137, 66, 0.5) 100%)',
+                  boxShadow: '0 0 20px rgba(166, 137, 66, 0.25)'
                 }}>
                   <div style={{
                     width: '100%',
@@ -3032,7 +3046,7 @@ The 3-month program consists of:
                     justifyContent: 'center',
                     fontSize: '20px',
                     fontWeight: '700',
-                    color: '#9C7A2E'
+                    color: '#A68942'
                   }}>
                     {testimonials[currentTestimonialIndex].name.charAt(0)}
                   </div>
@@ -3088,7 +3102,7 @@ The 3-month program consists of:
                 marginBottom: '16px',
                 height: '100px',
                 flexShrink: 0,
-                border: '1px solid rgba(156, 122, 46, 0.15)'
+                border: '1px solid rgba(166, 137, 66, 0.15)'
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex + 1) % testimonials.length].image || testimonials[(currentTestimonialIndex + 1) % testimonials.length].imageAfter} 
@@ -3146,7 +3160,7 @@ The 3-month program consists of:
                 zIndex: 10
               }}
             >
-              <ChevronRight size={24} color="#9C7A2E" />
+              <ChevronRight size={24} color="#A68942" />
             </button>
           </div>
 
@@ -3169,7 +3183,7 @@ The 3-month program consists of:
                   width: idx === currentTestimonialIndex ? '32px' : '10px',
                   height: '10px',
                   borderRadius: '5px',
-                  background: idx === currentTestimonialIndex ? '#9C7A2E' : 'rgba(255, 255, 255, 0.2)',
+                  background: idx === currentTestimonialIndex ? '#A68942' : 'rgba(255, 255, 255, 0.2)',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.4s ease'
@@ -3181,28 +3195,28 @@ The 3-month program consists of:
           {/* Testimonial Section Styles */}
           <style>{`
             .testimonial-nav-btn:hover {
-              border-color: rgba(156, 122, 46, 0.5) !important;
-              background: rgba(156, 122, 46, 0.1) !important;
-              box-shadow: 0 0 30px rgba(156, 122, 46, 0.2);
+              border-color: rgba(166, 137, 66, 0.5) !important;
+              background: rgba(166, 137, 66, 0.1) !important;
+              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
               transform: translateY(-50%) scale(1.1);
             }
             
             .testimonial-preview-card:hover {
               opacity: 0.7 !important;
               transform: scale(0.95) !important;
-              border-color: rgba(156, 122, 46, 0.3) !important;
+              border-color: rgba(166, 137, 66, 0.3) !important;
             }
             
             .testimonial-main-card:hover {
-              border-color: rgba(156, 122, 46, 0.3) !important;
+              border-color: rgba(166, 137, 66, 0.3) !important;
               box-shadow: 
                 0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 50px rgba(156, 122, 46, 0.1) !important;
+                0 0 50px rgba(166, 137, 66, 0.1) !important;
             }
             
             .testimonial-graph-clickable:hover {
-              border-color: rgba(156, 122, 46, 0.5) !important;
-              box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(156, 122, 46, 0.15) !important;
+              border-color: rgba(166, 137, 66, 0.5) !important;
+              box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(166, 137, 66, 0.15) !important;
             }
             
             .testimonial-graph-clickable:hover .graph-expand-indicator {
@@ -3263,8 +3277,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>Proof in the </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.35)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
               }}>Process</span>
             </h2>
             <p style={{
@@ -3322,7 +3336,7 @@ The 3-month program consists of:
                     style={{
                       position: 'absolute',
                       inset: '-40px',
-                      background: 'radial-gradient(circle at 50% 50%, rgba(156, 122, 46, 0.3) 0%, transparent 70%)',
+                      background: 'radial-gradient(circle at 50% 50%, rgba(166, 137, 66, 0.3) 0%, transparent 70%)',
                       opacity: 0,
                       transition: 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                       filter: 'blur(40px)',
@@ -3374,7 +3388,7 @@ The 3-month program consists of:
                         borderRadius: '50%',
                         background: 'rgba(10, 10, 10, 0.7)',
                         backdropFilter: 'blur(12px)',
-                        border: '2px solid rgba(156, 122, 46, 0.5)',
+                        border: '2px solid rgba(166, 137, 66, 0.5)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -3390,12 +3404,12 @@ The 3-month program consists of:
                         fill="none"
                         style={{
                           marginLeft: '3px',
-                          filter: 'drop-shadow(0 0 15px rgba(156, 122, 46, 0.5))'
+                          filter: 'drop-shadow(0 0 15px rgba(166, 137, 66, 0.5))'
                         }}
                       >
                         <polygon 
                           points="5,3 5,21 19,12" 
-                          fill="#9C7A2E"
+                          fill="#A68942"
                         />
                       </svg>
                     </div>
@@ -3427,12 +3441,12 @@ The 3-month program consists of:
                           width: '24px',
                           height: '24px',
                           borderRadius: '50%',
-                          background: 'rgba(156, 122, 46, 0.15)',
+                          background: 'rgba(166, 137, 66, 0.15)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}>
-                          <Play size={12} color="#9C7A2E" fill="#9C7A2E" />
+                          <Play size={12} color="#A68942" fill="#A68942" />
                         </div>
                         <span style={{
                           color: 'rgba(240, 240, 240, 0.5)',
@@ -3474,7 +3488,7 @@ The 3-month program consists of:
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
-              <ChevronLeft size={24} color="#9C7A2E" />
+              <ChevronLeft size={24} color="#A68942" />
             </button>
             <button 
               className="youtube-nav-btn"
@@ -3494,7 +3508,7 @@ The 3-month program consists of:
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
-              <ChevronRight size={24} color="#9C7A2E" />
+              <ChevronRight size={24} color="#A68942" />
             </button>
           </div>
 
@@ -3506,7 +3520,7 @@ The 3-month program consists of:
               rel="noopener noreferrer"
               className="youtube-view-all"
               style={{
-                color: '#9C7A2E',
+                color: '#A68942',
                 fontSize: '14px',
                 fontWeight: '600',
                 textDecoration: 'none',
@@ -3515,8 +3529,8 @@ The 3-month program consists of:
                 gap: '10px',
                 padding: '12px 24px',
                 borderRadius: '30px',
-                border: '1px solid rgba(156, 122, 46, 0.3)',
-                background: 'rgba(156, 122, 46, 0.05)',
+                border: '1px solid rgba(166, 137, 66, 0.3)',
+                background: 'rgba(166, 137, 66, 0.05)',
                 transition: 'all 0.4s ease'
               }}
             >
@@ -3541,34 +3555,34 @@ The 3-month program consists of:
             }
             
             .stealth-video-card:hover .stealth-card-frame {
-              border-color: rgba(156, 122, 46, 0.4) !important;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(156, 122, 46, 0.2) !important;
+              border-color: rgba(166, 137, 66, 0.4) !important;
+              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.2) !important;
               transform: translateY(-8px);
             }
             
             .stealth-video-card:hover .stealth-play-btn {
               opacity: 1 !important;
               transform: translate(-50%, -50%) scale(1.1);
-              border-color: rgba(156, 122, 46, 0.8) !important;
-              box-shadow: 0 0 40px rgba(156, 122, 46, 0.4);
+              border-color: rgba(166, 137, 66, 0.8) !important;
+              box-shadow: 0 0 40px rgba(166, 137, 66, 0.4);
             }
             
             .stealth-video-card:hover .stealth-title {
-              color: #9C7A2E !important;
+              color: #A68942 !important;
             }
             
             /* Navigation Buttons */
             .youtube-nav-btn:hover {
-              border-color: rgba(156, 122, 46, 0.5) !important;
-              background: rgba(156, 122, 46, 0.1) !important;
-              box-shadow: 0 0 30px rgba(156, 122, 46, 0.2);
+              border-color: rgba(166, 137, 66, 0.5) !important;
+              background: rgba(166, 137, 66, 0.1) !important;
+              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
               transform: scale(1.1);
             }
             
             .youtube-view-all:hover {
-              background: rgba(156, 122, 46, 0.15) !important;
-              border-color: rgba(156, 122, 46, 0.5) !important;
-              box-shadow: 0 0 30px rgba(156, 122, 46, 0.2);
+              background: rgba(166, 137, 66, 0.15) !important;
+              border-color: rgba(166, 137, 66, 0.5) !important;
+              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
             }
             
             @media (max-width: 768px) {
@@ -3625,8 +3639,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>Choose Your </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.35)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
               }}>Commitment</span>
             </h2>
             <p style={{
@@ -3661,11 +3675,11 @@ The 3-month program consists of:
           {/* Pricing Section Styles */}
           <style>{`
             .obsidian-pricing-card:hover {
-              border-color: rgba(156, 122, 46, 0.5) !important;
+              border-color: rgba(166, 137, 66, 0.5) !important;
               transform: translateY(-8px) scale(1.02);
               box-shadow: 
                 0 30px 80px rgba(0, 0, 0, 0.5),
-                0 0 60px rgba(156, 122, 46, 0.15) !important;
+                0 0 60px rgba(166, 137, 66, 0.15) !important;
             }
             
             .obsidian-pricing-card.featured {
@@ -3679,8 +3693,8 @@ The 3-month program consists of:
             
             .pricing-cta-btn:hover {
               transform: translateY(-2px);
-              box-shadow: 0 12px 35px rgba(156, 122, 46, 0.45) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #9C7A2E 100%) !important;
+              box-shadow: 0 12px 35px rgba(166, 137, 66, 0.45) !important;
+              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
             }
             
             @media (max-width: 1024px) {
@@ -3720,8 +3734,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>Is This Right </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.35)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
               }}>For You?</span>
             </h2>
           </div>
@@ -3762,8 +3776,8 @@ The 3-month program consists of:
               }}>
                 <span style={{ color: '#FFFFFF' }}>This is </span>
                 <span style={{ 
-                  color: '#9C7A2E',
-                  textShadow: '0 0 30px rgba(156, 122, 46, 0.3)'
+                  color: '#A68942',
+                  textShadow: '0 0 30px rgba(166, 137, 66, 0.3)'
                 }}>for you</span>
                 <span style={{ color: '#FFFFFF' }}> if...</span>
               </h3>
@@ -3785,15 +3799,15 @@ The 3-month program consists of:
                       width: '28px',
                       height: '28px',
                       borderRadius: '50%',
-                      background: 'rgba(156, 122, 46, 0.15)',
-                      border: '1px solid rgba(156, 122, 46, 0.3)',
+                      background: 'rgba(166, 137, 66, 0.15)',
+                      border: '1px solid rgba(166, 137, 66, 0.3)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                       marginTop: '2px'
                     }}>
-                      <Check size={16} color="#9C7A2E" strokeWidth={3} />
+                      <Check size={16} color="#A68942" strokeWidth={3} />
                     </div>
                     <span style={{
                       color: 'rgba(240, 240, 240, 0.85)',
@@ -3884,7 +3898,7 @@ The 3-month program consists of:
               rel="noopener noreferrer"
               className="qualification-cta-btn"
               style={{
-                background: 'linear-gradient(135deg, #9C7A2E 0%, #C9A534 100%)',
+                background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
                 color: '#0A0A0A',
                 padding: '20px 48px',
                 borderRadius: '20px',
@@ -3894,7 +3908,7 @@ The 3-month program consists of:
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '12px',
-                boxShadow: '0 8px 30px rgba(156, 122, 46, 0.35)',
+                boxShadow: '0 8px 30px rgba(166, 137, 66, 0.35)',
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
@@ -3912,14 +3926,14 @@ The 3-month program consists of:
             }
             
             .qualification-card.positive:hover {
-              border-color: rgba(156, 122, 46, 0.3) !important;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(156, 122, 46, 0.1);
+              border-color: rgba(166, 137, 66, 0.3) !important;
+              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(166, 137, 66, 0.1);
             }
             
             .qualification-cta-btn:hover {
               transform: translateY(-3px);
-              box-shadow: 0 12px 40px rgba(156, 122, 46, 0.45) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #9C7A2E 100%) !important;
+              box-shadow: 0 12px 40px rgba(166, 137, 66, 0.45) !important;
+              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
             }
             
             @media (max-width: 900px) {
@@ -3963,8 +3977,8 @@ The 3-month program consists of:
             }}>
               <span style={{ color: '#FFFFFF' }}>Frequently Asked </span>
               <span style={{ 
-                color: '#9C7A2E',
-                textShadow: '0 0 50px rgba(156, 122, 46, 0.35)'
+                color: '#A68942',
+                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
               }}>Questions</span>
             </h2>
             <p style={{
@@ -4014,7 +4028,7 @@ The 3-month program consists of:
               rel="noopener noreferrer"
               className="final-cta-btn"
               style={{
-                background: 'linear-gradient(135deg, #9C7A2E 0%, #C9A534 100%)',
+                background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
                 color: '#0A0A0A',
                 padding: '24px 56px',
                 borderRadius: '24px',
@@ -4024,7 +4038,7 @@ The 3-month program consists of:
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '14px',
-                boxShadow: '0 12px 50px rgba(156, 122, 46, 0.4), 0 0 100px rgba(156, 122, 46, 0.2)',
+                boxShadow: '0 12px 50px rgba(166, 137, 66, 0.4), 0 0 100px rgba(166, 137, 66, 0.2)',
                 transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                 position: 'relative'
               }}
@@ -4046,7 +4060,7 @@ The 3-month program consists of:
           {/* FAQ Console Styles */}
           <style>{`
             .faq-console-item:first-child {
-              border-top: 1px solid rgba(156, 122, 46, 0.15);
+              border-top: 1px solid rgba(166, 137, 66, 0.15);
             }
             
             .faq-console-item:hover {
@@ -4054,15 +4068,15 @@ The 3-month program consists of:
             }
             
             .faq-console-item.expanded {
-              background: rgba(156, 122, 46, 0.03) !important;
+              background: rgba(166, 137, 66, 0.03) !important;
             }
             
             .final-cta-btn:hover {
               transform: translateY(-4px) scale(1.02);
               box-shadow: 
-                0 20px 60px rgba(156, 122, 46, 0.5),
-                0 0 120px rgba(156, 122, 46, 0.3) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #9C7A2E 100%) !important;
+                0 20px 60px rgba(166, 137, 66, 0.5),
+                0 0 120px rgba(166, 137, 66, 0.3) !important;
+              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
             }
           `}</style>
         </div>
@@ -4317,7 +4331,7 @@ The 3-month program consists of:
               borderRadius: '32px',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               padding: '24px',
-              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(156, 122, 46, 0.1)',
+              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(166, 137, 66, 0.1)',
               animation: 'lightboxScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
@@ -4332,7 +4346,7 @@ The 3-month program consists of:
                 height: '48px',
                 borderRadius: '50%',
                 background: 'rgba(10, 10, 10, 0.9)',
-                border: '2px solid #9C7A2E',
+                border: '2px solid #A68942',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -4342,7 +4356,7 @@ The 3-month program consists of:
               }}
               className="lightbox-close-btn"
             >
-              <X size={24} color="#9C7A2E" strokeWidth={2.5} />
+              <X size={24} color="#A68942" strokeWidth={2.5} />
             </button>
             
             {/* Full Size Image */}
@@ -4389,9 +4403,9 @@ The 3-month program consists of:
         }
         
         .lightbox-close-btn:hover {
-          background: rgba(156, 122, 46, 0.15) !important;
+          background: rgba(166, 137, 66, 0.15) !important;
           transform: scale(1.1);
-          box-shadow: 0 0 30px rgba(156, 122, 46, 0.3);
+          box-shadow: 0 0 30px rgba(166, 137, 66, 0.3);
         }
       `}</style>
 
@@ -4427,7 +4441,7 @@ The 3-month program consists of:
               borderRadius: '32px',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               padding: '24px',
-              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(156, 122, 46, 0.1)',
+              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(166, 137, 66, 0.1)',
               animation: 'lightboxScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
           >
@@ -4442,7 +4456,7 @@ The 3-month program consists of:
                 height: '48px',
                 borderRadius: '50%',
                 background: 'rgba(10, 10, 10, 0.9)',
-                border: '2px solid #9C7A2E',
+                border: '2px solid #A68942',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -4452,7 +4466,7 @@ The 3-month program consists of:
               }}
               className="lightbox-close-btn"
             >
-              <X size={24} color="#9C7A2E" strokeWidth={2.5} />
+              <X size={24} color="#A68942" strokeWidth={2.5} />
             </button>
             
             {/* Before/After Toggle for dual images */}
@@ -4468,9 +4482,9 @@ The 3-month program consists of:
                   style={{
                     padding: '10px 24px',
                     borderRadius: '25px',
-                    border: testimonialLightbox.isBefore ? '2px solid #9C7A2E' : '1px solid rgba(255, 255, 255, 0.2)',
-                    background: testimonialLightbox.isBefore ? 'rgba(156, 122, 46, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    color: testimonialLightbox.isBefore ? '#9C7A2E' : 'rgba(255, 255, 255, 0.6)',
+                    border: testimonialLightbox.isBefore ? '2px solid #A68942' : '1px solid rgba(255, 255, 255, 0.2)',
+                    background: testimonialLightbox.isBefore ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                    color: testimonialLightbox.isBefore ? '#A68942' : 'rgba(255, 255, 255, 0.6)',
                     fontSize: '14px',
                     fontWeight: '600',
                     cursor: 'pointer',
@@ -4484,9 +4498,9 @@ The 3-month program consists of:
                   style={{
                     padding: '10px 24px',
                     borderRadius: '25px',
-                    border: !testimonialLightbox.isBefore ? '2px solid #9C7A2E' : '1px solid rgba(255, 255, 255, 0.2)',
-                    background: !testimonialLightbox.isBefore ? 'rgba(156, 122, 46, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    color: !testimonialLightbox.isBefore ? '#9C7A2E' : 'rgba(255, 255, 255, 0.6)',
+                    border: !testimonialLightbox.isBefore ? '2px solid #A68942' : '1px solid rgba(255, 255, 255, 0.2)',
+                    background: !testimonialLightbox.isBefore ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                    color: !testimonialLightbox.isBefore ? '#A68942' : 'rgba(255, 255, 255, 0.6)',
                     fontSize: '14px',
                     fontWeight: '600',
                     cursor: 'pointer',
