@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, TrendingUp } from 'lucide-react';
+import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 
 /**
  * Poker Seat Selection EV Visualization Tool
@@ -474,6 +475,9 @@ const PokerSeatEVTool = () => {
       `}</style>
 
       <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '20px'}}>
+        {/* Navigation Bar */}
+        <NachosPokerNavBar />
+        
         {/* Header Banner */}
         <div 
           className="card-hover spark-border"
