@@ -37,13 +37,16 @@ import {
   AlertTriangle,
   Globe,
   EyeOff,
-  Image
+  Image,
+  ClipboardPaste,
+  Calendar
 } from 'lucide-react';
 import { articlesApi, authApi } from '@/lib/supabaseClient';
 
 /**
  * FreeNachos Articles Page
  * Full Supabase integration with authentication and CRUD
+ * + Notion paste support
  */
 
 const CATEGORIES = ['All', 'Strategy', 'Analysis', 'Fundamentals', 'Mindset', 'Tools'];
@@ -61,9 +64,480 @@ const transformArticle = (dbArticle) => ({
   thumbnailUrl: dbArticle.thumbnail_url,
   blocks: dbArticle.blocks || [],
   published: dbArticle.published,
+  scheduledFor: dbArticle.scheduled_for,
   createdAt: dbArticle.created_at,
   updatedAt: dbArticle.updated_at
 });
+
+// ============================================
+// NOTION PARSER
+// ============================================
+
+const parseNotionContent = (content) => {
+  const blocks = [];
+  
+  // Normalize line endings
+  let text = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  
+  // Check if content is HTML (from rich paste)
+  const isHTML = /<[a-z][\s\S]*>/i.test(text);
+  
+  if (isHTML) {
+    return parseHTMLContent(text);
+  }
+  
+  // Parse as markdown/plain text
+  const lines = text.split('\n');
+  let i = 0;
+  
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmedLine = line.trim();
+    
+    // Skip empty lines
+    if (!trimmedLine) {
+      i++;
+      continue;
+    }
+    
+    // Check for code blocks (```)
+    if (trimmedLine.startsWith('```')) {
+      const language = trimmedLine.slice(3).trim() || 'text';
+      const codeLines = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      blocks.push({
+        type: 'code',
+        language,
+        title: language.charAt(0).toUpperCase() + language.slice(1),
+        content: codeLines.join('\n')
+      });
+      i++;
+      continue;
+    }
+    
+    // Check for callout syntax (:::type Title)
+    if (trimmedLine.startsWith(':::')) {
+      const calloutMatch = trimmedLine.match(/^:::(\w+)?\s*(.*?)(?:::)?$/);
+      if (calloutMatch) {
+        const variant = calloutMatch[1] || 'insight';
+        const titleOrContent = calloutMatch[2] || '';
+        
+        // Check if it's a single-line callout (ends with :::)
+        if (trimmedLine.endsWith(':::') && !trimmedLine.match(/^:::\w+\s*:::$/)) {
+          blocks.push({
+            type: 'callout',
+            variant: ['insight', 'warning', 'stat', 'tip'].includes(variant) ? variant : 'insight',
+            title: variant.charAt(0).toUpperCase() + variant.slice(1),
+            content: titleOrContent.replace(/:::$/, '').trim()
+          });
+          i++;
+          continue;
+        }
+        
+        // Multi-line callout
+        const calloutLines = [];
+        const title = titleOrContent;
+        i++;
+        while (i < lines.length && !lines[i].trim().startsWith(':::')) {
+          calloutLines.push(lines[i]);
+          i++;
+        }
+        blocks.push({
+          type: 'callout',
+          variant: ['insight', 'warning', 'stat', 'tip'].includes(variant) ? variant : 'insight',
+          title: title || variant.charAt(0).toUpperCase() + variant.slice(1),
+          content: calloutLines.join('\n').trim()
+        });
+        i++;
+        continue;
+      }
+    }
+    
+    // Check for headers
+    const headerMatch = trimmedLine.match(/^(#{1,3})\s+(.+)$/);
+    if (headerMatch) {
+      blocks.push({
+        type: 'header',
+        level: headerMatch[1].length,
+        content: headerMatch[2].trim()
+      });
+      i++;
+      continue;
+    }
+    
+    // Check for blockquotes
+    if (trimmedLine.startsWith('>')) {
+      const quoteLines = [];
+      while (i < lines.length && lines[i].trim().startsWith('>')) {
+        quoteLines.push(lines[i].trim().replace(/^>\s*/, ''));
+        i++;
+      }
+      const quoteContent = quoteLines.join(' ').trim();
+      // Check for attribution (— or --)
+      const attrMatch = quoteContent.match(/(.+?)(?:\s*[—–-]{1,2}\s*)([^—–-]+)$/);
+      if (attrMatch) {
+        blocks.push({
+          type: 'quote',
+          content: attrMatch[1].trim(),
+          attribution: attrMatch[2].trim()
+        });
+      } else {
+        blocks.push({
+          type: 'quote',
+          content: quoteContent,
+          attribution: ''
+        });
+      }
+      continue;
+    }
+    
+    // Check for list items
+    if (trimmedLine.match(/^[-*•]\s+/) || trimmedLine.match(/^\d+\.\s+/)) {
+      const listItems = [];
+      while (i < lines.length) {
+        const listLine = lines[i].trim();
+        const bulletMatch = listLine.match(/^[-*•]\s+(.+)$/);
+        const numberMatch = listLine.match(/^\d+\.\s+(.+)$/);
+        if (bulletMatch) {
+          listItems.push(bulletMatch[1]);
+          i++;
+        } else if (numberMatch) {
+          listItems.push(numberMatch[1]);
+          i++;
+        } else if (listLine === '') {
+          i++;
+          break;
+        } else {
+          break;
+        }
+      }
+      if (listItems.length > 0) {
+        blocks.push({
+          type: 'list',
+          items: listItems
+        });
+      }
+      continue;
+    }
+    
+    // Check for image URL (standalone URL that looks like an image)
+    const imageUrlMatch = trimmedLine.match(/^(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s]*)?)$/i);
+    if (imageUrlMatch) {
+      blocks.push({
+        type: 'image',
+        src: imageUrlMatch[1],
+        alt: '',
+        caption: ''
+      });
+      i++;
+      continue;
+    }
+    
+    // Check for markdown image syntax ![alt](url)
+    const mdImageMatch = trimmedLine.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (mdImageMatch) {
+      const src = mdImageMatch[2];
+      // Check if it's a Notion attachment (won't work externally)
+      if (src.startsWith('attachment:')) {
+        blocks.push({
+          type: 'image',
+          src: '',
+          alt: mdImageMatch[1] || 'Image placeholder - add URL',
+          caption: '⚠️ Notion attachment detected - please add image URL'
+        });
+      } else {
+        blocks.push({
+          type: 'image',
+          src: src,
+          alt: mdImageMatch[1] || '',
+          caption: ''
+        });
+      }
+      i++;
+      continue;
+    }
+    
+    // Default: paragraph
+    // Collect consecutive non-special lines as one paragraph
+    const paragraphLines = [];
+    while (i < lines.length) {
+      const pLine = lines[i].trim();
+      if (pLine === '' || 
+          pLine.startsWith('#') || 
+          pLine.startsWith('>') || 
+          pLine.startsWith('```') ||
+          pLine.startsWith(':::') ||
+          pLine.match(/^[-*•]\s+/) ||
+          pLine.match(/^\d+\.\s+/) ||
+          pLine.match(/^!\[/) ||
+          pLine.match(/^https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)/i)) {
+        break;
+      }
+      paragraphLines.push(pLine);
+      i++;
+    }
+    
+    if (paragraphLines.length > 0) {
+      blocks.push({
+        type: 'paragraph',
+        content: paragraphLines.join(' ')
+      });
+    }
+  }
+  
+  return blocks;
+};
+
+const parseHTMLContent = (html) => {
+  const blocks = [];
+  
+  // Create a temporary div to parse HTML
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const body = doc.body;
+  
+  const processNode = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent.trim();
+      if (text) {
+        return [{ type: 'paragraph', content: text }];
+      }
+      return [];
+    }
+    
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return [];
+    }
+    
+    const tag = node.tagName.toLowerCase();
+    
+    // Headers
+    if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag)) {
+      const level = Math.min(parseInt(tag[1]), 3);
+      return [{
+        type: 'header',
+        level,
+        content: getTextWithFormatting(node)
+      }];
+    }
+    
+    // Paragraphs
+    if (tag === 'p') {
+      const content = getTextWithFormatting(node);
+      if (content.trim()) {
+        // Check if it's just an image URL
+        const imageUrlMatch = content.trim().match(/^(https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s]*)?)$/i);
+        if (imageUrlMatch) {
+          return [{
+            type: 'image',
+            src: imageUrlMatch[1],
+            alt: '',
+            caption: ''
+          }];
+        }
+        return [{ type: 'paragraph', content }];
+      }
+      return [];
+    }
+    
+    // Callouts (Notion uses <aside>)
+    if (tag === 'aside') {
+      const content = getTextWithFormatting(node);
+      // Remove leading emoji if present
+      const cleanContent = content.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*/u, '').trim();
+      return [{
+        type: 'callout',
+        variant: 'insight',
+        title: 'Quick Note',
+        content: cleanContent
+      }];
+    }
+    
+    // Lists
+    if (tag === 'ul' || tag === 'ol') {
+      const items = [];
+      node.querySelectorAll(':scope > li').forEach(li => {
+        items.push(getTextWithFormatting(li));
+      });
+      if (items.length > 0) {
+        return [{ type: 'list', items }];
+      }
+      return [];
+    }
+    
+    // Code blocks
+    if (tag === 'pre') {
+      const code = node.querySelector('code');
+      const content = code ? code.textContent : node.textContent;
+      const langClass = code?.className.match(/language-(\w+)/);
+      return [{
+        type: 'code',
+        language: langClass ? langClass[1] : 'text',
+        title: 'Code',
+        content: content.trim()
+      }];
+    }
+    
+    // Blockquotes
+    if (tag === 'blockquote') {
+      const content = getTextWithFormatting(node);
+      return [{
+        type: 'quote',
+        content,
+        attribution: ''
+      }];
+    }
+    
+    // Images
+    if (tag === 'img') {
+      return [{
+        type: 'image',
+        src: node.src || '',
+        alt: node.alt || '',
+        caption: ''
+      }];
+    }
+    
+    // Divs and other containers - process children
+    if (['div', 'article', 'section', 'main', 'span'].includes(tag)) {
+      const childBlocks = [];
+      node.childNodes.forEach(child => {
+        childBlocks.push(...processNode(child));
+      });
+      return childBlocks;
+    }
+    
+    // Fallback: get text content
+    const text = getTextWithFormatting(node);
+    if (text.trim()) {
+      return [{ type: 'paragraph', content: text }];
+    }
+    
+    return [];
+  };
+  
+  // Helper to convert HTML formatting to markdown-style
+  const getTextWithFormatting = (element) => {
+    let result = '';
+    
+    element.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        result += node.textContent;
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const tag = node.tagName.toLowerCase();
+        const innerText = getTextWithFormatting(node);
+        
+        if (tag === 'strong' || tag === 'b') {
+          result += `**${innerText}**`;
+        } else if (tag === 'em' || tag === 'i') {
+          result += `*${innerText}*`;
+        } else if (tag === 'code') {
+          result += `\`${innerText}\``;
+        } else if (tag === 'a') {
+          const href = node.getAttribute('href');
+          if (href) {
+            result += `[${innerText}](${href})`;
+          } else {
+            result += innerText;
+          }
+        } else if (tag === 'br') {
+          result += ' ';
+        } else {
+          result += innerText;
+        }
+      }
+    });
+    
+    return result;
+  };
+  
+  body.childNodes.forEach(node => {
+    blocks.push(...processNode(node));
+  });
+  
+  return blocks;
+};
+
+// ============================================
+// INLINE MARKDOWN RENDERER
+// ============================================
+
+const renderInlineMarkdown = (text) => {
+  if (!text) return null;
+  
+  const parts = [];
+  let remaining = text;
+  let key = 0;
+  
+  // Pattern for **bold**, *italic*, `code`, and [links](url)
+  const pattern = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`|\[([^\]]+)\]\(([^)]+)\))/g;
+  
+  let lastIndex = 0;
+  let match;
+  
+  while ((match = pattern.exec(text)) !== null) {
+    // Add text before the match
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    
+    const fullMatch = match[0];
+    
+    if (match[2]) {
+      // ***bold italic***
+      parts.push(<strong key={key++}><em>{match[2]}</em></strong>);
+    } else if (match[3]) {
+      // **bold**
+      parts.push(<strong key={key++}>{match[3]}</strong>);
+    } else if (match[4]) {
+      // *italic*
+      parts.push(<em key={key++}>{match[4]}</em>);
+    } else if (match[5]) {
+      // `code`
+      parts.push(
+        <code key={key++} style={{
+          background: 'rgba(255, 179, 71, 0.15)',
+          padding: '2px 6px',
+          borderRadius: '4px',
+          fontSize: '0.9em',
+          fontFamily: 'monospace'
+        }}>
+          {match[5]}
+        </code>
+      );
+    } else if (match[6] && match[7]) {
+      // [link](url)
+      parts.push(
+        <a 
+          key={key++} 
+          href={match[7]} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ color: '#FFB347', textDecoration: 'underline' }}
+        >
+          {match[6]}
+        </a>
+      );
+    }
+    
+    lastIndex = match.index + fullMatch.length;
+  }
+  
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  
+  return parts.length > 0 ? parts : text;
+};
+
+// ============================================
+// MAIN COMPONENT
+// ============================================
 
 export default function FreeNachosArticles() {
   const [view, setView] = useState('library');
@@ -85,6 +559,15 @@ export default function FreeNachosArticles() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  
+  // Notion paste modal
+  const [showNotionPaste, setShowNotionPaste] = useState(false);
+  const [notionContent, setNotionContent] = useState('');
+  
+  // Schedule modal
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState('');
+  const [scheduleTime, setScheduleTime] = useState('');
   
   const [nachos, setNachos] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -149,7 +632,7 @@ export default function FreeNachosArticles() {
       setEditorArticle({ ...article });
       setIsEditing(true);
     } else {
-      setEditorArticle({ id: null, title: '', slug: '', category: 'Strategy', excerpt: '', readTime: '5 min', thumbnail: 'default', thumbnailUrl: '', blocks: [], published: false });
+      setEditorArticle({ id: null, title: '', slug: '', category: 'Strategy', excerpt: '', readTime: '5 min', thumbnail: 'default', thumbnailUrl: '', blocks: [], published: false, scheduledFor: null });
       setIsEditing(false);
     }
     setView('editor');
@@ -175,6 +658,41 @@ export default function FreeNachosArticles() {
     }
   };
 
+  const scheduleArticle = async (dateOverride, timeOverride) => {
+    const finalDate = dateOverride || scheduleDate;
+    const finalTime = timeOverride || scheduleTime;
+    
+    if (!editorArticle.title || !finalDate || !finalTime) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const slug = editorArticle.slug || generateSlug(editorArticle.title);
+      const scheduledFor = new Date(`${finalDate}T${finalTime}`).toISOString();
+      const articleData = { 
+        ...editorArticle, 
+        slug, 
+        published: true, 
+        scheduledFor 
+      };
+      if (isEditing && editorArticle.id) { 
+        await articlesApi.update(editorArticle.id, articleData); 
+      } else { 
+        await articlesApi.create(articleData); 
+      }
+      await fetchArticles();
+      setView('library');
+      setEditorArticle(null);
+      setShowScheduleModal(false);
+      setScheduleDate('');
+      setScheduleTime('');
+    } catch (err) {
+      console.error('Error scheduling article:', err);
+      setError(err.message || 'Failed to schedule article');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const deleteArticle = async (articleId) => {
     setDeleting(true);
     try {
@@ -189,63 +707,90 @@ export default function FreeNachosArticles() {
       setDeleting(false);
     }
   };
-
-// Nacho Animation - eyes disabled on this page
-  useEffect(() => {
-    // Eye tracking disabled to prevent input focus issues
-  }, []);
-
-  const getEyeOffset = () => {
-    if (!nachoRef.current) return { x: 0, y: 0 };
-    const rect = nachoRef.current.getBoundingClientRect();
-    const nachoCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-    const angle = Math.atan2(mousePos.y - nachoCenter.y, mousePos.x - nachoCenter.x);
-    const distance = Math.min(3, Math.hypot(mousePos.x - nachoCenter.x, mousePos.y - nachoCenter.y) / 50);
-    return { x: Math.cos(angle) * distance, y: Math.sin(angle) * distance };
+  
+  // Notion paste handler
+  const handleNotionPaste = () => {
+    if (!notionContent.trim()) return;
+    
+    const parsedBlocks = parseNotionContent(notionContent);
+    
+    // Try to extract title from first H1
+    let title = editorArticle.title;
+    let excerpt = editorArticle.excerpt;
+    let finalBlocks = parsedBlocks;
+    
+    if (parsedBlocks.length > 0 && parsedBlocks[0].type === 'header' && parsedBlocks[0].level === 1) {
+      title = parsedBlocks[0].content;
+      finalBlocks = parsedBlocks.slice(1);
+    }
+    
+    // Try to extract excerpt from first paragraph
+    if (!excerpt && finalBlocks.length > 0 && finalBlocks[0].type === 'paragraph') {
+      excerpt = finalBlocks[0].content.slice(0, 200);
+      if (finalBlocks[0].content.length > 200) excerpt += '...';
+    }
+    
+    setEditorArticle({
+      ...editorArticle,
+      title: title || editorArticle.title,
+      excerpt: excerpt || editorArticle.excerpt,
+      blocks: [...editorArticle.blocks, ...finalBlocks]
+    });
+    
+    setNotionContent('');
+    setShowNotionPaste(false);
   };
 
+  // Background nachos
   useEffect(() => {
-    const newNachos = Array.from({ length: 54 }, (_, i) => ({
-      id: i, x: Math.random() * 100, y: Math.random() * 100, size: 12 + Math.random() * 28,
-      duration: 40 + Math.random() * 20, delay: Math.random() * 20,
-      opacity: 0.4 + Math.random() * 0.5, moveX: Math.random() * 200 - 100, moveY: Math.random() * 200 - 100
+    const generated = Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 20 + Math.random() * 30,
+      opacity: 0.03 + Math.random() * 0.05,
+      duration: 15 + Math.random() * 20,
+      delay: Math.random() * 10,
+      moveX: (Math.random() - 0.5) * 100,
+      moveY: (Math.random() - 0.5) * 100
     }));
-    setNachos(newNachos);
+    setNachos(generated);
   }, []);
 
-  const eyeOffset = getEyeOffset();
-  
-  const filteredArticles = selectedCategory === 'All' 
-    ? articles 
-    : articles.filter(a => a.category === selectedCategory);
+  const filteredArticles = selectedCategory === 'All' ? articles : articles.filter(a => a.category === selectedCategory);
 
-// Components
-  const CartoonNacho = () => (
-    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(255, 179, 71, 0.4))' }}>
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#FFB347" stroke="#E09A30" strokeWidth="2"/>
-      <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#FFD54F" opacity="0.9"/>
-      <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#FFD54F" opacity="0.9"/>
-      <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#FFD54F" opacity="0.9"/>
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#FFB347" />
-      <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
-      <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
-      <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }}/>
-      <circle cx={60 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }}/>
-      <circle cx={38 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
-      <circle cx={58 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
-      <path d="M38 62 Q50 72 62 62" fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M33 38 Q40 35 47 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <path d="M53 38 Q60 35 67 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="30" cy="30" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="70" cy="35" r="2.5" fill="#E09A30" opacity="0.5" />
-      <circle cx="35" cy="80" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="65" cy="78" r="1.5" fill="#E09A30" opacity="0.5" />
+  const NachoTriangle = ({ size = 40, opacity = 0.1 }) => (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" style={{ opacity }}>
+      <path d="M20 2L38 38H2L20 2Z" fill="#FFB347" />
+      <circle cx="12" cy="28" r="2" fill="#4A2C0A" />
+      <circle cx="22" cy="22" r="1.5" fill="#4A2C0A" />
+      <circle cx="28" cy="30" r="2" fill="#4A2C0A" />
+      <circle cx="18" cy="32" r="1" fill="#2D5A27" />
+      <circle cx="25" cy="26" r="1.5" fill="#2D5A27" />
     </svg>
   );
 
-  const NachoTriangle = ({ size, opacity }) => (
-    <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8"/>
+  const CartoonNacho = () => (
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+      <path d="M32 4L60 56H4L32 4Z" fill="url(#nachoGrad)" stroke="#E09030" strokeWidth="2" />
+      <circle cx="20" cy="42" r="4" fill="#5D3A1A" />
+      <circle cx="38" cy="36" r="3" fill="#5D3A1A" />
+      <circle cx="44" cy="46" r="4" fill="#5D3A1A" />
+      <circle cx="28" cy="48" r="3" fill="#5D3A1A" />
+      <ellipse cx="24" cy="38" r="3" ry="2" fill="#4A7C3F" />
+      <ellipse cx="40" cy="44" r="2.5" ry="1.5" fill="#4A7C3F" />
+      <ellipse cx="32" cy="50" r="2" ry="1.5" fill="#C41E3A" />
+      <circle cx="24" cy="24" r="3" fill="#1a1a1a" />
+      <circle cx="40" cy="24" r="3" fill="#1a1a1a" />
+      <circle cx="25" cy="23" r="1" fill="white" />
+      <circle cx="41" cy="23" r="1" fill="white" />
+      <path d="M28 32 Q32 36 36 32" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <defs>
+        <linearGradient id="nachoGrad" x1="32" y1="4" x2="32" y2="56" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFD485" />
+          <stop offset="1" stopColor="#FFB347" />
+        </linearGradient>
+      </defs>
     </svg>
   );
 
@@ -274,32 +819,36 @@ export default function FreeNachosArticles() {
         case 'header':
           const HeaderTag = block.level === 1 ? 'h1' : block.level === 2 ? 'h2' : 'h3';
           const headerStyles = { 1: { fontSize: '2.2em', fontWeight: '800', marginBottom: '24px', marginTop: index === 0 ? 0 : '48px' }, 2: { fontSize: '1.5em', fontWeight: '700', marginBottom: '16px', marginTop: '40px' }, 3: { fontSize: '1.2em', fontWeight: '600', marginBottom: '12px', marginTop: '32px' } };
-          return <HeaderTag key={index} style={{ color: '#ffffff', lineHeight: 1.2, ...headerStyles[block.level] }}>{block.content}</HeaderTag>;
+          return <HeaderTag key={index} style={{ color: '#ffffff', lineHeight: 1.2, ...headerStyles[block.level] }}>{renderInlineMarkdown(block.content)}</HeaderTag>;
         case 'paragraph':
-          return <p key={index} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '16px', lineHeight: 1.8, marginBottom: '20px' }}>{block.content}</p>;
+          return <p key={index} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '16px', lineHeight: 1.8, marginBottom: '20px' }}>{renderInlineMarkdown(block.content)}</p>;
         case 'callout':
           const calloutStyles = { insight: { bg: 'rgba(255, 179, 71, 0.15)', border: 'rgba(255, 179, 71, 0.3)', icon: Lightbulb, iconColor: '#FFB347' }, warning: { bg: 'rgba(239, 68, 68, 0.15)', border: 'rgba(239, 68, 68, 0.3)', icon: Zap, iconColor: '#ef4444' }, stat: { bg: 'rgba(34, 197, 94, 0.15)', border: 'rgba(34, 197, 94, 0.3)', icon: TrendingUp, iconColor: '#22c55e' }, tip: { bg: 'rgba(59, 130, 246, 0.15)', border: 'rgba(59, 130, 246, 0.3)', icon: BookOpen, iconColor: '#60a5fa' } };
           const style = calloutStyles[block.variant] || calloutStyles.insight;
           const IconComponent = style.icon;
-          return (<div key={index} style={{ background: style.bg, border: `1px solid ${style.border}`, borderRadius: '12px', padding: '24px', marginBottom: '24px', marginTop: '24px' }}><div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}><IconComponent size={20} color={style.iconColor} /><span style={{ color: style.iconColor, fontWeight: '600', fontSize: '14px' }}>{block.title}</span></div><p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>{block.content}</p></div>);
+          return (<div key={index} style={{ background: style.bg, border: `1px solid ${style.border}`, borderRadius: '12px', padding: '24px', marginBottom: '24px', marginTop: '24px' }}><div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}><IconComponent size={20} color={style.iconColor} /><span style={{ color: style.iconColor, fontWeight: '600', fontSize: '14px' }}>{block.title}</span></div><p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>{renderInlineMarkdown(block.content)}</p></div>);
         case 'list':
-          return (<ul key={index} style={{ marginBottom: '24px', paddingLeft: '8px', listStyle: 'none' }}>{block.items.map((item, i) => (<li key={i} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', lineHeight: 1.8, marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}><span style={{ color: '#FFB347', fontSize: '18px', lineHeight: 1.4 }}>▸</span><span>{item}</span></li>))}</ul>);
+          return (<ul key={index} style={{ marginBottom: '24px', paddingLeft: '8px', listStyle: 'none' }}>{block.items.map((item, i) => (<li key={i} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', lineHeight: 1.8, marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}><span style={{ color: '#FFB347', fontSize: '18px', lineHeight: 1.4 }}>▸</span><span>{renderInlineMarkdown(item)}</span></li>))}</ul>);
         case 'code':
           return (<div key={index} style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '12px', overflow: 'hidden', marginBottom: '24px', marginTop: '24px', border: '1px solid rgba(255,255,255,0.1)' }}><div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '8px' }}><Code size={14} color="#FFB347" /><span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: '500' }}>{block.title || block.language}</span></div><pre style={{ margin: 0, padding: '20px', overflow: 'auto', fontFamily: 'monospace', fontSize: '13px', lineHeight: 1.6, color: 'rgba(255,255,255,0.9)' }}><code>{block.content}</code></pre></div>);
         case 'data-viz':
           return (<div key={index} className="glass-card" style={{ borderRadius: '12px', padding: '24px', marginBottom: '24px', marginTop: '24px' }}><div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}><BarChart3 size={18} color="#FFB347" /><span style={{ color: '#FFB347', fontWeight: '600', fontSize: '14px' }}>{block.title}</span></div><div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>{block.data.labels.map((label, i) => { const value = block.data.values[i]; const maxValue = Math.max(...block.data.values.map(Math.abs)); const percentage = (Math.abs(value) / maxValue) * 100; const isPositive = value >= 0; return (<div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><span style={{ width: '70px', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: '500' }}>{label}</span><div style={{ flex: 1, height: '28px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}><div style={{ width: `${percentage}%`, height: '100%', background: isPositive ? 'linear-gradient(90deg, rgba(34, 197, 94, 0.6), rgba(34, 197, 94, 0.9))' : 'linear-gradient(90deg, rgba(239, 68, 68, 0.6), rgba(239, 68, 68, 0.9))', borderRadius: '6px', transition: 'width 0.5s ease-out' }} /></div><span style={{ width: '70px', textAlign: 'right', color: isPositive ? '#22c55e' : '#ef4444', fontSize: '14px', fontWeight: '600' }}>{isPositive ? '+' : ''}{value.toFixed(1)}</span></div>); })}</div></div>);
         case 'quote':
-          return (<blockquote key={index} style={{ borderLeft: '4px solid #FFB347', margin: '32px 0', padding: '20px 24px', background: 'rgba(255, 179, 71, 0.08)', borderRadius: '0 12px 12px 0' }}><Quote size={24} color="#FFB347" style={{ marginBottom: '12px', opacity: 0.6 }} /><p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>{block.content}</p>{block.attribution && (<cite style={{ display: 'block', marginTop: '12px', color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontStyle: 'normal' }}>— {block.attribution}</cite>)}</blockquote>);
+          return (<blockquote key={index} style={{ borderLeft: '4px solid #FFB347', margin: '32px 0', padding: '20px 24px', background: 'rgba(255, 179, 71, 0.08)', borderRadius: '0 12px 12px 0' }}><Quote size={24} color="#FFB347" style={{ marginBottom: '12px', opacity: 0.6 }} /><p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '18px', fontStyle: 'italic', lineHeight: 1.7, margin: 0 }}>{renderInlineMarkdown(block.content)}</p>{block.attribution && (<cite style={{ display: 'block', marginTop: '12px', color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontStyle: 'normal' }}>— {block.attribution}</cite>)}</blockquote>);
         case 'image':
           return (<figure key={index} style={{ margin: '32px 0', textAlign: 'center' }}>{block.src ? (<img src={block.src} alt={block.alt || ''} style={{ maxWidth: '100%', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }} />) : (<div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}><FileImage size={48} color="rgba(255,255,255,0.3)" /><span style={{ marginLeft: '12px', color: 'rgba(255,255,255,0.4)' }}>[Image: {block.alt || 'Image'}]</span></div>)}{block.caption && <figcaption style={{ marginTop: '12px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>{block.caption}</figcaption>}</figure>);
         default: return null;
       }
     };
+    const isScheduled = article.scheduledFor && new Date(article.scheduledFor) > new Date();
+    const scheduledDate = isScheduled ? new Date(article.scheduledFor).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : null;
+    
     return (
       <article style={{ maxWidth: '720px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px', flexWrap: 'wrap' }}>
           <span style={{ background: 'rgba(255, 179, 71, 0.2)', color: '#FFB347', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{article.category}</span>
           {!article.published && (<span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Draft</span>)}
+          {isScheduled && (<span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '6px' }}><Calendar size={12} />{scheduledDate}</span>)}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><User size={14} /><span>FreeNachos</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><Clock size={14} /><span>{article.readTime}</span></div>
         </div>
@@ -313,9 +862,13 @@ export default function FreeNachosArticles() {
     const ThumbnailIcon = thumbnailIcons[article.thumbnail] || thumbnailIcons.default;
     const hasThumbnailImage = article.thumbnailUrl && article.thumbnailUrl.trim() !== '';
     
+    const isScheduled = article.scheduledFor && new Date(article.scheduledFor) > new Date();
+    const scheduledDate = isScheduled ? new Date(article.scheduledFor).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : null;
+    
     return (
       <div className="card-hover glass-card article-card" onClick={() => onClick(article)} style={{ borderRadius: '16px', overflow: 'hidden', cursor: 'pointer', position: 'relative' }}>
         {!article.published && (<div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(239, 68, 68, 0.9)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', zIndex: 2 }}>Draft</div>)}
+        {isScheduled && (<div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(59, 130, 246, 0.9)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', zIndex: 2, display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={10} />Scheduled</div>)}
         <div style={{ height: '140px', background: 'linear-gradient(135deg, rgba(255, 179, 71, 0.15) 0%, rgba(255, 179, 71, 0.05) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
           {hasThumbnailImage ? (
             <img src={article.thumbnailUrl} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -387,33 +940,332 @@ export default function FreeNachosArticles() {
       );
     };
 
+    const blockTypes = [
+      { type: 'header', icon: Type, label: 'Header' },
+      { type: 'paragraph', icon: FileText, label: 'Text' },
+      { type: 'callout', icon: Lightbulb, label: 'Callout' },
+      { type: 'list', icon: List, label: 'List' },
+      { type: 'code', icon: Code, label: 'Code' },
+      { type: 'data-viz', icon: BarChart3, label: 'Chart' },
+      { type: 'quote', icon: Quote, label: 'Quote' },
+      { type: 'image', icon: FileImage, label: 'Image' }
+    ];
+
     return (
-      <div style={{ display: 'flex', gap: '30px', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 500px', minWidth: '300px' }}>
-          <div className="glass-card" style={{ borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}><Terminal size={18} color="#FFB347" /><h3 style={{ color: '#FFB347', fontSize: '14px', fontWeight: '600', margin: 0 }}>ARTICLE METADATA</h3></div>
-            <div style={{ display: 'grid', gap: '16px' }}>
-              <div><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Title</label><input type="text" value={editorArticle.title} onChange={(e) => setEditorArticle({ ...editorArticle, title: e.target.value })} placeholder="Article title..." style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '16px', fontWeight: '500', outline: 'none' }} /></div>
-              <div><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Slug (URL path)</label><input type="text" value={editorArticle.slug} onChange={(e) => setEditorArticle({ ...editorArticle, slug: e.target.value })} placeholder={editorArticle.title ? generateSlug(editorArticle.title) : 'auto-generated'} style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', fontFamily: 'monospace', outline: 'none' }} /></div>
-              <div style={{ display: 'flex', gap: '16px' }}><div style={{ flex: 1 }}><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Category</label><select value={editorArticle.category} onChange={(e) => setEditorArticle({ ...editorArticle, category: e.target.value })} style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px' }}>{CATEGORIES.filter(c => c !== 'All').map(cat => (<option key={cat} value={cat}>{cat}</option>))}</select></div><div style={{ flex: 1 }}><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Read Time</label><input type="text" value={editorArticle.readTime} onChange={(e) => setEditorArticle({ ...editorArticle, readTime: e.target.value })} style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} /></div></div>
-              <div><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Excerpt</label><textarea value={editorArticle.excerpt} onChange={(e) => setEditorArticle({ ...editorArticle, excerpt: e.target.value })} rows={2} style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', resize: 'vertical', outline: 'none' }} /></div>
-              <div><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Thumbnail Image URL (optional)</label><input type="text" value={editorArticle.thumbnailUrl || ''} onChange={(e) => setEditorArticle({ ...editorArticle, thumbnailUrl: e.target.value })} placeholder="https://... (leave empty for icon)" style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} /></div>
-              <div><label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase' }}>Fallback Icon</label><select value={editorArticle.thumbnail} onChange={(e) => setEditorArticle({ ...editorArticle, thumbnail: e.target.value })} style={{ width: '100%', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px' }}><option value="default">Default (Document)</option><option value="poker-table">Poker Table (Fish)</option><option value="chart">Chart</option><option value="stats">Stats (Trending)</option></select></div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
+        <div>
+          <div className="glass-card" style={{ borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Title</label>
+              <input type="text" value={editorArticle.title} onChange={(e) => setEditorArticle({ ...editorArticle, title: e.target.value })} placeholder="Article title..." style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '14px 16px', color: '#fff', fontSize: '18px', fontWeight: '600', outline: 'none' }} />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              <div>
+                <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category</label>
+                <select value={editorArticle.category} onChange={(e) => setEditorArticle({ ...editorArticle, category: e.target.value })} style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px' }}>
+                  {CATEGORIES.filter(c => c !== 'All').map(cat => (<option key={cat} value={cat}>{cat}</option>))}
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Read Time</label>
+                <input type="text" value={editorArticle.readTime} onChange={(e) => setEditorArticle({ ...editorArticle, readTime: e.target.value })} placeholder="5 min" style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
+              </div>
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Excerpt</label>
+              <textarea value={editorArticle.excerpt} onChange={(e) => setEditorArticle({ ...editorArticle, excerpt: e.target.value })} placeholder="Brief description..." rows={2} style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', resize: 'vertical', outline: 'none' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Thumbnail URL (optional)</label>
+              <input type="text" value={editorArticle.thumbnailUrl || ''} onChange={(e) => setEditorArticle({ ...editorArticle, thumbnailUrl: e.target.value })} placeholder="https://..." style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }} />
             </div>
           </div>
-          <div className="glass-card" style={{ borderRadius: '12px', padding: '20px', marginBottom: '24px', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}><Plus size={18} color="#22c55e" /><h3 style={{ color: '#22c55e', fontSize: '14px', fontWeight: '600', margin: 0 }}>ADD CONTENT BLOCK</h3></div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>{[{ type: 'header', icon: Type, label: 'Header' }, { type: 'paragraph', icon: FileText, label: 'Paragraph' }, { type: 'callout', icon: Lightbulb, label: 'Callout' }, { type: 'list', icon: List, label: 'List' }, { type: 'code', icon: Code, label: 'Code' }, { type: 'data-viz', icon: BarChart3, label: 'Data Viz' }, { type: 'quote', icon: Quote, label: 'Quote' }, { type: 'image', icon: FileImage, label: 'Image' }].map(({ type, icon: Icon, label }) => (<button key={type} onClick={() => addBlock(type)} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '6px', padding: '8px 12px', color: '#22c55e', fontSize: '12px', fontWeight: '500', cursor: 'pointer' }}><Icon size={14} />{label}</button>))}</div>
+
+          <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: '600', margin: 0 }}>Content Blocks</h3>
+            <button 
+              onClick={() => setShowNotionPaste(true)} 
+              className="btn-hover"
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                background: 'linear-gradient(135deg, rgba(255, 179, 71, 0.2) 0%, rgba(255, 179, 71, 0.1) 100%)', 
+                border: '1px solid rgba(255, 179, 71, 0.3)', 
+                borderRadius: '8px', 
+                padding: '10px 16px', 
+                color: '#FFB347', 
+                fontSize: '13px', 
+                fontWeight: '600', 
+                cursor: 'pointer' 
+              }}
+            >
+              <ClipboardPaste size={16} />
+              Paste from Notion
+            </button>
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}><Settings size={18} color="rgba(255,255,255,0.5)" /><h3 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontWeight: '600', margin: 0 }}>CONTENT BLOCKS ({editorArticle.blocks.length})</h3></div>
-            {editorArticle.blocks.length === 0 ? (<div className="glass-card" style={{ borderRadius: '12px', padding: '40px', textAlign: 'center', border: '1px dashed rgba(255,255,255,0.2)' }}><FileText size={32} color="rgba(255,255,255,0.3)" style={{ marginBottom: '12px' }} /><p style={{ color: 'rgba(255,255,255,0.4)', margin: 0 }}>No content blocks yet. Add blocks above.</p></div>) : (editorArticle.blocks.map((block, index) => (<BlockEditor key={index} block={block} index={index} />)))}
+
+          {editorArticle.blocks.length === 0 ? (
+            <div className="glass-card" style={{ borderRadius: '12px', padding: '48px', textAlign: 'center', border: '2px dashed rgba(255, 179, 71, 0.2)' }}>
+              <ClipboardPaste size={48} color="rgba(255,255,255,0.2)" style={{ marginBottom: '16px' }} />
+              <h4 style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>No content yet</h4>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', marginBottom: '20px' }}>Paste from Notion or add blocks manually</p>
+              <button 
+                onClick={() => setShowNotionPaste(true)} 
+                className="btn-hover"
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '8px', 
+                  background: '#FFB347', 
+                  border: 'none', 
+                  borderRadius: '8px', 
+                  padding: '12px 20px', 
+                  color: '#0a0a0a', 
+                  fontSize: '14px', 
+                  fontWeight: '600', 
+                  cursor: 'pointer' 
+                }}
+              >
+                <ClipboardPaste size={16} />
+                Paste from Notion
+              </button>
+            </div>
+          ) : (
+            editorArticle.blocks.map((block, index) => (
+              <BlockEditor key={index} block={block} index={index} />
+            ))
+          )}
+        </div>
+
+        <div>
+          <div className="glass-card" style={{ borderRadius: '12px', padding: '20px', position: 'sticky', top: '20px' }}>
+            <h4 style={{ color: '#fff', fontSize: '14px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Plus size={16} color="#FFB347" />Add Block</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {blockTypes.map(({ type, icon: Icon, label }) => (
+                <button key={type} onClick={() => addBlock(type)} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 14px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s ease' }}>
+                  <Icon size={16} color="#FFB347" />
+                  <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '500' }}>{label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <div style={{ flex: '1 1 400px', minWidth: '300px' }}>
-          <div className="glass-card" style={{ borderRadius: '12px', padding: '24px', position: 'sticky', top: '20px', maxHeight: 'calc(100vh - 40px)', overflow: 'auto', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}><Eye size={18} color="#60a5fa" /><h3 style={{ color: '#60a5fa', fontSize: '14px', fontWeight: '600', margin: 0 }}>LIVE PREVIEW</h3></div>
-            {editorArticle.title || editorArticle.blocks.length > 0 ? (<ArticleRenderer article={editorArticle} />) : (<div style={{ textAlign: 'center', padding: '40px 0' }}><Eye size={32} color="rgba(255,255,255,0.2)" style={{ marginBottom: '12px' }} /><p style={{ color: 'rgba(255,255,255,0.4)', margin: 0, fontSize: '14px' }}>Start adding content to see preview</p></div>)}
+      </div>
+    );
+  };
+
+  // Notion Paste Modal
+  const NotionPasteModal = () => (
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+      <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '700px', maxHeight: '80vh', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(255, 179, 71, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ClipboardPaste size={22} color="#FFB347" />
+            </div>
+            <div>
+              <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: 0 }}>Paste from Notion</h2>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: '4px 0 0' }}>Copy your Notion content and paste it here</p>
+            </div>
+          </div>
+          <button onClick={() => { setShowNotionPaste(false); setNotionContent(''); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
+            <X size={18} color="rgba(255,255,255,0.6)" />
+          </button>
+        </div>
+        
+        <div style={{ background: 'rgba(255, 179, 71, 0.1)', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', border: '1px solid rgba(255, 179, 71, 0.2)' }}>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: 0, lineHeight: 1.6 }}>
+            <strong style={{ color: '#FFB347' }}>Supported:</strong> Headings, paragraphs, lists, code blocks, quotes, callouts, <strong>**bold**</strong>, <em>*italic*</em>
+            <br />
+            <strong style={{ color: '#FFB347' }}>Images:</strong> Replace Notion image attachments with direct URLs (paste URL on its own line)
+          </p>
+        </div>
+        
+        <textarea
+          value={notionContent}
+          onChange={(e) => setNotionContent(e.target.value)}
+          placeholder="Paste your Notion content here (Ctrl+V / Cmd+V)..."
+          style={{
+            flex: 1,
+            minHeight: '250px',
+            width: '100%',
+            background: 'rgba(0,0,0,0.4)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: '8px',
+            padding: '16px',
+            color: '#fff',
+            fontSize: '14px',
+            lineHeight: 1.6,
+            resize: 'none',
+            outline: 'none',
+            fontFamily: 'monospace'
+          }}
+          autoFocus
+        />
+        
+        <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+          <button 
+            onClick={() => { setShowNotionPaste(false); setNotionContent(''); }} 
+            style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', padding: '14px', color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={handleNotionPaste} 
+            disabled={!notionContent.trim()}
+            style={{ 
+              flex: 2, 
+              background: notionContent.trim() ? '#FFB347' : 'rgba(255, 179, 71, 0.3)', 
+              border: 'none', 
+              borderRadius: '8px', 
+              padding: '14px', 
+              color: notionContent.trim() ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
+              fontSize: '14px', 
+              fontWeight: '600', 
+              cursor: notionContent.trim() ? 'pointer' : 'not-allowed',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
+            }}
+          >
+            <Zap size={16} />
+            Parse & Import
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Schedule Modal
+  const ScheduleModal = () => {
+    // Set default to tomorrow at 9:00 AM if not already set
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const defaultDate = tomorrow.toISOString().split('T')[0];
+    const defaultTime = '09:00';
+    
+    const currentDate = scheduleDate || defaultDate;
+    const currentTime = scheduleTime || defaultTime;
+    
+    const scheduledDateTime = new Date(`${currentDate}T${currentTime}`);
+    const isValidSchedule = scheduledDateTime > new Date();
+    
+    const formatPreview = () => {
+      if (!currentDate || !currentTime) return '';
+      return scheduledDateTime.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    };
+
+    return (
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+        <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '450px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(59, 130, 246, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Calendar size={22} color="#60a5fa" />
+              </div>
+              <div>
+                <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', margin: 0 }}>Schedule Article</h2>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: '4px 0 0' }}>Set when this article goes live</p>
+              </div>
+            </div>
+            <button onClick={() => { setShowScheduleModal(false); setScheduleDate(''); setScheduleTime(''); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
+              <X size={18} color="rgba(255,255,255,0.6)" />
+            </button>
+          </div>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</label>
+            <input
+              type="date"
+              value={currentDate}
+              onChange={(e) => setScheduleDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              style={{
+                width: '100%',
+                background: 'rgba(0,0,0,0.4)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                color: '#fff',
+                fontSize: '14px',
+                outline: 'none',
+                colorScheme: 'dark'
+              }}
+            />
+          </div>
+          
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '11px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Time</label>
+            <input
+              type="time"
+              value={currentTime}
+              onChange={(e) => setScheduleTime(e.target.value)}
+              style={{
+                width: '100%',
+                background: 'rgba(0,0,0,0.4)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                color: '#fff',
+                fontSize: '14px',
+                outline: 'none',
+                colorScheme: 'dark'
+              }}
+            />
+          </div>
+          
+          {currentDate && currentTime && (
+            <div style={{ 
+              background: isValidSchedule ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.1)', 
+              borderRadius: '8px', 
+              padding: '12px 16px', 
+              marginBottom: '24px', 
+              border: `1px solid ${isValidSchedule ? 'rgba(59, 130, 246, 0.2)' : 'rgba(239, 68, 68, 0.2)'}` 
+            }}>
+              <p style={{ color: isValidSchedule ? '#60a5fa' : '#ef4444', fontSize: '13px', margin: 0 }}>
+                {isValidSchedule ? `📅 ${formatPreview()}` : '⚠️ Please select a future date and time'}
+              </p>
+            </div>
+          )}
+          
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button 
+              onClick={() => { setShowScheduleModal(false); setScheduleDate(''); setScheduleTime(''); }} 
+              style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', padding: '14px', color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={() => scheduleArticle(currentDate, currentTime)}
+              disabled={!isValidSchedule || saving}
+              style={{ 
+                flex: 2, 
+                background: isValidSchedule && !saving ? '#60a5fa' : 'rgba(59, 130, 246, 0.3)', 
+                border: 'none', 
+                borderRadius: '8px', 
+                padding: '14px', 
+                color: isValidSchedule && !saving ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
+                fontSize: '14px', 
+                fontWeight: '600', 
+                cursor: isValidSchedule && !saving ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {saving ? (<><Loader size={16} className="spin" />Scheduling...</>) : (<><Calendar size={16} />Schedule</>)}
+            </button>
           </div>
         </div>
       </div>
@@ -421,7 +1273,7 @@ export default function FreeNachosArticles() {
   };
 
   return (
-    <div style={{minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
+    <div ref={nachoRef} style={{ minHeight: '100vh', background: '#0a0a0a', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
       {showLogin && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '400px', margin: '20px', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
@@ -457,6 +1309,8 @@ export default function FreeNachosArticles() {
         </div>
       )}
       {showDeleteConfirm && <DeleteConfirmModal article={showDeleteConfirm} />}
+      {showNotionPaste && <NotionPasteModal />}
+      {showScheduleModal && <ScheduleModal />}
 
       <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1}}>
         {nachos.map(nacho => (<div key={nacho.id} style={{ position: 'absolute', left: `${nacho.x}%`, top: `${nacho.y}%`, animation: `floatNacho ${nacho.duration}s ease-in-out infinite`, animationDelay: `${nacho.delay}s`, '--moveX': `${nacho.moveX}px`, '--moveY': `${nacho.moveY}px` }}><NachoTriangle size={nacho.size} opacity={nacho.opacity} /></div>))}
@@ -518,6 +1372,7 @@ export default function FreeNachosArticles() {
             {view === 'editor' && user && (<>
               <button onClick={() => { setView('library'); setEditorArticle(null); }} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', padding: '10px 16px', color: '#ef4444', fontSize: '13px', fontWeight: '500', cursor: 'pointer' }}><X size={14} />Cancel</button>
               <button onClick={() => saveArticle(false)} disabled={!editorArticle?.title || saving} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', padding: '10px 16px', color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '500', cursor: !editorArticle?.title || saving ? 'not-allowed' : 'pointer', opacity: !editorArticle?.title ? 0.5 : 1 }}><EyeOff size={14} />Save Draft</button>
+              <button onClick={() => setShowScheduleModal(true)} disabled={!editorArticle?.title || saving} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(59, 130, 246, 0.2)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '8px', padding: '10px 16px', color: '#60a5fa', fontSize: '13px', fontWeight: '500', cursor: !editorArticle?.title || saving ? 'not-allowed' : 'pointer', opacity: !editorArticle?.title ? 0.5 : 1 }}><Calendar size={14} />Schedule</button>
               <button onClick={() => saveArticle(true)} disabled={!editorArticle?.title || saving} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: !editorArticle?.title || saving ? 'rgba(34, 197, 94, 0.3)' : '#22c55e', border: 'none', borderRadius: '8px', padding: '10px 20px', color: !editorArticle?.title || saving ? 'rgba(255,255,255,0.4)' : '#0a0a0a', fontSize: '13px', fontWeight: '600', cursor: !editorArticle?.title || saving ? 'not-allowed' : 'pointer' }}>{saving ? (<><Loader size={14} className="spin" />Saving...</>) : (<><Globe size={14} />Publish</>)}</button>
             </>)}
             {view !== 'editor' && user && (<button onClick={() => openEditor()} className="btn-hover" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #FFB347 0%, #E09A30 100%)', border: 'none', borderRadius: '8px', padding: '10px 20px', color: '#0a0a0a', fontSize: '13px', fontWeight: '600', cursor: 'pointer', boxShadow: '0 4px 20px rgba(255, 179, 71, 0.3)' }}><Edit3 size={14} />New Article</button>)}
