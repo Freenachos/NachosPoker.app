@@ -948,7 +948,7 @@ The 3-month program consists of:
       />
 
       {/* Floating Nachos Background */}
-      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1}}>
+      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1}}>
         {nachos.map(nacho => (
           <div
             key={nacho.id}
@@ -1406,17 +1406,11 @@ The 3-month program consists of:
           mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
-
-        /* Hero Section Global Mask - Organic Bottom Fade */
-        .hero-section-mask {
-          mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-        }
       `}</style>
 
-      {/* ==================== GLOBAL ATMOSPHERIC LAYER (Fixed, z-0) ==================== */}
+      {/* ==================== GLOBAL ATMOSPHERIC LAYER (Fixed, z--2) ==================== */}
       {/* These shapes stay fixed so they show through the Hero section fade */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -2, overflow: 'hidden' }}>
         {/* Massive Atmospheric Shape - Top Right Corner */}
         <div style={{
           position: 'absolute',
@@ -1496,10 +1490,9 @@ The 3-month program consists of:
 
       {/* ==================== CINEMATIC HERO SECTION ==================== */}
       <section 
-        className="hero-section-mask"
         style={{
           position: 'relative',
-          minHeight: '120vh',
+          minHeight: '100vh',
           width: '100%',
           overflow: 'hidden',
           background: '#0A0A0A'
@@ -1521,7 +1514,7 @@ The 3-month program consists of:
           </div>
         </div>
 
-        {/* === HALO LIGHTING: Key Light Behind Coach (z-2) === */}
+        {/* === HALO LIGHTING: Key Light Behind Coach (z-5) === */}
         <div style={{
           position: 'absolute',
           bottom: '-15%',
@@ -1530,11 +1523,11 @@ The 3-month program consists of:
           height: '800px',
           background: 'radial-gradient(circle, rgba(255, 153, 0, 0.3) 0%, rgba(212, 175, 55, 0.12) 40%, transparent 70%)',
           filter: 'blur(120px)',
-          zIndex: 2,
+          zIndex: 5,
           pointerEvents: 'none'
         }} />
 
-        {/* === COACH IMAGE: Anchored Bottom-Right (z-10) === */}
+        {/* === COACH IMAGE: Anchored Bottom-Right (z-20) === */}
         <div 
           className="hero-image-mask"
           style={{
@@ -1543,7 +1536,7 @@ The 3-month program consists of:
             right: 0,
             height: '88vh',
             maxHeight: '920px',
-            zIndex: 10,
+            zIndex: 20,
             animation: 'imageReveal 1.2s ease-out 0.5s both',
             pointerEvents: 'none'
           }}
@@ -1571,11 +1564,11 @@ The 3-month program consists of:
           }}
         />
 
-        {/* === CONTENT WRAPPER: Constrained Width (z-20) === */}
+        {/* === CONTENT WRAPPER: Constrained Width (z-30) === */}
         <div 
           style={{
             position: 'relative',
-            zIndex: 20,
+            zIndex: 30,
             width: '100%',
             minHeight: '100vh',
             display: 'flex',
@@ -1700,19 +1693,33 @@ The 3-month program consists of:
             }
           }
         `}</style>
+
+        {/* === FLOOR FOG: Soft Bottom Transition (z-25) === */}
+        <div 
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            height: '25vh',
+            background: 'linear-gradient(to top, #0A0A0A 0%, rgba(10, 10, 10, 0.6) 50%, transparent 100%)',
+            zIndex: 25,
+            pointerEvents: 'none'
+          }}
+        />
       </section>
 
-      {/* ==================== MUSEUM SPACER: Pure Atmosphere ==================== */}
+      {/* ==================== MUSEUM SPACER: Fade Zone ==================== */}
       <div 
         style={{
-          height: '200px',
+          height: '300px',
           position: 'relative',
           zIndex: 1
         }}
       />
 
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
-      <div style={{position: 'relative', zIndex: 2, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
+      <div style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
         {/* About Section - First Card with Extra Dramatic Entrance */}
         <div 
