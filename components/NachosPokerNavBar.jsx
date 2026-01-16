@@ -87,7 +87,7 @@ const NachosPokerNavBar = () => {
           inset: 0;
           border-radius: 12px;
           z-index: -1;
-          background: rgba(255, 255, 255, calc(0.03 * var(--scroll-progress, 0)));
+          background: rgba(10, 10, 10, calc(0.85 * var(--scroll-progress, 0)));
           border: 1px solid rgba(255, 255, 255, calc(0.08 * var(--scroll-progress, 0)));
           backdrop-filter: blur(calc(10px * var(--scroll-progress, 0)));
           -webkit-backdrop-filter: blur(calc(10px * var(--scroll-progress, 0)));
