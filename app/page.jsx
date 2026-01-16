@@ -1406,15 +1406,103 @@ The 3-month program consists of:
           mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
+
+        /* Hero Section Global Mask - Organic Bottom Fade */
+        .hero-section-mask {
+          mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
       `}</style>
+
+      {/* ==================== GLOBAL ATMOSPHERIC LAYER (Fixed, z-0) ==================== */}
+      {/* These shapes stay fixed so they show through the Hero section fade */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        {/* Massive Atmospheric Shape - Top Right Corner */}
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '-8%',
+          width: '900px',
+          height: '900px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%)',
+          filter: 'blur(80px)',
+          opacity: 0.6
+        }} />
+        
+        {/* Massive Atmospheric Shape - Bottom Left Corner */}
+        <div style={{
+          position: 'absolute',
+          bottom: '-15%',
+          left: '-12%',
+          width: '1000px',
+          height: '1000px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255, 153, 0, 0.06) 0%, transparent 55%)',
+          filter: 'blur(100px)',
+          opacity: 0.5
+        }} />
+
+        {/* Cinematic Nacho 1 - Upper Right */}
+        <div style={{
+          position: 'absolute',
+          top: '12%',
+          right: '10%',
+          width: '200px',
+          height: '200px',
+          opacity: 0.07,
+          filter: 'blur(25px)',
+          animation: 'cinematicFloat 16s ease-in-out infinite'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+          </svg>
+        </div>
+        
+        {/* Cinematic Nacho 2 - Mid Left */}
+        <div style={{
+          position: 'absolute',
+          top: '45%',
+          left: '5%',
+          width: '160px',
+          height: '160px',
+          opacity: 0.05,
+          filter: 'blur(30px)',
+          animation: 'cinematicFloat2 20s ease-in-out infinite',
+          animationDelay: '-6s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+          </svg>
+        </div>
+        
+        {/* Cinematic Nacho 3 - Lower Right */}
+        <div style={{
+          position: 'absolute',
+          bottom: '20%',
+          right: '15%',
+          width: '180px',
+          height: '180px',
+          opacity: 0.06,
+          filter: 'blur(35px)',
+          animation: 'cinematicFloat 22s ease-in-out infinite',
+          animationDelay: '-10s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+          </svg>
+        </div>
+      </div>
 
       {/* ==================== CINEMATIC HERO SECTION ==================== */}
       <section 
+        className="hero-section-mask"
         style={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: '120vh',
           width: '100%',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          background: '#0A0A0A'
         }}
       >
         {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
@@ -1430,91 +1518,6 @@ The 3-month program consists of:
         >
           <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
             <NachosPokerNavBar />
-          </div>
-        </div>
-
-        {/* === LAYER A: Atmospheric Shapes (z-0) - Deep Background === */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-          {/* Massive Atmospheric Shape - Top Right Corner */}
-          <div style={{
-            position: 'absolute',
-            top: '-15%',
-            right: '-10%',
-            width: '800px',
-            height: '800px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%)',
-            filter: 'blur(80px)',
-            opacity: 0.5,
-            animation: 'atmosphereDrift 25s ease-in-out infinite'
-          }} />
-          
-          {/* Massive Atmospheric Shape - Bottom Left Corner */}
-          <div style={{
-            position: 'absolute',
-            bottom: '-20%',
-            left: '-15%',
-            width: '900px',
-            height: '900px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 153, 0, 0.06) 0%, transparent 55%)',
-            filter: 'blur(100px)',
-            opacity: 0.5,
-            animation: 'atmosphereDrift 30s ease-in-out infinite',
-            animationDelay: '-10s'
-          }} />
-        </div>
-
-        {/* === LAYER B: Subtle Nacho Shapes (z-1) - Scattered to Edges === */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden', pointerEvents: 'none' }}>
-          {/* Nacho 1 - Far Top Right (away from text) */}
-          <div style={{
-            position: 'absolute',
-            top: '8%',
-            right: '8%',
-            width: '180px',
-            height: '180px',
-            opacity: 0.06,
-            filter: 'blur(30px)',
-            animation: 'cinematicFloat 14s ease-in-out infinite'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
-            </svg>
-          </div>
-          
-          {/* Nacho 2 - Bottom Right (near coach feet area) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '5%',
-            right: '25%',
-            width: '140px',
-            height: '140px',
-            opacity: 0.05,
-            filter: 'blur(35px)',
-            animation: 'cinematicFloat2 18s ease-in-out infinite',
-            animationDelay: '-5s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
-            </svg>
-          </div>
-          
-          {/* Nacho 3 - Far Bottom Left Corner (away from text) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '12%',
-            left: '3%',
-            width: '160px',
-            height: '160px',
-            opacity: 0.05,
-            filter: 'blur(40px)',
-            animation: 'cinematicFloat 20s ease-in-out infinite',
-            animationDelay: '-8s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
-            </svg>
           </div>
         </div>
 
@@ -1697,26 +1700,12 @@ The 3-month program consists of:
             }
           }
         `}</style>
-
-        {/* === FLOOR FOG: Atmospheric Transition (z-25) === */}
-        <div 
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-            height: '35vh',
-            background: 'linear-gradient(to top, #0A0A0A 0%, rgba(10, 10, 10, 0.8) 40%, rgba(10, 10, 10, 0) 100%)',
-            zIndex: 25,
-            pointerEvents: 'none'
-          }}
-        />
       </section>
 
       {/* ==================== MUSEUM SPACER: Pure Atmosphere ==================== */}
       <div 
         style={{
-          height: '500px',
+          height: '200px',
           position: 'relative',
           zIndex: 1
         }}
