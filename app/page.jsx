@@ -2587,130 +2587,194 @@ The 3-month program consists of:
           `}</style>
         </div>
 
-        {/* Testimonials Section */}
+        {/* ==================== TESTIMONIALS - Museum Gallery ==================== */}
         <div 
           id="testimonials"
-          className="glass-card reveal"
+          className="reveal"
           style={{
-            borderRadius: '24px',
-            padding: '64px',
+            paddingTop: '256px',
+            paddingBottom: '256px',
             marginBottom: '200px',
-            overflow: 'hidden'
+            position: 'relative',
+            overflow: 'visible'
           }}
         >
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          {/* Header - Centered with Liquid Gold */}
+          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
             <h2 style={{
-              fontSize: '32px',
+              fontSize: 'clamp(36px, 4vw, 52px)',
               fontWeight: '800',
-              color: '#F0F0F0',
-              marginBottom: '8px'
+              marginBottom: '20px',
+              letterSpacing: '-0.025em',
+              fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              Testimonials
+              <span style={{ color: '#FFFFFF' }}>What My Students </span>
+              <span style={{ 
+                color: '#D3AF39',
+                textShadow: '0 0 50px rgba(211, 175, 57, 0.3)'
+              }}>Say</span>
             </h2>
+            <p style={{
+              fontSize: '18px',
+              color: 'rgba(240, 240, 240, 0.55)',
+              maxWidth: '550px',
+              margin: '0 auto',
+              lineHeight: 1.7
+            }}>
+              Real results from real players who transformed their game
+            </p>
           </div>
 
-          {/* Testimonial Carousel with Side Previews */}
+          {/* Carousel Container */}
           <div style={{
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '20px',
-            padding: '0 20px'
+            gap: '32px',
+            padding: '0 60px',
+            overflow: 'visible'
           }}>
+            
+            {/* Left Navigation Arrow - Floating Glass Circle */}
+            <button 
+              onClick={prevTestimonial}
+              className="testimonial-nav-btn"
+              style={{
+                position: 'absolute',
+                left: '0',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                zIndex: 10
+              }}
+            >
+              <ChevronLeft size={24} color="#D3AF39" />
+            </button>
+
             {/* Left Preview Card */}
             <div 
               onClick={prevTestimonial}
+              className="testimonial-preview-card"
               style={{
-                flex: '0 0 200px',
-                height: '280px',
-                background: 'rgba(15, 15, 15, 0.4)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-                borderRadius: '16px',
-                padding: '20px',
+                flex: '0 0 220px',
+                height: '320px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(40px)',
+                WebkitBackdropFilter: 'blur(40px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '28px',
+                padding: '24px',
                 opacity: 0.5,
-                transform: 'scale(0.9)',
+                transform: 'scale(0.92)',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
               }}
-              className="preview-card"
             >
+              {/* Preview Graph */}
               <div style={{
-                background: 'rgba(15, 15, 15, 0.8)',
-                borderRadius: '8px',
-                padding: '8px',
-                marginBottom: '12px',
-                border: '1px solid rgba(255, 179, 71, 0.1)',
+                borderRadius: '16px',
                 overflow: 'hidden',
-                height: '80px',
-                flexShrink: 0
+                marginBottom: '16px',
+                height: '100px',
+                flexShrink: 0,
+                border: '1px solid rgba(211, 175, 57, 0.15)'
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].image || testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].imageAfter} 
                   alt="Results"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.6)',
-                fontSize: '12px',
+                color: 'rgba(255,255,255,0.5)',
+                fontSize: '13px',
                 fontStyle: 'italic',
                 flex: 1,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: 4,
-                WebkitBoxOrient: 'vertical'
+                WebkitBoxOrient: 'vertical',
+                lineHeight: 1.6
               }}>
                 "{testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].quote.substring(0, 100)}..."
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '11px',
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: '12px',
                 fontWeight: '600',
-                marginTop: '8px',
+                marginTop: '12px',
                 flexShrink: 0
               }}>
                 {testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].name}
               </div>
             </div>
 
-            {/* Main Testimonial Card */}
+            {/* Main Testimonial Card - Obsidian Style */}
             <div 
               key={currentTestimonialIndex}
-              className="testimonial-card-main"
+              className="testimonial-main-card"
               style={{
-                flex: '0 0 600px',
-                maxWidth: '600px',
-                height: '480px',
-                background: 'rgba(15, 15, 15, 0.6)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 179, 71, 0.2)',
-                borderRadius: '20px',
-                padding: '32px',
+                flex: '0 0 640px',
+                maxWidth: '640px',
+                minHeight: '520px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(40px)',
+                WebkitBackdropFilter: 'blur(40px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '32px',
+                padding: '40px',
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
-                animation: `${slideDirection === 'right' ? 'slideInRight' : 'slideInLeft'} 0.4s ease-out`
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                animation: `${slideDirection === 'right' ? 'slideInRight' : 'slideInLeft'} 0.4s ease-out`,
+                boxShadow: '0 8px 40px rgba(0, 0, 0, 0.3)'
               }}
             >
-              {/* Graph */}
+              {/* Student Verified Badge */}
               <div style={{
-                background: 'rgba(15, 15, 15, 0.8)',
-                borderRadius: '12px',
-                padding: '16px',
-                marginBottom: '24px',
-                border: '1px solid rgba(255, 179, 71, 0.2)',
-                height: '160px',
-                flexShrink: 0,
-                overflow: 'hidden',
+                position: 'absolute',
+                top: '24px',
+                right: '24px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                gap: '6px',
+                background: 'rgba(211, 175, 57, 0.1)',
+                border: '1px solid rgba(211, 175, 57, 0.3)',
+                borderRadius: '20px',
+                padding: '6px 14px'
+              }}>
+                <CheckCircle size={14} color="#D3AF39" />
+                <span style={{ color: '#D3AF39', fontSize: '11px', fontWeight: '600', letterSpacing: '0.05em' }}>
+                  VERIFIED
+                </span>
+              </div>
+
+              {/* Graph/Results Image */}
+              <div style={{
+                borderRadius: '20px',
+                overflow: 'hidden',
+                marginBottom: '28px',
+                height: '180px',
+                flexShrink: 0,
+                border: '1px solid rgba(211, 175, 57, 0.2)',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
               }}>
                 {testimonials[currentTestimonialIndex].hasBeforeAfter ? (
                   <BeforeAfterGraph 
@@ -2726,159 +2790,258 @@ The 3-month program consists of:
               <div style={{
                 position: 'relative',
                 flex: 1,
-                overflow: 'auto',
-                marginBottom: '16px'
+                marginBottom: '24px'
               }}>
+                {/* Gold Quote Mark */}
                 <div style={{
                   position: 'absolute',
-                  top: '-10px',
-                  left: '-10px',
-                  fontSize: '60px',
-                  color: 'rgba(255, 179, 71, 0.15)',
+                  top: '-8px',
+                  left: '-8px',
+                  fontSize: '72px',
+                  color: 'rgba(211, 175, 57, 0.15)',
                   fontFamily: 'Georgia, serif',
-                  lineHeight: 1
+                  lineHeight: 1,
+                  pointerEvents: 'none'
                 }}>
                   "
                 </div>
                 <p style={{
                   color: 'rgba(255, 255, 255, 0.85)',
-                  fontSize: '15px',
-                  lineHeight: 1.8,
+                  fontSize: '16px',
+                  lineHeight: 1.85,
                   fontStyle: 'italic',
-                  paddingLeft: '20px'
+                  paddingLeft: '24px',
+                  paddingRight: '8px'
                 }}>
                   {testimonials[currentTestimonialIndex].quote}
                 </p>
               </div>
 
-              {/* Result Badge */}
+              {/* Star Rating */}
               <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'rgba(212, 175, 55, 0.1)',
-                border: '1px solid rgba(212, 175, 55, 0.3)',
-                borderRadius: '20px',
-                padding: '8px 16px',
-                marginBottom: '16px',
-                alignSelf: 'flex-start'
+                display: 'flex',
+                gap: '4px',
+                marginBottom: '20px'
               }}>
-                <TrendingUp size={14} color="#D4AF37" />
-                <span style={{ color: '#D4AF37', fontSize: '12px', fontWeight: '600' }}>
-                  {testimonials[currentTestimonialIndex].result}
-                </span>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} size={18} fill="#D3AF39" color="#D3AF39" />
+                ))}
               </div>
 
-              {/* Name */}
-              <div style={{ textAlign: 'center', flexShrink: 0 }}>
+              {/* Author Info with Gold Ring Avatar */}
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '16px',
+                flexShrink: 0 
+              }}>
+                {/* Avatar with Gold Ring */}
                 <div style={{
-                  color: '#ffffff',
-                  fontSize: '18px',
-                  fontWeight: '700'
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '50%',
+                  padding: '2px',
+                  background: 'linear-gradient(135deg, #D3AF39 0%, rgba(211, 175, 57, 0.5) 100%)',
+                  boxShadow: '0 0 20px rgba(211, 175, 57, 0.25)'
                 }}>
-                  {testimonials[currentTestimonialIndex].name}
-                </div>
-                {testimonials[currentTestimonialIndex].subtitle && (
                   <div style={{
-                    color: 'rgba(255,255,255,0.5)',
-                    fontSize: '13px',
-                    marginTop: '4px'
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    background: '#1a1a1a',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: '#D3AF39'
                   }}>
-                    {testimonials[currentTestimonialIndex].subtitle}
+                    {testimonials[currentTestimonialIndex].name.charAt(0)}
                   </div>
-                )}
+                </div>
+                
+                <div>
+                  <div style={{
+                    color: '#ffffff',
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    marginBottom: '4px'
+                  }}>
+                    {testimonials[currentTestimonialIndex].name}
+                  </div>
+                  {testimonials[currentTestimonialIndex].subtitle && (
+                    <div style={{
+                      color: 'rgba(255,255,255,0.5)',
+                      fontSize: '13px'
+                    }}>
+                      {testimonials[currentTestimonialIndex].subtitle}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Right Preview Card */}
             <div 
               onClick={nextTestimonial}
+              className="testimonial-preview-card"
               style={{
-                flex: '0 0 200px',
-                height: '280px',
-                background: 'rgba(15, 15, 15, 0.4)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-                borderRadius: '16px',
-                padding: '20px',
+                flex: '0 0 220px',
+                height: '320px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(40px)',
+                WebkitBackdropFilter: 'blur(40px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '28px',
+                padding: '24px',
                 opacity: 0.5,
-                transform: 'scale(0.9)',
+                transform: 'scale(0.92)',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
               }}
-              className="preview-card"
             >
+              {/* Preview Graph */}
               <div style={{
-                background: 'rgba(15, 15, 15, 0.8)',
-                borderRadius: '8px',
-                padding: '8px',
-                marginBottom: '12px',
-                border: '1px solid rgba(255, 179, 71, 0.1)',
+                borderRadius: '16px',
                 overflow: 'hidden',
-                height: '80px',
-                flexShrink: 0
+                marginBottom: '16px',
+                height: '100px',
+                flexShrink: 0,
+                border: '1px solid rgba(211, 175, 57, 0.15)'
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex + 1) % testimonials.length].image || testimonials[(currentTestimonialIndex + 1) % testimonials.length].imageAfter} 
                   alt="Results"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.6)',
-                fontSize: '12px',
+                color: 'rgba(255,255,255,0.5)',
+                fontSize: '13px',
                 fontStyle: 'italic',
                 flex: 1,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: 4,
-                WebkitBoxOrient: 'vertical'
+                WebkitBoxOrient: 'vertical',
+                lineHeight: 1.6
               }}>
                 "{testimonials[(currentTestimonialIndex + 1) % testimonials.length].quote.substring(0, 100)}..."
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '11px',
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: '12px',
                 fontWeight: '600',
-                marginTop: '8px',
+                marginTop: '12px',
                 flexShrink: 0
               }}>
                 {testimonials[(currentTestimonialIndex + 1) % testimonials.length].name}
               </div>
             </div>
+
+            {/* Right Navigation Arrow - Floating Glass Circle */}
+            <button 
+              onClick={nextTestimonial}
+              className="testimonial-nav-btn"
+              style={{
+                position: 'absolute',
+                right: '0',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                zIndex: 10
+              }}
+            >
+              <ChevronRight size={24} color="#D3AF39" />
+            </button>
           </div>
 
-          {/* Carousel Controls */}
+          {/* Dot Indicators */}
           <div style={{
             display: 'flex',
             gap: '12px',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '32px'
+            marginTop: '48px'
           }}>
-            <button className="carousel-btn" onClick={prevTestimonial}>
-              <ChevronLeft size={20} color="#D4AF37" />
-            </button>
-            
-            {/* Counter */}
-            <div style={{
-              color: 'rgba(240, 240, 240, 0.6)',
-              fontSize: '14px',
-              fontWeight: '500',
-              minWidth: '60px',
-              textAlign: 'center'
-            }}>
-              {currentTestimonialIndex + 1} / {testimonials.length}
-            </div>
-            
-            <button className="carousel-btn" onClick={nextTestimonial}>
-              <ChevronRight size={20} color="#D4AF37" />
-            </button>
+            {testimonials.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setSlideDirection(idx > currentTestimonialIndex ? 'right' : 'left');
+                  setCurrentTestimonialIndex(idx);
+                }}
+                style={{
+                  width: idx === currentTestimonialIndex ? '32px' : '10px',
+                  height: '10px',
+                  borderRadius: '5px',
+                  background: idx === currentTestimonialIndex ? '#D3AF39' : 'rgba(255, 255, 255, 0.2)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.4s ease'
+                }}
+              />
+            ))}
           </div>
+
+          {/* Testimonial Section Styles */}
+          <style>{`
+            .testimonial-nav-btn:hover {
+              border-color: rgba(211, 175, 57, 0.5) !important;
+              background: rgba(211, 175, 57, 0.1) !important;
+              box-shadow: 0 0 30px rgba(211, 175, 57, 0.2);
+              transform: translateY(-50%) scale(1.1);
+            }
+            
+            .testimonial-preview-card:hover {
+              opacity: 0.7 !important;
+              transform: scale(0.95) !important;
+              border-color: rgba(211, 175, 57, 0.3) !important;
+            }
+            
+            .testimonial-main-card:hover {
+              border-color: rgba(211, 175, 57, 0.3) !important;
+              box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 50px rgba(211, 175, 57, 0.1) !important;
+            }
+            
+            @media (max-width: 1200px) {
+              .testimonial-preview-card {
+                display: none !important;
+              }
+              .testimonial-main-card {
+                flex: 1 !important;
+                max-width: 100% !important;
+              }
+            }
+            
+            @media (max-width: 680px) {
+              .testimonial-main-card {
+                padding: 28px !important;
+                min-height: auto !important;
+              }
+              .testimonial-nav-btn {
+                width: 44px !important;
+                height: 44px !important;
+              }
+            }
+          `}</style>
         </div>
         {/* ==================== YOUTUBE CINEMA SECTION ==================== */}
         {/* Premium Masterclass Library - No Box, Museum Spacing */}
