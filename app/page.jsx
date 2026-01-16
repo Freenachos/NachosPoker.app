@@ -1517,6 +1517,42 @@ The 3-month program consists of:
         {/* Sparse at top (distant stars), denser toward bottom */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 16, overflow: 'hidden', pointerEvents: 'none' }}>
           
+          {/* === CRYSTAL CLEAR MICRO NACHOS === */}
+          
+          {/* Micro Nacho - Upper Left (near logo area) */}
+          <div style={{
+            position: 'absolute',
+            top: '12%',
+            left: '8%',
+            width: '18px',
+            height: '18px',
+            opacity: 0.4,
+            filter: 'blur(0px)',
+            animation: 'cinematicFloat 15s ease-in-out infinite',
+            animationDelay: '-3s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+            </svg>
+          </div>
+
+          {/* Micro Nacho - Below CTA button area */}
+          <div style={{
+            position: 'absolute',
+            top: '72%',
+            left: '18%',
+            width: '20px',
+            height: '20px',
+            opacity: 0.35,
+            filter: 'blur(0px)',
+            animation: 'cinematicFloat2 17s ease-in-out infinite',
+            animationDelay: '-7s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+            </svg>
+          </div>
+
           {/* === HERO ACCENT NACHOS: Intentional Placement === */}
           
           {/* Nacho - Left of "Master High-Stakes" headline */}
