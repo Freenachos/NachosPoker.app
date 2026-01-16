@@ -1,5 +1,5 @@
 'use client';
-
+import { motion, AnimatePresence } from 'framer-motion';
 import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
@@ -3036,22 +3036,22 @@ const PLAYER_DATA = POKER_DATA_COMPRESSED.map(d => ({
 
 const GGPokerLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-    <rect width="40" height="40" rx="8" fill="#1a1a1a"/>
-    <text x="20" y="27" textAnchor="middle" fill="#FFD700" fontSize="18" fontWeight="bold" fontFamily="Arial Black, sans-serif">GG</text>
+    <rect width="40" height="40" rx="8" fill="#18181b"/>
+    <text x="20" y="27" textAnchor="middle" fill="#eab308" fontSize="18" fontWeight="bold" fontFamily="Arial Black, sans-serif">GG</text>
   </svg>
 );
 
 const PokerStarsLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-    <rect width="40" height="40" rx="8" fill="#1a1a1a"/>
+    <rect width="40" height="40" rx="8" fill="#18181b"/>
     <path d="M20 6 L23 16 L34 16 L25 22 L28 33 L20 26 L12 33 L15 22 L6 16 L17 16 Z" fill="#C41200"/>
-    <path d="M20 12 L21.5 17 L27 17 L22.5 20.5 L24 26 L20 22.5 L16 26 L17.5 20.5 L13 17 L18.5 17 Z" fill="#FFD700"/>
+    <path d="M20 12 L21.5 17 L27 17 L22.5 20.5 L24 26 L20 22.5 L16 26 L17.5 20.5 L13 17 L18.5 17 Z" fill="#eab308"/>
   </svg>
 );
 
 const IPokerLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-    <rect width="40" height="40" rx="8" fill="#1a1a1a"/>
+    <rect width="40" height="40" rx="8" fill="#18181b"/>
     <circle cx="20" cy="12" r="4" fill="#3B82F6"/>
     <rect x="16" y="18" width="8" height="16" rx="2" fill="#3B82F6"/>
   </svg>
@@ -3066,7 +3066,7 @@ const WinamaxLogo = ({ size = 24 }) => (
 
 const WPNLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-    <rect width="40" height="40" rx="8" fill="#1a1a1a"/>
+    <rect width="40" height="40" rx="8" fill="#18181b"/>
     <circle cx="20" cy="20" r="12" stroke="#10b981" strokeWidth="2" fill="none"/>
     <circle cx="20" cy="20" r="6" fill="#10b981"/>
     <line x1="20" y1="8" x2="20" y2="14" stroke="#10b981" strokeWidth="2"/>
@@ -3081,7 +3081,7 @@ const WPNLogo = ({ size = 24 }) => (
 // ============================================================
 
 const SITE_CONFIG = {
-  GGPoker: { color: '#FFD700', Logo: GGPokerLogo, name: 'GGPoker' },
+  GGPoker: { color: '#eab308', Logo: GGPokerLogo, name: 'GGPoker' },
   PokerStars: { color: '#C41200', Logo: PokerStarsLogo, name: 'PokerStars' },
   iPoker: { color: '#3B82F6', Logo: IPokerLogo, name: 'iPoker' },
   Winamax: { color: '#C41200', Logo: WinamaxLogo, name: 'Winamax' },
@@ -3090,8 +3090,8 @@ const SITE_CONFIG = {
 
 // Battle mode colors (high contrast for head-to-head)
 const BATTLE_COLORS = {
-  datasetA: { color: '#00ffff', glow: 'rgba(0, 255, 255, 0.6)', bg: 'rgba(0, 255, 255, 0.15)' },
-  datasetB: { color: '#ff00ff', glow: 'rgba(255, 0, 255, 0.6)', bg: 'rgba(255, 0, 255, 0.15)' },
+  datasetA: { color: '#22d3ee', glow: 'rgba(34, 211, 238, 0.6)', bg: 'rgba(34, 211, 238, 0.15)' },
+  datasetB: { color: '#f472b6', glow: 'rgba(244, 114, 182, 0.6)', bg: 'rgba(244, 114, 182, 0.15)' },
   merged: { color: '#ffffff', glow: 'rgba(255, 255, 255, 0.8)', bg: 'rgba(255, 255, 255, 0.15)' }
 };
 
@@ -3124,7 +3124,6 @@ PLAYER_DATA.forEach(player => {
   PLAYERS_BY_DATASET[key].push(player);
 });
 
-// ============================================================
 // ============================================================
 // CALCULATION UTILITIES
 // ============================================================
@@ -3223,6 +3222,28 @@ const mergePlayerData = (selectedDatasets) => {
 };
 
 // ============================================================
+// ANIMATION VARIANTS
+// ============================================================
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" } }
+};
+
+// ============================================================
 // MAIN COMPONENT
 // ============================================================
 
@@ -3276,10 +3297,8 @@ const NachoStatsDashboard = () => {
     setSelectedDatasets(prev => {
       const exists = prev.find(d => d.key === key);
       if (exists) {
-        // Remove it
         return prev.filter(d => d.key !== key);
       } else if (prev.length < MAX_SELECTIONS) {
-        // Add it
         return [...prev, { key, site, stake }];
       }
       return prev;
@@ -3375,14 +3394,14 @@ const NachoStatsDashboard = () => {
     if (player.isMerged) return BATTLE_COLORS.merged.color;
     if (isBattleMode) return player.primaryIndex === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color;
     const site = player.entries?.[0]?.site;
-    return SITE_CONFIG[site]?.color || '#94a3b8';
+    return SITE_CONFIG[site]?.color || '#a1a1aa';
   };
 
   const getPlayerGlow = (player) => {
     if (player.isMerged) return BATTLE_COLORS.merged.glow;
     if (isBattleMode) return player.primaryIndex === 0 ? BATTLE_COLORS.datasetA.glow : BATTLE_COLORS.datasetB.glow;
     const site = player.entries?.[0]?.site;
-    return `${SITE_CONFIG[site]?.color}99` || 'rgba(148, 163, 184, 0.6)';
+    return `${SITE_CONFIG[site]?.color}99` || 'rgba(161, 161, 170, 0.6)';
   };
 
   const isPlayerHighlighted = (player) => highlightedPlayer === player.id || (searchTerm && player.name.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -3394,27 +3413,27 @@ const NachoStatsDashboard = () => {
   // ============================================================
 
   const CartoonNacho = () => (
-    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(255, 179, 71, 0.4))' }}>
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#FFB347" stroke="#E09A30" strokeWidth="2" />
-      <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#FFD54F" opacity="0.9" />
-      <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#FFD54F" opacity="0.9" />
-      <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#FFD54F" opacity="0.9" />
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#FFB347" />
+    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" className="drop-shadow-[0_4px_12px_rgba(234,179,8,0.4)]">
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#eab308" stroke="#ca8a04" strokeWidth="2" />
+      <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#facc15" opacity="0.9" />
+      <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#facc15" opacity="0.9" />
+      <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#facc15" opacity="0.9" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#eab308" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
-      <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" />
-      <circle cx={60 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" />
+      <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#09090b" />
+      <circle cx={60 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#09090b" />
       <circle cx={38 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
       <circle cx={58 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
-      <path d="M38 62 Q50 72 62 62" fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round" />
-      <path d="M33 38 Q40 35 47 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <path d="M53 38 Q60 35 67 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
+      <path d="M38 62 Q50 72 62 62" fill="none" stroke="#09090b" strokeWidth="3" strokeLinecap="round" />
+      <path d="M33 38 Q40 35 47 38" fill="none" stroke="#09090b" strokeWidth="2" strokeLinecap="round" />
+      <path d="M53 38 Q60 35 67 38" fill="none" stroke="#09090b" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 
   const NachoTriangle = ({ size, opacity }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8" />
+      <path d="M10 2 L18 17 L2 17 Z" fill="#eab308" opacity="0.8" />
     </svg>
   );
 
@@ -3440,140 +3459,148 @@ const NachoStatsDashboard = () => {
     const LogoB = datasetB.config.Logo;
     
     return (
-      <div className="glass-card" style={{ borderRadius: '16px', padding: '24px', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={scaleIn}
+        className="bg-zinc-900/60 backdrop-blur-xl border border-yellow-500/20 rounded-2xl p-6"
+      >
+        <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center gap-3">
             <LogoA size={32} />
             <div>
-              <div style={{ color: BATTLE_COLORS.datasetA.color, fontSize: '16px', fontWeight: '700' }}>{datasetA.site} {datasetA.stake}</div>
-              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>{datasetA.stats.playerCount} players</div>
+              <div className="text-cyan-400 text-base font-bold">{datasetA.site} {datasetA.stake}</div>
+              <div className="text-zinc-500 text-xs">{datasetA.stats.playerCount} players</div>
             </div>
           </div>
           
-          <div style={{ padding: '12px', background: 'rgba(255, 179, 71, 0.2)', borderRadius: '50%' }}>
-            <Swords size={28} color="#FFB347" />
+          <div className="p-3 bg-yellow-500/20 rounded-full">
+            <Swords size={28} className="text-yellow-500" />
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ color: BATTLE_COLORS.datasetB.color, fontSize: '16px', fontWeight: '700' }}>{datasetB.site} {datasetB.stake}</div>
-              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>{datasetB.stats.playerCount} players</div>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <div className="text-pink-400 text-base font-bold">{datasetB.site} {datasetB.stake}</div>
+              <div className="text-zinc-500 text-xs">{datasetB.stats.playerCount} players</div>
             </div>
             <LogoB size={32} />
           </div>
         </div>
         
-        <div style={{ display: 'grid', gap: '10px' }}>
+        <div className="space-y-2.5">
           {metrics.map((metric, i) => {
             const comparison = compareMetric(metric.valueA, metric.valueB, metric.higherIsBetter);
             const Icon = metric.icon;
             
             return (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '16px', alignItems: 'center', padding: '12px 16px', background: 'rgba(0,0,0,0.3)', borderRadius: '10px' }}>
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: comparison.winner === 'A' ? BATTLE_COLORS.datasetA.color : 'rgba(255,255,255,0.5)', textShadow: comparison.winner === 'A' ? `0 0 10px ${BATTLE_COLORS.datasetA.glow}` : 'none' }}>
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center p-3 bg-zinc-950/50 rounded-xl"
+              >
+                <div className="text-left">
+                  <div className={`text-base font-bold ${comparison.winner === 'A' ? 'text-cyan-400' : 'text-zinc-500'}`}
+                       style={{ textShadow: comparison.winner === 'A' ? '0 0 10px rgba(34, 211, 238, 0.6)' : 'none' }}>
                     {metric.format(metric.valueA)}
-                    {comparison.winner === 'A' && <span style={{ marginLeft: '8px', fontSize: '14px' }}>🏆</span>}
+                    {comparison.winner === 'A' && <span className="ml-2 text-sm">🏆</span>}
                   </div>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                  <Icon size={14} color="rgba(255,255,255,0.4)" />
-                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', fontWeight: '500', whiteSpace: 'nowrap' }}>{metric.label}</span>
+                <div className="flex items-center gap-2 justify-center">
+                  <Icon size={14} className="text-zinc-500" />
+                  <span className="text-zinc-400 text-xs font-medium whitespace-nowrap">{metric.label}</span>
                 </div>
                 
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: comparison.winner === 'B' ? BATTLE_COLORS.datasetB.color : 'rgba(255,255,255,0.5)', textShadow: comparison.winner === 'B' ? `0 0 10px ${BATTLE_COLORS.datasetB.glow}` : 'none' }}>
-                    {comparison.winner === 'B' && <span style={{ marginRight: '8px', fontSize: '14px' }}>🏆</span>}
+                <div className="text-right">
+                  <div className={`text-base font-bold ${comparison.winner === 'B' ? 'text-pink-400' : 'text-zinc-500'}`}
+                       style={{ textShadow: comparison.winner === 'B' ? '0 0 10px rgba(244, 114, 182, 0.6)' : 'none' }}>
+                    {comparison.winner === 'B' && <span className="mr-2 text-sm">🏆</span>}
                     {metric.format(metric.valueB)}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
         
-        <div style={{ marginTop: '16px', padding: '12px', background: BATTLE_COLORS.merged.bg, borderRadius: '8px', border: `1px solid ${BATTLE_COLORS.merged.color}30`, textAlign: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: BATTLE_COLORS.merged.color, boxShadow: `0 0 8px ${BATTLE_COLORS.merged.glow}` }} />
-            <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px' }}>
-              <strong style={{ color: BATTLE_COLORS.merged.color }}>{mergedPlayers.filter(p => p.isMerged).length}</strong> players appear in both datasets (merged)
+        <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+            <span className="text-zinc-400 text-xs">
+              <strong className="text-white">{mergedPlayers.filter(p => p.isMerged).length}</strong> players appear in both datasets (merged)
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   };
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload || !payload.length) return null;
-    const p = payload[0].payload;
+    const player = payload[0].payload;
     
     return (
-      <div style={{ background: 'rgba(20, 20, 20, 0.95)', backdropFilter: 'blur(10px)', border: `1px solid ${getPlayerColor(p)}50`, borderRadius: '10px', padding: '14px 18px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', minWidth: '260px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: getPlayerColor(p), boxShadow: `0 0 8px ${getPlayerGlow(p)}` }} />
-          <span style={{ color: '#FFB347', fontWeight: '600', fontSize: '14px' }}>{p.name}</span>
-          {p.isMerged && (
-            <span style={{ color: BATTLE_COLORS.merged.color, fontSize: '10px', padding: '2px 6px', background: BATTLE_COLORS.merged.bg, borderRadius: '4px', marginLeft: 'auto' }}>MERGED</span>
-          )}
+      <div className="bg-zinc-900/95 backdrop-blur-xl border border-yellow-500/30 rounded-xl p-4 min-w-[220px] shadow-2xl">
+        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-zinc-700">
+          <div className="w-2.5 h-2.5 rounded-full" style={{ background: getPlayerColor(player), boxShadow: `0 0 8px ${getPlayerGlow(player)}` }} />
+          <span className="text-white font-semibold text-sm">{player.name}</span>
+          {player.isMerged && <span className="text-white/80 text-[10px] px-1.5 py-0.5 bg-white/10 rounded">MERGED</span>}
         </div>
-        
-        <div style={{ display: 'grid', gap: '6px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Total Hands</span>
-            <span style={{ color: 'white', fontWeight: '600', fontSize: '12px' }}>{p.hands.toLocaleString()}</span>
+        <div className="space-y-1.5">
+          <div className="flex justify-between">
+            <span className="text-zinc-400 text-xs">Total Hands</span>
+            <span className="text-white font-medium text-xs">{(player.hands / 1000000).toFixed(2)}M</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Win Rate</span>
-            <span style={{ color: p.winRate >= 0 ? '#22c55e' : '#ef4444', fontWeight: '600', fontSize: '12px' }}>
-              {p.winRate >= 0 ? '+' : ''}{p.winRate.toFixed(2)} bb/100
+          <div className="flex justify-between">
+            <span className="text-zinc-400 text-xs">Win Rate</span>
+            <span className={`font-bold text-xs ${player.winRate >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {player.winRate >= 0 ? '+' : ''}{player.winRate.toFixed(2)} bb/100
             </span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Total Profit</span>
-            <span style={{ color: p.totalProfit >= 0 ? '#22c55e' : '#ef4444', fontWeight: '600', fontSize: '12px' }}>
-              {p.totalProfit >= 0 ? '+' : ''}${p.totalProfit.toLocaleString()}
+          <div className="flex justify-between">
+            <span className="text-zinc-400 text-xs">Est. Profit</span>
+            <span className={`font-bold text-xs ${player.totalProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {player.totalProfit >= 0 ? '+' : ''}${Math.round(player.totalProfit).toLocaleString()}
             </span>
           </div>
-          
-          {p.entries && p.entries.length > 1 && (
-            <>
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '6px', paddingTop: '8px' }}>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', textTransform: 'uppercase' }}>Breakdown</span>
+        </div>
+        {player.entries && player.entries.length > 1 && (
+          <div className="mt-3 pt-2 border-t border-zinc-700">
+            <div className="text-zinc-500 text-[10px] uppercase tracking-wider mb-1.5">Breakdown</div>
+            {player.entries.map((e, i) => (
+              <div key={i} className="flex justify-between text-xs py-0.5">
+                <span className="text-zinc-400">{e.site} {e.stake}</span>
+                <span className="text-zinc-300">{(e.hands / 1000000).toFixed(2)}M @ {e.winRate >= 0 ? '+' : ''}{e.winRate.toFixed(1)}</span>
               </div>
-              {p.entries.map((entry, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: i === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color, fontSize: '11px' }}>
-                    {entry.site} {entry.stake}
-                  </span>
-                  <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px' }}>
-                    {(entry.hands/1000).toFixed(0)}k @ {entry.winRate >= 0 ? '+' : ''}{entry.winRate.toFixed(1)}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
 
   const renderDot = (props) => {
     const { cx, cy, payload } = props;
-    if (!cx || !cy) return null;
-    const highlighted = isPlayerHighlighted(payload);
+    const isHighlighted = isPlayerHighlighted(payload);
     const color = getPlayerColor(payload);
-    const glow = getPlayerGlow(payload);
-    const size = highlighted ? 12 : (payload.isMerged ? 8 : 5);
+    const size = isHighlighted ? 10 : 6;
     
     return (
-      <g key={payload.id}>
-        <circle cx={cx} cy={cy} r={size * 2.5} fill={glow} opacity={highlighted ? 0.5 : 0.15} />
-        <circle cx={cx} cy={cy} r={size * 1.5} fill={glow} opacity={highlighted ? 0.7 : 0.3} />
-        <circle cx={cx} cy={cy} r={size} fill={color} stroke={payload.isMerged ? '#ffffff' : 'rgba(255,255,255,0.3)'} strokeWidth={payload.isMerged ? 2 : 0.5} style={{ filter: `drop-shadow(0 0 ${highlighted ? 15 : 8}px ${glow})`, cursor: 'pointer' }} />
-        {highlighted && <circle cx={cx} cy={cy} r={3} fill="white" opacity={0.9} />}
-      </g>
+      <circle
+        cx={cx}
+        cy={cy}
+        r={size}
+        fill={color}
+        fillOpacity={isHighlighted ? 1 : 0.7}
+        stroke={isHighlighted ? 'white' : 'none'}
+        strokeWidth={2}
+        style={{
+          filter: isHighlighted ? `drop-shadow(0 0 10px ${getPlayerGlow(payload)})` : 'none',
+          transition: 'all 0.2s ease'
+        }}
+      />
     );
   };
 
@@ -3582,134 +3609,141 @@ const NachoStatsDashboard = () => {
   // ============================================================
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+    <div className="min-h-screen bg-zinc-950 text-white font-sans relative overflow-hidden">
       {/* Floating Nachos Background */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {nachos.map(nacho => (
-          <div key={nacho.id} style={{ position: 'absolute', left: `${nacho.x}%`, top: `${nacho.y}%`, animation: `floatNacho ${nacho.duration}s ease-in-out infinite`, animationDelay: `${nacho.delay}s`, '--moveX': `${nacho.moveX}px`, '--moveY': `${nacho.moveY}px` }}>
-            <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
-          </div>
+          <motion.div
+            key={nacho.id}
+            initial={{ x: `${nacho.x}vw`, y: `${nacho.y}vh`, rotate: 0 }}
+            animate={{ 
+              x: [`${nacho.x}vw`, `${nacho.x + nacho.moveX / 10}vw`, `${nacho.x}vw`],
+              y: [`${nacho.y}vh`, `${nacho.y + nacho.moveY / 10}vh`, `${nacho.y}vh`],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: nacho.duration, 
+              repeat: Infinity, 
+              ease: "linear",
+              delay: nacho.delay 
+            }}
+            className="absolute"
+          >
+            <NachoTriangle size={nacho.size} opacity={nacho.opacity * 0.3} />
+          </motion.div>
         ))}
       </div>
-      
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
-        @keyframes floatNacho { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(var(--moveX), var(--moveY)) rotate(180deg); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.05); } }
-        @keyframes traceBorder { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
-        
-        .glass-card { background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); }
-        .input-focus { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        .input-focus:focus { border-color: #FFB347 !important; box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.15); outline: none; }
-        .btn-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .btn-hover:hover:not(:disabled) { transform: translateY(-2px); }
-        
-        .spark-border { position: relative; overflow: hidden; border-radius: 16px; background: #0a0a0a; }
-        .spark-border::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2px; background: linear-gradient(135deg, rgba(255, 179, 71, 0.3), rgba(255, 179, 71, 0.1)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 1; pointer-events: none; }
-        .spark-border::after { content: ""; position: absolute; top: 0; left: 0; width: 100px; height: 2px; background: linear-gradient(90deg, transparent 0%, #FFB347 50%, #FFB347 100%); box-shadow: 0 0 10px 1px rgba(255, 179, 71, 0.6); offset-path: rect(0 100% 100% 0 round 16px); animation: traceBorder 5s linear infinite; z-index: 2; pointer-events: none; }
-        
-        .chart-toggle { display: flex; background: rgba(0,0,0,0.4); border-radius: 8px; padding: 3px; border: 1px solid rgba(255,255,255,0.1); }
-        .chart-toggle-btn { padding: 8px 14px; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 6px; transition: all 0.2s; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 6px; border: none; background: transparent; }
-        .chart-toggle-btn.active { background: rgba(255, 179, 71, 0.2); color: #FFB347; }
-        .chart-toggle-btn:hover:not(.active) { color: rgba(255,255,255,0.8); }
-        
-        .display-toggle { display: flex; background: linear-gradient(135deg, rgba(255, 179, 71, 0.1), rgba(168, 85, 247, 0.1)); border-radius: 10px; padding: 4px; border: 1px solid rgba(255, 179, 71, 0.2); }
-        .display-toggle-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 8px; border: none; background: transparent; }
-        .display-toggle-btn.active { background: rgba(255, 179, 71, 0.3); color: #FFB347; box-shadow: 0 4px 12px rgba(255, 179, 71, 0.2); }
-        .display-toggle-btn:hover:not(.active) { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
-        
-        .stake-btn { padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6); }
-        .stake-btn:hover:not(.selected):not(.disabled) { background: rgba(255,255,255,0.1); color: white; }
-        .stake-btn.selected { animation: pulse 2s ease-in-out infinite; }
-        .stake-btn.disabled { opacity: 0.3; cursor: not-allowed; }
-        
-        .leaderboard-row { display: grid; grid-template-columns: 44px 1fr 90px; align-items: center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.2s; }
-        .leaderboard-row:hover { background: rgba(255,255,255,0.05); transform: translateX(4px); }
-        .leaderboard-row.highlighted { background: rgba(255, 179, 71, 0.15); border-left: 3px solid #FFB347; }
-        
-        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-        
-        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr 380px; } }
-        
-        .site-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-        @media (max-width: 900px) { .site-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 600px) { .site-grid { grid-template-columns: repeat(2, 1fr); } }
-      `}</style>
 
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: '1600px', margin: '0 auto', padding: '20px' }}>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <NachosPokerNavBar />
         
         {/* CTA Banner */}
-        <div className="card-hover spark-border" style={{ marginBottom: '24px', padding: '28px 32px', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap', animation: 'fadeInUp 0.6s ease-out' }}>
-          <div style={{ flexShrink: 0, animation: 'bounce 2s ease-in-out infinite' }}>
-            <CartoonNacho />
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="relative mb-6 overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-transparent to-yellow-500/10 rounded-2xl" />
+          <div className="relative bg-zinc-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-2xl p-7 flex items-center gap-6 flex-wrap
+                          before:absolute before:inset-0 before:rounded-2xl before:p-[1px] before:bg-gradient-to-r before:from-yellow-500/30 before:to-yellow-500/10 before:-z-10">
+            <motion.div 
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="flex-shrink-0"
+            >
+              <CartoonNacho />
+            </motion.div>
+            <div className="flex-1 min-w-[280px]">
+              <div className="text-xs text-yellow-500 font-semibold mb-1.5 tracking-widest uppercase">Crafted by FreeNachos</div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Ready to increase your win rate?</h2>
+              <p className="text-sm text-zinc-400 leading-relaxed">Level up your game with elite coaching or join the fastest-growing CFP in poker.</p>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <a 
+                href="https://www.nachospoker.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950 px-5 py-3 rounded-lg font-semibold text-sm
+                           transition-all duration-300 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:-translate-y-0.5"
+              >
+                Join Our CFP <ExternalLink size={14} />
+              </a>
+              <a 
+                href="https://www.freenachoscoaching.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 bg-transparent border border-yellow-500/50 text-yellow-500 px-5 py-3 rounded-lg font-semibold text-sm
+                           transition-all duration-300 hover:bg-yellow-500/10 hover:border-yellow-500 hover:-translate-y-0.5"
+              >
+                Private Coaching <ExternalLink size={14} />
+              </a>
+            </div>
           </div>
-          <div style={{ flex: 1, minWidth: '280px' }}>
-            <div style={{ fontSize: '12px', color: '#FFB347', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Crafted by FreeNachos</div>
-            <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#ffffff', marginBottom: '8px', lineHeight: 1.2 }}>Ready to increase your win rate?</h2>
-            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', marginBottom: '0', lineHeight: 1.5 }}>Level up your game with elite coaching or join the fastest-growing CFP in poker.</p>
-          </div>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <a href="https://www.nachospoker.com/" target="_blank" rel="noopener noreferrer" className="btn-hover" style={{ background: '#FFB347', color: '#0a0a0a', padding: '12px 20px', borderRadius: '8px', fontWeight: '600', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              Join Our CFP <ExternalLink size={14} />
-            </a>
-            <a href="https://www.freenachoscoaching.com/" target="_blank" rel="noopener noreferrer" className="btn-hover" style={{ background: 'transparent', border: '1px solid rgba(255, 179, 71, 0.5)', color: '#FFB347', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              Private Coaching <ExternalLink size={14} />
-            </a>
-          </div>
-        </div>
+        </motion.div>
 
         {/* Main Dashboard */}
-        <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', marginBottom: '24px', animation: 'fadeInUp 0.6s ease-out 0.1s both' }}>
-          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-            <h1 style={{ fontSize: '1.8em', fontWeight: '700', color: '#ffffff', marginBottom: '8px' }}>
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ delay: 0.1 }}
+          className="bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 sm:p-8 mb-6"
+        >
+          <div className="text-center mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
               Win Rate Dashboard
             </h1>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>
+            <p className="text-zinc-400 text-sm">
               Select up to 2 datasets to compare • 3,000 player records across 5 sites
             </p>
           </div>
 
           {/* Site/Stake Selection Grid */}
-          <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
-                Click a stake to select • {selectedDatasets.length}/{MAX_SELECTIONS} selected
+          <div className="bg-zinc-950/50 rounded-xl p-5 mb-6 border border-zinc-800/50">
+            <div className="flex justify-between items-center mb-4 flex-wrap gap-3">
+              <span className="text-zinc-400 text-sm">
+                Click a stake to select • <span className="text-yellow-500 font-medium">{selectedDatasets.length}/{MAX_SELECTIONS}</span> selected
               </span>
               {selectedDatasets.length > 0 && (
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedDatasets([])}
-                  style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#ef4444', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                  className="bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1.5 rounded-lg text-xs font-medium
+                             transition-colors hover:bg-red-500/20"
                 >
                   Clear All
-                </button>
+                </motion.button>
               )}
             </div>
             
-            <div className="site-grid">
+            <motion.div 
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
+            >
               {AVAILABLE_SITES.map(site => {
                 const config = SITE_CONFIG[site];
                 const stakes = STAKES_BY_SITE[site] || [];
                 const SiteLogo = config.Logo;
                 
                 return (
-                  <div key={site} style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '10px', padding: '16px', border: `1px solid ${config.color}30` }}>
+                  <motion.div 
+                    key={site} 
+                    variants={scaleIn}
+                    className="bg-zinc-900/50 rounded-xl p-4 border transition-colors"
+                    style={{ borderColor: `${config.color}30` }}
+                  >
                     {/* Site Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', paddingBottom: '10px', borderBottom: `1px solid ${config.color}30` }}>
+                    <div className="flex items-center gap-2 mb-3 pb-3 border-b" style={{ borderColor: `${config.color}30` }}>
                       <SiteLogo size={24} />
-                      <span style={{ color: config.color, fontWeight: '700', fontSize: '14px' }}>{site}</span>
+                      <span className="font-bold text-sm" style={{ color: config.color }}>{site}</span>
                     </div>
                     
                     {/* Stakes */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div className="flex flex-col gap-1.5">
                       {stakes.map(stake => {
                         const isSelected = isDatasetSelected(site, stake);
                         const selIndex = getSelectionIndex(site, stake);
@@ -3730,10 +3764,15 @@ const NachoStatsDashboard = () => {
                         }
                         
                         return (
-                          <button
+                          <motion.button
                             key={stake}
+                            whileHover={!isDisabled ? { scale: 1.02 } : {}}
+                            whileTap={!isDisabled ? { scale: 0.98 } : {}}
                             onClick={() => !isDisabled && toggleDataset(site, stake)}
-                            className={`stake-btn ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                            disabled={isDisabled}
+                            className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 border-2
+                                       ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer hover:bg-white/5'}
+                                       ${isSelected ? 'animate-pulse' : ''}`}
                             style={{
                               color: isSelected ? btnColor : 'rgba(255,255,255,0.6)',
                               background: btnBg,
@@ -3741,66 +3780,99 @@ const NachoStatsDashboard = () => {
                               boxShadow: isSelected ? `0 0 12px ${btnColor}40` : 'none'
                             }}
                           >
-                            {isSelected && <span style={{ marginRight: '4px' }}>{selIndex === 0 ? '①' : '②'}</span>}
+                            {isSelected && <span className="mr-1">{selIndex === 0 ? '①' : '②'}</span>}
                             {stake}
-                          </button>
+                          </motion.button>
                         );
                       })}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
 
           {/* Controls Row */}
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="flex gap-4 mb-6 flex-wrap items-center justify-between">
             {/* Search Bar */}
-            <div style={{ position: 'relative', minWidth: '200px', flex: 1, maxWidth: '300px' }}>
-              <Search size={16} color="rgba(255,255,255,0.4)" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+            <div className="relative min-w-[200px] flex-1 max-w-xs">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input 
                 type="text" 
                 placeholder="Search players..." 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)} 
-                className="input-focus" 
-                style={{ width: '100%', padding: '10px 14px 10px 42px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'white', fontSize: '13px', boxSizing: 'border-box' }} 
+                className="w-full py-2.5 pl-11 pr-4 bg-zinc-950/70 border border-zinc-800 rounded-lg text-white text-sm
+                           placeholder-zinc-500 transition-all duration-200
+                           focus:outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
               />
             </div>
 
             {/* Display Mode Toggle */}
-            <div className="display-toggle">
-              <button className={`display-toggle-btn ${displayMode === 'winRate' ? 'active' : ''}`} onClick={() => setDisplayMode('winRate')}>
+            <div className="flex bg-zinc-900/80 rounded-xl p-1 border border-zinc-800">
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200
+                           ${displayMode === 'winRate' 
+                             ? 'bg-gradient-to-r from-yellow-500/30 to-yellow-600/20 text-yellow-500 shadow-lg' 
+                             : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setDisplayMode('winRate')}
+              >
                 <TrendingUp size={16} /> bb/100
-              </button>
-              <button className={`display-toggle-btn ${displayMode === 'profit' ? 'active' : ''}`} onClick={() => setDisplayMode('profit')}>
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200
+                           ${displayMode === 'profit' 
+                             ? 'bg-gradient-to-r from-yellow-500/30 to-yellow-600/20 text-yellow-500 shadow-lg' 
+                             : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setDisplayMode('profit')}
+              >
                 <DollarSign size={16} /> Profit ($)
-              </button>
+              </motion.button>
             </div>
           </div>
 
           {/* Dashboard Grid: Chart + Leaderboard */}
-          <div className="dashboard-grid">
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
             {/* Chart Panel */}
-            <div className="glass-card" style={{ borderRadius: '12px', padding: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                <h3 style={{ color: '#FFB347', fontSize: '15px', fontWeight: '600', margin: 0 }}>
+            <motion.div 
+              variants={scaleIn}
+              className="bg-zinc-900/40 backdrop-blur border border-zinc-800/50 rounded-xl p-5"
+            >
+              <div className="flex justify-between items-center mb-4 flex-wrap gap-3">
+                <h3 className="text-yellow-500 text-base font-semibold">
                   {chartView === 'scatter' ? 'Player Distribution' : chartView === 'bar' ? 'Top 50 Rankings' : 'Win Rate Distribution'}
                 </h3>
-                <div className="chart-toggle">
-                  <button className={`chart-toggle-btn ${chartView === 'scatter' ? 'active' : ''}`} onClick={() => setChartView('scatter')}><LayoutGrid size={14} /> Scatter</button>
-                  <button className={`chart-toggle-btn ${chartView === 'bar' ? 'active' : ''}`} onClick={() => setChartView('bar')}><BarChart3 size={14} /> Top 50</button>
-                  <button className={`chart-toggle-btn ${chartView === 'density' ? 'active' : ''}`} onClick={() => setChartView('density')}><Flame size={14} /> Distribution</button>
+                <div className="flex bg-zinc-950/60 rounded-lg p-1 border border-zinc-800">
+                  {[
+                    { id: 'scatter', icon: LayoutGrid, label: 'Scatter' },
+                    { id: 'bar', icon: BarChart3, label: 'Top 50' },
+                    { id: 'density', icon: Flame, label: 'Distribution' }
+                  ].map(view => (
+                    <button
+                      key={view.id}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all
+                                 ${chartView === view.id 
+                                   ? 'bg-yellow-500/20 text-yellow-500' 
+                                   : 'text-zinc-500 hover:text-zinc-300'}`}
+                      onClick={() => setChartView(view.id)}
+                    >
+                      <view.icon size={14} /> {view.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {selectedDatasets.length === 0 ? (
-                <div style={{ height: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '12px' }}>
-                  <Layers size={48} color="rgba(255,255,255,0.2)" />
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>Select datasets above to view data</p>
+                <div className="h-[420px] flex items-center justify-center flex-col gap-3">
+                  <Layers size={48} className="text-zinc-700" />
+                  <p className="text-zinc-500 text-sm">Select datasets above to view data</p>
                 </div>
               ) : (
-                <div style={{ height: '420px' }}>
+                <div className="h-[420px]">
                   <ResponsiveContainer width="100%" height="100%">
                     {chartView === 'scatter' ? (
                       <ScatterChart margin={{ top: 20, right: 20, bottom: 40, left: 20 }}>
@@ -3842,18 +3914,18 @@ const NachoStatsDashboard = () => {
                           if (!active || !payload || !payload.length) return null;
                           const d = payload[0].payload;
                           return (
-                            <div style={{ background: 'rgba(20, 20, 20, 0.95)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 179, 71, 0.3)', borderRadius: '10px', padding: '12px 16px', minWidth: '180px' }}>
-                              <div style={{ color: '#FFB347', fontWeight: '600', marginBottom: '8px' }}>{d.value} to {d.value + 1} bb/100</div>
+                            <div className="bg-zinc-900/95 backdrop-blur-xl border border-yellow-500/30 rounded-xl p-4 min-w-[180px]">
+                              <div className="text-yellow-500 font-semibold mb-2">{d.value} to {d.value + 1} bb/100</div>
                               {selectedDatasets.length >= 1 && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                                  <span style={{ color: BATTLE_COLORS.datasetA.color, fontSize: '12px' }}>{selectedDatasets[0]?.site} {selectedDatasets[0]?.stake}</span>
-                                  <span style={{ color: BATTLE_COLORS.datasetA.color, fontWeight: '600' }}>{d.countA}</span>
+                                <div className="flex justify-between mb-1">
+                                  <span className="text-cyan-400 text-xs">{selectedDatasets[0]?.site} {selectedDatasets[0]?.stake}</span>
+                                  <span className="text-cyan-400 font-semibold">{d.countA}</span>
                                 </div>
                               )}
                               {selectedDatasets.length === 2 && (
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                  <span style={{ color: BATTLE_COLORS.datasetB.color, fontSize: '12px' }}>{selectedDatasets[1]?.site} {selectedDatasets[1]?.stake}</span>
-                                  <span style={{ color: BATTLE_COLORS.datasetB.color, fontWeight: '600' }}>{d.countB}</span>
+                                <div className="flex justify-between">
+                                  <span className="text-pink-400 text-xs">{selectedDatasets[1]?.site} {selectedDatasets[1]?.stake}</span>
+                                  <span className="text-pink-400 font-semibold">{d.countB}</span>
                                 </div>
                               )}
                             </div>
@@ -3872,154 +3944,209 @@ const NachoStatsDashboard = () => {
 
               {/* Legend */}
               {selectedDatasets.length > 0 && (
-                <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', marginTop: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
+                <div className="p-3 bg-zinc-950/50 rounded-lg mt-3 border border-zinc-800/50">
+                  <div className="flex justify-center gap-6 flex-wrap">
                     {selectedDatasets.map((dataset, index) => (
-                      <div key={dataset.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color) : SITE_CONFIG[dataset.site].color, boxShadow: `0 0 8px ${isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.glow : BATTLE_COLORS.datasetB.glow) : SITE_CONFIG[dataset.site].color}` }} />
-                        <span style={{ color: isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color) : 'white', fontSize: '12px', fontWeight: '500' }}>{dataset.site} {dataset.stake}</span>
+                      <div key={dataset.key} className="flex items-center gap-2">
+                        <div 
+                          className="w-3 h-3 rounded-full" 
+                          style={{ 
+                            background: isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color) : SITE_CONFIG[dataset.site].color,
+                            boxShadow: `0 0 8px ${isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.glow : BATTLE_COLORS.datasetB.glow) : SITE_CONFIG[dataset.site].color}` 
+                          }} 
+                        />
+                        <span 
+                          className="text-xs font-medium"
+                          style={{ color: isBattleMode ? (index === 0 ? BATTLE_COLORS.datasetA.color : BATTLE_COLORS.datasetB.color) : 'white' }}
+                        >
+                          {dataset.site} {dataset.stake}
+                        </span>
                       </div>
                     ))}
                     {isBattleMode && mergedPlayers.filter(p => p.isMerged).length > 0 && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: BATTLE_COLORS.merged.color, border: '2px solid white', boxShadow: `0 0 8px ${BATTLE_COLORS.merged.glow}` }} />
-                        <span style={{ color: BATTLE_COLORS.merged.color, fontSize: '12px', fontWeight: '500' }}>Merged</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-white border-2 border-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+                        <span className="text-white text-xs font-medium">Merged</span>
                       </div>
                     )}
                   </div>
                 </div>
               )}
-            </div>
+            </motion.div>
 
             {/* Leaderboard Panel */}
-            <div className="glass-card" style={{ borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <div style={{ padding: '20px 20px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <Trophy size={20} color="#fbbf24" />
-                  <h3 style={{ color: '#FFB347', fontSize: '16px', fontWeight: '600', margin: 0 }}>
+            <motion.div 
+              variants={scaleIn}
+              className="bg-zinc-900/40 backdrop-blur border border-zinc-800/50 rounded-xl flex flex-col overflow-hidden"
+            >
+              <div className="p-5 pb-3 border-b border-zinc-800/50">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <Trophy size={20} className="text-yellow-500" />
+                  <h3 className="text-yellow-500 text-base font-semibold">
                     Top 100 by {displayMode === 'profit' ? 'Profit' : 'Win Rate'}
                   </h3>
                 </div>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', margin: 0 }}>Combined stats across selected datasets</p>
+                <p className="text-zinc-500 text-xs">Combined stats across selected datasets</p>
               </div>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 90px', padding: '10px 20px', background: 'rgba(0,0,0,0.2)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontWeight: '600', textTransform: 'uppercase' }}>#</span>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontWeight: '600', textTransform: 'uppercase' }}>Player</span>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', textAlign: 'right' }}>{displayMode === 'profit' ? 'Profit' : 'WR'}</span>
+              <div className="grid grid-cols-[44px_1fr_90px] px-5 py-2.5 bg-zinc-950/50 border-b border-zinc-800/50">
+                <span className="text-zinc-500 text-[10px] font-semibold uppercase tracking-wider">#</span>
+                <span className="text-zinc-500 text-[10px] font-semibold uppercase tracking-wider">Player</span>
+                <span className="text-zinc-500 text-[10px] font-semibold uppercase tracking-wider text-right">{displayMode === 'profit' ? 'Profit' : 'WR'}</span>
               </div>
               
-              <div className="scrollbar-thin" style={{ flex: 1, overflowY: 'auto', maxHeight: '380px' }}>
+              <div className="flex-1 overflow-y-auto max-h-[380px] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
                 {filteredLeaderboard.length === 0 ? (
-                  <div style={{ padding: '40px 20px', textAlign: 'center' }}>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>{selectedDatasets.length === 0 ? 'Select datasets above' : 'No players found'}</p>
+                  <div className="py-10 px-5 text-center">
+                    <p className="text-zinc-500 text-sm">{selectedDatasets.length === 0 ? 'Select datasets above' : 'No players found'}</p>
                   </div>
                 ) : (
-                  filteredLeaderboard.slice(0, 50).map((player) => {
-                    const originalRank = leaderboard.findIndex(p => p.id === player.id) + 1;
-                    const isHighlighted = isPlayerHighlighted(player);
-                    const playerColor = getPlayerColor(player);
-                    
-                    return (
-                      <div key={player.id} className={`leaderboard-row ${isHighlighted ? 'highlighted' : ''}`} onMouseEnter={() => setHighlightedPlayer(player.id)} onMouseLeave={() => setHighlightedPlayer(null)}>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          {originalRank <= 3 ? (
-                            <div style={{ width: '26px', height: '26px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: originalRank === 1 ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : originalRank === 2 ? 'linear-gradient(135deg, #94a3b8, #64748b)' : 'linear-gradient(135deg, #d97706, #b45309)' }}>
-                              {originalRank === 1 ? <Crown size={12} color="#1a1a1a" /> : <Award size={12} color="#1a1a1a" />}
-                            </div>
-                          ) : (
-                            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', fontWeight: '500', paddingLeft: '8px' }}>{originalRank}</span>
-                          )}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: playerColor, boxShadow: `0 0 6px ${playerColor}`, flexShrink: 0 }} />
-                            <span style={{ color: 'white', fontSize: '12px', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{player.name}</span>
-                            {player.isMerged && <span style={{ color: BATTLE_COLORS.merged.color, fontSize: '8px', padding: '1px 3px', background: BATTLE_COLORS.merged.bg, borderRadius: '3px', flexShrink: 0 }}>M</span>}
+                  <AnimatePresence>
+                    {filteredLeaderboard.slice(0, 50).map((player) => {
+                      const originalRank = leaderboard.findIndex(p => p.id === player.id) + 1;
+                      const isHighlighted = isPlayerHighlighted(player);
+                      const playerColor = getPlayerColor(player);
+                      
+                      return (
+                        <motion.div 
+                          key={player.id}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className={`grid grid-cols-[44px_1fr_90px] items-center py-3 px-5 border-b border-zinc-800/30 cursor-pointer
+                                     transition-all duration-200 hover:bg-white/5 hover:translate-x-1
+                                     ${isHighlighted ? 'bg-yellow-500/10 border-l-2 border-l-yellow-500' : ''}`}
+                          onMouseEnter={() => setHighlightedPlayer(player.id)} 
+                          onMouseLeave={() => setHighlightedPlayer(null)}
+                        >
+                          <div className="flex items-center">
+                            {originalRank <= 3 ? (
+                              <div className={`w-6 h-6 rounded-md flex items-center justify-center
+                                             ${originalRank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' : 
+                                               originalRank === 2 ? 'bg-gradient-to-br from-zinc-300 to-zinc-500' : 
+                                               'bg-gradient-to-br from-amber-600 to-amber-800'}`}>
+                                {originalRank === 1 ? <Crown size={12} className="text-zinc-900" /> : <Award size={12} className="text-zinc-900" />}
+                              </div>
+                            ) : (
+                              <span className="text-zinc-500 text-xs font-medium pl-2">{originalRank}</span>
+                            )}
                           </div>
-                          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px' }}>{(player.hands / 1000000).toFixed(1)}M hands</div>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                          {displayMode === 'profit' ? (
-                            <div style={{ color: player.totalProfit >= 0 ? '#22c55e' : '#ef4444', fontSize: '13px', fontWeight: '600' }}>
-                              {player.totalProfit >= 0 ? '+' : ''}${Math.round(player.totalProfit).toLocaleString()}
+                          <div className="flex flex-col gap-0.5 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <div 
+                                className="w-2 h-2 rounded-full flex-shrink-0" 
+                                style={{ background: playerColor, boxShadow: `0 0 6px ${playerColor}` }} 
+                              />
+                              <span className="text-white text-xs font-medium truncate">{player.name}</span>
+                              {player.isMerged && (
+                                <span className="text-white/80 text-[8px] px-1 py-0.5 bg-white/10 rounded flex-shrink-0">M</span>
+                              )}
                             </div>
-                          ) : (
-                            <div style={{ color: player.winRate >= 0 ? '#22c55e' : '#ef4444', fontSize: '13px', fontWeight: '600' }}>
-                              {player.winRate >= 0 ? '+' : ''}{player.winRate.toFixed(2)} bb
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
+                            <div className="text-zinc-500 text-[10px]">{(player.hands / 1000000).toFixed(1)}M hands</div>
+                          </div>
+                          <div className="text-right">
+                            {displayMode === 'profit' ? (
+                              <div className={`text-sm font-semibold ${player.totalProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {player.totalProfit >= 0 ? '+' : ''}${Math.round(player.totalProfit).toLocaleString()}
+                              </div>
+                            ) : (
+                              <div className={`text-sm font-semibold ${player.winRate >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {player.winRate >= 0 ? '+' : ''}{player.winRate.toFixed(2)} bb
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
                 )}
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Head-to-Head Comparison */}
-        {isBattleMode && (
-          <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', marginBottom: '24px', animation: 'fadeInUp 0.6s ease-out 0.2s both' }}>
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '1.5em', fontWeight: '700', color: '#ffffff', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-                <Swords size={28} color="#FFB347" />
-                Head-to-Head Comparison
-              </h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>
-                {selectedDatasets[0]?.site} {selectedDatasets[0]?.stake} vs {selectedDatasets[1]?.site} {selectedDatasets[1]?.stake}
-              </p>
-            </div>
-            
-            <BattleCard />
-          </div>
-        )}
+        <AnimatePresence>
+          {isBattleMode && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 sm:p-8 mb-6"
+            >
+              <div className="text-center mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+                  <Swords size={28} className="text-yellow-500" />
+                  Head-to-Head Comparison
+                </h2>
+                <p className="text-zinc-500 text-sm">
+                  {selectedDatasets[0]?.site} {selectedDatasets[0]?.stake} vs {selectedDatasets[1]?.site} {selectedDatasets[1]?.stake}
+                </p>
+              </div>
+              
+              <BattleCard />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Formula Reference */}
-        <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', animation: 'fadeInUp 0.6s ease-out 0.3s both' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
-            <HelpCircle size={22} color="#FFB347" />
-            <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: 0 }}>Calculation Formulas</h2>
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ delay: 0.3 }}
+          className="bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 sm:p-8"
+        >
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <HelpCircle size={22} className="text-yellow-500" />
+            <h2 className="text-lg font-semibold text-white">Calculation Formulas</h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-            <div style={{ background: 'rgba(0, 255, 255, 0.1)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(0, 255, 255, 0.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                <TrendingUp size={18} color="#00ffff" />
-                <h3 style={{ color: '#00ffff', fontSize: '14px', fontWeight: '600', margin: 0 }}>Weighted Win Rate</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <motion.div 
+              variants={scaleIn}
+              className="bg-cyan-500/10 p-5 rounded-xl border border-cyan-500/20"
+            >
+              <div className="flex items-center gap-2.5 mb-3">
+                <TrendingUp size={18} className="text-cyan-400" />
+                <h3 className="text-cyan-400 text-sm font-semibold">Weighted Win Rate</h3>
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', lineHeight: 1.7, margin: 0 }}>
+              <p className="text-zinc-400 text-xs leading-relaxed">
                 Merging across datasets:<br />
-                <code style={{ background: 'rgba(0,0,0,0.3)', padding: '6px 10px', borderRadius: '4px', fontSize: '11px', display: 'block', marginTop: '8px' }}>WR = Σ(WR_i × Hands_i) / Σ(Hands_i)</code>
+                <code className="bg-zinc-950/50 px-2.5 py-1.5 rounded text-[11px] block mt-2 text-cyan-300">WR = Σ(WR_i × Hands_i) / Σ(Hands_i)</code>
               </p>
-            </div>
+            </motion.div>
 
-            <div style={{ background: 'rgba(255, 0, 255, 0.1)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255, 0, 255, 0.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                <DollarSign size={18} color="#ff00ff" />
-                <h3 style={{ color: '#ff00ff', fontSize: '14px', fontWeight: '600', margin: 0 }}>Total Profit</h3>
+            <motion.div 
+              variants={scaleIn}
+              className="bg-pink-500/10 p-5 rounded-xl border border-pink-500/20"
+            >
+              <div className="flex items-center gap-2.5 mb-3">
+                <DollarSign size={18} className="text-pink-400" />
+                <h3 className="text-pink-400 text-sm font-semibold">Total Profit</h3>
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', lineHeight: 1.7, margin: 0 }}>
+              <p className="text-zinc-400 text-xs leading-relaxed">
                 Sum across stakes:<br />
-                <code style={{ background: 'rgba(0,0,0,0.3)', padding: '6px 10px', borderRadius: '4px', fontSize: '11px', display: 'block', marginTop: '8px' }}>Profit = Σ(WR/100 × Hands × BB$)</code>
+                <code className="bg-zinc-950/50 px-2.5 py-1.5 rounded text-[11px] block mt-2 text-pink-300">Profit = Σ(WR/100 × Hands × BB$)</code>
               </p>
-            </div>
+            </motion.div>
 
-            <div style={{ background: 'rgba(255, 179, 71, 0.1)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255, 179, 71, 0.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                <Target size={18} color="#FFB347" />
-                <h3 style={{ color: '#FFB347', fontSize: '14px', fontWeight: '600', margin: 0 }}>Data Sources</h3>
+            <motion.div 
+              variants={scaleIn}
+              className="bg-yellow-500/10 p-5 rounded-xl border border-yellow-500/20"
+            >
+              <div className="flex items-center gap-2.5 mb-3">
+                <Target size={18} className="text-yellow-500" />
+                <h3 className="text-yellow-500 text-sm font-semibold">Data Sources</h3>
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px', lineHeight: 1.7, margin: 0 }}>
+              <p className="text-zinc-400 text-xs leading-relaxed">
                 30 datasets, 3,000 players<br />
-                <span style={{ fontSize: '11px', display: 'block', marginTop: '8px', color: 'rgba(255,255,255,0.5)' }}>
+                <span className="text-zinc-500 text-[11px] block mt-2">
                   GGPoker • PokerStars • iPoker<br />Winamax • WPN
                 </span>
               </p>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
