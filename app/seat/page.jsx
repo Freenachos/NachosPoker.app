@@ -1,8 +1,5 @@
-'use client';
-
-import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink, Fish, TrendingUp, AlertCircle, ChevronDown } from 'lucide-react';
+import { ExternalLink, TrendingUp } from 'lucide-react';
 
 /**
  * Poker Seat Selection EV Visualization Tool
@@ -164,16 +161,16 @@ const PokerSeatEVTool = () => {
   // ============================================
   
   const TABLE_CONFIG = {
-    // Container dimensions
-    containerWidth: 580,
-    containerHeight: 420,
-    // Table felt ellipse dimensions (matches the actual green felt)
-    feltWidth: 400,
-    feltHeight: 240,
+    // Container dimensions (25% larger)
+    containerWidth: 775,
+    containerHeight: 563,
+    // Table felt ellipse dimensions (25% larger)
+    feltWidth: 550,
+    feltHeight: 338,
     // Border thickness of table
-    feltBorder: 8,
+    feltBorder: 10,
     // How much seat cards should overlap the table edge (negative = into table)
-    overlapOffset: -12,
+    overlapOffset: -18,
   };
 
   // Calculate seat position on ellipse perimeter
@@ -201,9 +198,27 @@ const PokerSeatEVTool = () => {
     BB: -150,   // Lower-left (same as 210°)
   };
 
+  // Subtle icon components for player types (larger)
+  const RegIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  );
+
+  const FishIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.8 }}>
+      <path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6-3.56 0-7.56-2.53-8.5-6Z"/>
+      <path d="M18 12v.5"/>
+      <path d="M16 17.93a9.77 9.77 0 0 1-2.5 4.57"/>
+      <path d="M7 10.67A9.77 9.77 0 0 1 4.5 6.1"/>
+      <path d="M4.5 12a7.5 7.5 0 0 0-2.5-2v4a7.5 7.5 0 0 0 2.5-2Z"/>
+    </svg>
+  );
+
   // Seat component for the poker table
-  const Seat = ({ position, winRate, seatAngle, isEP = false }) => {
-    const colors = isEP ? 
+  const Seat = ({ position, winRate, seatAngle, isRec = false }) => {
+    const colors = isRec ? 
       { bg: 'rgba(59, 130, 246, 0.2)', border: 'rgba(59, 130, 246, 0.4)', text: '#60a5fa' } : 
       getWinRateColor(winRate);
     
@@ -222,12 +237,12 @@ const PokerSeatEVTool = () => {
         top: `${centerY + y}px`,
         // Center the card on its calculated point
         transform: 'translate(-50%, -50%)',
-        // Visual styling
+        // Visual styling - CONSISTENT SIZE for all cards
         background: colors.bg,
         border: `2px solid ${colors.border}`,
-        borderRadius: '12px',
-        padding: isEP ? '12px 16px' : '14px 18px',
-        minWidth: isEP ? '70px' : '85px',
+        borderRadius: '10px',
+        padding: '12px 16px',
+        width: '90px',
         textAlign: 'center',
         transition: 'all 0.3s ease',
         backdropFilter: 'blur(12px)',
@@ -236,35 +251,44 @@ const PokerSeatEVTool = () => {
         zIndex: 10,
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
       }}>
+        {/* Position label with player type icon */}
         <div style={{
-          fontSize: '11px',
-          fontWeight: '600',
-          color: 'rgba(255,255,255,0.5)',
-          marginBottom: '4px',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em'
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '5px',
+          marginBottom: '8px',
+          color: isRec ? colors.text : 'rgba(255,255,255,0.5)'
         }}>
-          {position}
-        </div>
-        {isEP ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-            <Fish size={16} color={colors.text} />
-            <span style={{ fontSize: '13px', fontWeight: '600', color: colors.text }}>Fish</span>
-          </div>
-        ) : (
-          <div style={{
-            fontSize: '20px',
-            fontWeight: '700',
-            color: colors.text
+          {isRec ? <FishIcon /> : <RegIcon />}
+          <span style={{
+            fontSize: '12px',
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
           }}>
-            {winRate >= 0 ? '+' : ''}{winRate.toFixed(1)}
-          </div>
-        )}
-        {!isEP && (
-          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginTop: '2px' }}>
-            bb/100
-          </div>
-        )}
+            {position}
+          </span>
+        </div>
+        
+        {/* Win rate value */}
+        <div style={{
+          fontSize: '20px',
+          fontWeight: '700',
+          color: colors.text,
+          lineHeight: 1
+        }}>
+          {isRec ? '—' : `${winRate >= 0 ? '+' : ''}${winRate.toFixed(1)}`}
+        </div>
+        
+        {/* Unit label */}
+        <div style={{ 
+          fontSize: '10px', 
+          color: 'rgba(255,255,255,0.35)', 
+          marginTop: '4px' 
+        }}>
+          {isRec ? 'rec player' : 'bb/100'}
+        </div>
       </div>
     );
   };
@@ -324,10 +348,10 @@ const PokerSeatEVTool = () => {
         }
         
         .glass-card {
-          background: rgba(20, 20, 20, 0.6);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(18, 18, 18, 0.65);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .card-hover {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -339,8 +363,8 @@ const PokerSeatEVTool = () => {
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         .input-focus:focus {
-          border-color: #FFB347 !important;
-          box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.15);
+          border-color: #D4AF37 !important;
+          box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
         }
         .btn-hover {
           transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -365,7 +389,7 @@ const PokerSeatEVTool = () => {
           inset: 0;
           border-radius: inherit;
           padding: 2px;
-          background: linear-gradient(135deg, rgba(255, 179, 71, 0.3), rgba(255, 179, 71, 0.1));
+          background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1));
           -webkit-mask: 
             linear-gradient(#fff 0 0) content-box, 
             linear-gradient(#fff 0 0);
@@ -382,8 +406,8 @@ const PokerSeatEVTool = () => {
           left: 0;
           width: 100px;
           height: 2px;
-          background: linear-gradient(90deg, transparent 0%, #FFB347 50%, #FFB347 100%);
-          box-shadow: 0 0 10px 1px rgba(255, 179, 71, 0.6);
+          background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, #D4AF37 100%);
+          box-shadow: 0 0 10px 1px rgba(212, 175, 55, 0.6);
           offset-path: rect(0 100% 100% 0 round 16px);
           animation: traceBorder 5s linear infinite;
           offset-rotate: auto;
@@ -395,30 +419,59 @@ const PokerSeatEVTool = () => {
         .filter-btn {
           padding: 10px 16px;
           border-radius: 8px;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          text-align: center;
+          white-space: nowrap;
         }
         .filter-btn.active {
-          background: #FFB347;
+          background: linear-gradient(135deg, #D4AF37 0%, #B8972E 100%);
           color: #0a0a0a;
-          border-color: #FFB347;
+          border-color: #D4AF37;
+          box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
         }
         .filter-btn:not(.active) {
-          background: rgba(255, 255, 255, 0.05);
-          color: rgba(255, 255, 255, 0.6);
+          background: rgba(255, 255, 255, 0.04);
+          color: rgba(255, 255, 255, 0.55);
         }
         .filter-btn:not(.active):hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.08);
           color: rgba(255, 255, 255, 0.8);
+          border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Responsive Dashboard Grid */
+        .dashboard-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 220px;
+          grid-template-rows: auto 1fr;
+          gap: 20px;
+          grid-template-areas:
+            "filters sidebar"
+            "table sidebar";
+        }
+        
+        @media (max-width: 1024px) {
+          .dashboard-grid {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+              "filters"
+              "table"
+              "sidebar";
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .filter-row {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
 
       <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '20px'}}>
-        <NachosPokerNavBar />
-        
         {/* Header Banner */}
         <div 
           className="card-hover spark-border"
@@ -436,14 +489,14 @@ const PokerSeatEVTool = () => {
           </div>
           
           <div style={{ flex: 1 }}>
-            <div style={{fontSize: '12px', color: '#FFB347', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.1em', textTransform: 'uppercase'}}>
+            <div style={{fontSize: '12px', color: '#D4AF37', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.1em', textTransform: 'uppercase'}}>
               Crafted by FreeNachos
             </div>
             <h2 style={{fontSize: '22px', fontWeight: '700', color: '#ffffff', marginBottom: '8px', lineHeight: 1.2}}>
-              See where the money really is.
+              Now you see the EV. Ready to capture it?
             </h2>
             <p style={{fontSize: '14px', color: 'rgba(255,255,255,0.6)', marginBottom: '0', lineHeight: 1.5, maxWidth: '400px'}}>
-              Optimize your seat selection with real data. Understand how fish position impacts your win rate.
+              This tool shows where the bb/100 hides. Our coaching and CFP will help you actually extract it.
             </p>
           </div>
           
@@ -454,7 +507,7 @@ const PokerSeatEVTool = () => {
               rel="noopener noreferrer"
               className="btn-hover"
               style={{
-                background: '#FFB347',
+                background: '#D4AF37',
                 color: '#0a0a0a',
                 padding: '12px 20px',
                 borderRadius: '8px',
@@ -466,17 +519,15 @@ const PokerSeatEVTool = () => {
                 gap: '8px'
               }}
             >
-              Join Our CFP <ExternalLink size={14} />
+              Join the CFP <ExternalLink size={14} />
             </a>
             <a 
-              href="https://www.freenachoscoaching.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              href="/"
               className="btn-hover"
               style={{
                 background: 'transparent',
-                border: '1px solid rgba(255, 179, 71, 0.5)',
-                color: '#FFB347',
+                border: '1px solid rgba(212, 175, 55, 0.5)',
+                color: '#D4AF37',
                 padding: '10px 20px',
                 borderRadius: '8px',
                 fontWeight: '600',
@@ -487,7 +538,7 @@ const PokerSeatEVTool = () => {
                 gap: '8px'
               }}
             >
-              Private Coaching <ExternalLink size={14} />
+              Mentorship Program
             </a>
           </div>
         </div>
@@ -498,7 +549,7 @@ const PokerSeatEVTool = () => {
           style={{
             borderRadius: '16px', 
             padding: '40px', 
-            marginBottom: '30px',
+            marginBottom: '45px',
             animation: 'fadeInUp 0.6s ease-out 0.1s both'
           }}
         >
@@ -515,92 +566,166 @@ const PokerSeatEVTool = () => {
             How fish VPIP and position affect your win rate at 6-max
           </p>
 
-          {/* Filters Section */}
-          <div style={{display: 'flex', gap: '24px', marginBottom: '40px', flexWrap: 'wrap'}}>
-            {/* Site Filter */}
-            <div className="glass-card" style={{
-              flex: '1 1 200px',
-              padding: '24px',
-              borderRadius: '12px',
-              animation: 'fadeIn 0.4s ease-out 0.2s both'
+          {/* Dashboard Grid Layout - Responsive */}
+          <div className="dashboard-grid">
+            
+            {/* Top Row: Filters (Site, VPIP, Avg WR) */}
+            <div className="filter-row" style={{
+              gridArea: 'filters',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '16px',
+              alignItems: 'stretch'
             }}>
-              <h3 style={{color: '#FFB347', marginBottom: '16px', fontSize: '14px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
-                Site
-              </h3>
-              <div style={{display: 'flex', gap: '10px'}}>
-                <button 
-                  className={`filter-btn ${selectedSite === 'pokerstars' ? 'active' : ''}`}
-                  onClick={() => setSelectedSite('pokerstars')}
-                >
-                  PokerStars
-                </button>
-                <button 
-                  className={`filter-btn ${selectedSite === 'ggpoker' ? 'active' : ''}`}
-                  onClick={() => setSelectedSite('ggpoker')}
-                >
-                  GGPoker
-                </button>
-              </div>
-            </div>
-
-            {/* VPIP Filter */}
-            <div className="glass-card" style={{
-              flex: '2 1 400px',
-              padding: '24px',
-              borderRadius: '12px',
-              animation: 'fadeIn 0.4s ease-out 0.3s both'
-            }}>
-              <h3 style={{color: '#FFB347', marginBottom: '16px', fontSize: '14px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
-                Fish VPIP Range
-              </h3>
-              <div style={{display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
-                {vpipRanges.map(range => (
+              {/* Site Filter */}
+              <div className="glass-card" style={{
+                padding: '20px 24px',
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                animation: 'fadeIn 0.4s ease-out 0.2s both'
+              }}>
+                <h3 style={{
+                  color: '#D4AF37', 
+                  marginBottom: '16px', 
+                  fontSize: '11px', 
+                  fontWeight: '600', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.1em'
+                }}>
+                  Site
+                </h3>
+                <div style={{
+                  display: 'flex', 
+                  gap: '10px',
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
                   <button 
-                    key={range}
-                    className={`filter-btn ${selectedVpip === range ? 'active' : ''}`}
-                    onClick={() => setSelectedVpip(range)}
+                    className={`filter-btn ${selectedSite === 'pokerstars' ? 'active' : ''}`}
+                    onClick={() => setSelectedSite('pokerstars')}
+                    style={{flex: 1, maxWidth: '120px'}}
                   >
-                    {range === '50+' ? '50+' : range}
+                    PokerStars
                   </button>
-                ))}
+                  <button 
+                    className={`filter-btn ${selectedSite === 'ggpoker' ? 'active' : ''}`}
+                    onClick={() => setSelectedSite('ggpoker')}
+                    style={{flex: 1, maxWidth: '120px'}}
+                  >
+                    GGPoker
+                  </button>
+                </div>
+              </div>
+
+              {/* VPIP Filter */}
+              <div className="glass-card" style={{
+                padding: '20px 24px',
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                animation: 'fadeIn 0.4s ease-out 0.3s both'
+              }}>
+                <h3 style={{
+                  color: '#D4AF37', 
+                  marginBottom: '16px', 
+                  fontSize: '11px', 
+                  fontWeight: '600', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.1em'
+                }}>
+                  Fish VPIP Range
+                </h3>
+                <div style={{
+                  display: 'flex', 
+                  gap: '8px',
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  {vpipRanges.map(range => (
+                    <button 
+                      key={range}
+                      className={`filter-btn ${selectedVpip === range ? 'active' : ''}`}
+                      onClick={() => setSelectedVpip(range)}
+                      style={{flex: 1, minWidth: 0, padding: '10px 12px'}}
+                    >
+                      {range}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Average WR Card */}
+              <div className="glass-card" style={{
+                padding: '20px 24px',
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                animation: 'fadeIn 0.4s ease-out 0.4s both'
+              }}>
+                <h3 style={{
+                  color: '#D4AF37', 
+                  marginBottom: '12px', 
+                  fontSize: '11px', 
+                  fontWeight: '600', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.1em'
+                }}>
+                  Average Win Rate
+                </h3>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: '8px'
+                }}>
+                  <span style={{
+                    fontSize: '32px',
+                    fontWeight: '700',
+                    color: currentData.expectedWR >= 0 ? '#22c55e' : '#ef4444',
+                    lineHeight: 1
+                  }}>
+                    {currentData.expectedWR >= 0 ? '+' : ''}{currentData.expectedWR.toFixed(1)}
+                  </span>
+                  <span style={{fontSize: '13px', color: 'rgba(255,255,255,0.4)'}}>
+                    bb/100
+                  </span>
+                </div>
+                <div style={{fontSize: '10px', color: 'rgba(255,255,255,0.35)', marginTop: '6px'}}>
+                  {currentData.name} sample avg
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Main Content: Table + Stats */}
-          <div style={{display: 'flex', gap: '40px', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-            {/* Poker Table Visualization */}
+            {/* Poker Table Area */}
             <div style={{
-              flex: '1 1 580px',
-              position: 'relative',
+              gridArea: 'table',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
               animation: 'fadeIn 0.5s ease-out 0.4s both'
             }}>
-              {/* Table Container - centered with explicit dimensions */}
               <div style={{
                 position: 'relative',
                 width: `${TABLE_CONFIG.containerWidth}px`,
-                height: `${TABLE_CONFIG.containerHeight}px`,
-                margin: '0 auto'
+                height: `${TABLE_CONFIG.containerHeight}px`
               }}>
-                {/* Table felt - centered in container */}
+                {/* Table felt */}
                 <div style={{
                   position: 'absolute',
-                  // Center the felt in the container
                   left: '50%',
                   top: '50%',
                   transform: 'translate(-50%, -50%)',
-                  // Felt dimensions
                   width: `${TABLE_CONFIG.feltWidth}px`,
                   height: `${TABLE_CONFIG.feltHeight}px`,
-                  // Visual styling
                   background: 'linear-gradient(145deg, #1a472a 0%, #0d2818 100%)',
                   borderRadius: '50%',
                   border: `${TABLE_CONFIG.feltBorder}px solid #2d1810`,
                   boxShadow: 'inset 0 0 60px rgba(0,0,0,0.5), 0 10px 40px rgba(0,0,0,0.4)',
-                  // Ensure table is below seats
                   zIndex: 1
                 }}>
-                  {/* Table center text */}
                   <div style={{
                     position: 'absolute',
                     top: '50%',
@@ -608,155 +733,222 @@ const PokerSeatEVTool = () => {
                     transform: 'translate(-50%, -50%)',
                     textAlign: 'center'
                   }}>
-                    <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.1em'}}>
+                    <div style={{
+                      fontSize: '11px', 
+                      color: 'rgba(255,255,255,0.3)', 
+                      marginBottom: '4px', 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.1em'
+                    }}>
                       6-Max
                     </div>
-                    <div style={{fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontWeight: '500'}}>
+                    <div style={{
+                      fontSize: '13px', 
+                      color: 'rgba(255,255,255,0.5)', 
+                      fontWeight: '500'
+                    }}>
                       {currentData.name}
                     </div>
                   </div>
                 </div>
 
-                {/* Seats - positioned on ellipse perimeter with overlap */}
-                {/* EP (Fish) - upper-left, 150° */}
-                <Seat position="EP" winRate={0} seatAngle={SEAT_ANGLES.EP} isEP={true} />
-                
-                {/* MP - top center, 90° */}
+                {/* Seats */}
+                <Seat position="EP" winRate={0} seatAngle={SEAT_ANGLES.EP} isRec={true} />
                 <Seat position="MP" winRate={getWinRate('MP')} seatAngle={SEAT_ANGLES.MP} />
-                
-                {/* CO - upper-right, 30° */}
                 <Seat position="CO" winRate={getWinRate('CO')} seatAngle={SEAT_ANGLES.CO} />
-                
-                {/* BTN - lower-right, -30° */}
                 <Seat position="BTN" winRate={getWinRate('BTN')} seatAngle={SEAT_ANGLES.BTN} />
-                
-                {/* SB - bottom center, -90° */}
                 <Seat position="SB" winRate={getWinRate('SB')} seatAngle={SEAT_ANGLES.SB} />
-                
-                {/* BB - lower-left, -150° */}
                 <Seat position="BB" winRate={getWinRate('BB')} seatAngle={SEAT_ANGLES.BB} />
-              </div>
-
-              {/* Scenario note */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '10px',
-                padding: '10px 16px',
-                background: 'rgba(59, 130, 246, 0.1)',
-                borderRadius: '8px',
-                border: '1px solid rgba(59, 130, 246, 0.2)',
-                maxWidth: '400px',
-                margin: '10px auto 0'
-              }}>
-                <AlertCircle size={14} color="#60a5fa" />
-                <span style={{fontSize: '12px', color: 'rgba(255,255,255,0.6)'}}>
-                  Scenario assumes the recreational player (fish) is in EP
-                </span>
               </div>
             </div>
 
-            {/* Stats Panel */}
+            {/* Right Sidebar: Position Rankings + Strategy Insights */}
             <div style={{
-              flex: '0 0 280px',
+              gridArea: 'sidebar',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
               animation: 'fadeIn 0.5s ease-out 0.5s both'
             }}>
-              {/* Expected WR Card */}
-              <div className="glass-card" style={{
-                padding: '28px',
-                borderRadius: '12px',
-                marginBottom: '20px',
-                textAlign: 'center'
-              }}>
-                <div style={{fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
-                  Expected Win Rate
-                </div>
-                <div style={{
-                  fontSize: '42px',
-                  fontWeight: '700',
-                  color: currentData.expectedWR >= 0 ? '#22c55e' : '#ef4444',
-                  lineHeight: 1
-                }}>
-                  {currentData.expectedWR >= 0 ? '+' : ''}{currentData.expectedWR.toFixed(1)}
-                </div>
-                <div style={{fontSize: '14px', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
-                  bb/100 on {currentData.name}
-                </div>
-              </div>
-
               {/* Position Rankings */}
               <div className="glass-card" style={{
-                padding: '24px',
+                padding: '20px',
                 borderRadius: '12px'
               }}>
-                <h4 style={{color: '#FFB347', marginBottom: '16px', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em'}}>
+                <h3 style={{
+                  color: '#D4AF37', 
+                  marginBottom: '16px', 
+                  fontSize: '11px', 
+                  fontWeight: '600', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.1em'
+                }}>
                   Position Rankings
-                </h4>
-                {Object.entries(currentData.positions)
-                  .map(([pos, rates]) => ({ pos, wr: rates[selectedVpip] }))
-                  .sort((a, b) => b.wr - a.wr)
-                  .map(({ pos, wr }, idx) => {
-                    const colors = getWinRateColor(wr);
-                    return (
-                      <div 
-                        key={pos}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '10px 12px',
-                          marginBottom: '8px',
-                          background: colors.bg,
-                          borderRadius: '8px',
-                          border: `1px solid ${colors.border}`
-                        }}
-                      >
-                        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                          <span style={{
-                            fontSize: '11px',
-                            color: 'rgba(255,255,255,0.4)',
-                            width: '18px'
-                          }}>
-                            #{idx + 1}
-                          </span>
+                </h3>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+                  {Object.entries(currentData.positions)
+                    .map(([pos, rates]) => ({ pos, wr: rates[selectedVpip] }))
+                    .sort((a, b) => b.wr - a.wr)
+                    .map(({ pos, wr }, idx) => {
+                      const colors = getWinRateColor(wr);
+                      return (
+                        <div 
+                          key={pos}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '10px 12px',
+                            background: colors.bg,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                            <span style={{
+                              fontSize: '10px',
+                              color: 'rgba(255,255,255,0.35)',
+                              fontWeight: '500',
+                              width: '18px'
+                            }}>
+                              #{idx + 1}
+                            </span>
+                            <span style={{
+                              fontSize: '13px',
+                              fontWeight: '600',
+                              color: 'rgba(255,255,255,0.9)'
+                            }}>
+                              {pos}
+                            </span>
+                          </div>
                           <span style={{
                             fontSize: '14px',
-                            fontWeight: '600',
-                            color: 'rgba(255,255,255,0.9)'
+                            fontWeight: '700',
+                            color: colors.text
                           }}>
-                            {pos}
+                            {wr >= 0 ? '+' : ''}{wr.toFixed(1)}
                           </span>
                         </div>
-                        <span style={{
-                          fontSize: '15px',
-                          fontWeight: '700',
-                          color: colors.text
-                        }}>
-                          {wr >= 0 ? '+' : ''}{wr.toFixed(1)}
-                        </span>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                </div>
               </div>
 
-              {/* VPIP Impact Note */}
-              <div style={{
-                marginTop: '16px',
-                padding: '14px',
-                background: 'rgba(255, 179, 71, 0.1)',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 179, 71, 0.2)'
+              {/* Strategy Insight Panel */}
+              <div className="glass-card" style={{
+                padding: '20px',
+                borderRadius: '12px',
+                borderLeft: '3px solid #D4AF37',
+                flex: '1 1 auto',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <div style={{fontSize: '12px', color: '#FFB347', fontWeight: '600', marginBottom: '6px'}}>
-                  {vpipLabels[selectedVpip]}
+                {/* Quick Tip Section */}
+                <div style={{marginBottom: '18px'}}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '10px'
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+                      <path d="M9 18h6"/>
+                      <path d="M10 22h4"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '11px',
+                      fontWeight: '600',
+                      color: '#D4AF37',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em'
+                    }}>
+                      Quick Tip
+                    </span>
+                  </div>
+                  <p style={{
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.7)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    {selectedVpip === '50+' && 'On a table with a 50+ VPIP recreational, every seat is winning. Positional advantage still gives you an edge, but you can\'t always be picky.'}
+                    {selectedVpip === '40-50' && 'Loose fish overplay too many hands preflop. Focus on isolating them in position and extracting thin value on later streets.'}
+                    {selectedVpip === '30-40' && 'Moderate fish play a bit tighter preflop, but you should still look to isolate them widely to punish their lack of 4bets.'}
+                    {selectedVpip === '0-30' && 'Tight fish offer minimal edge. When the recreational is playing few hands, prioritize table selection over seat selection.'}
+                  </p>
                 </div>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5}}>
-                  {selectedVpip === '50+' && 'Very loose fish = maximum EV across all seats'}
-                  {selectedVpip === '40-50' && 'Loose fish = solid EV, especially in position'}
-                  {selectedVpip === '30-40' && 'Moderate fish = marginal gains for most regs'}
-                  {selectedVpip === '0-30' && 'Tight fish = minimal edge, seat selection matters less'}
+
+                {/* Divider */}
+                <div style={{
+                  height: '1px',
+                  background: 'rgba(255,255,255,0.08)',
+                  margin: '4px 0 16px 0'
+                }}/>
+
+                {/* Seat Legend */}
+                <div>
+                  <div style={{
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    color: 'rgba(255,255,255,0.5)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    marginBottom: '12px'
+                  }}>
+                    Seat Legend
+                  </div>
+                  <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                      <div style={{
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '3px',
+                        background: 'rgba(34, 197, 94, 0.2)',
+                        border: '1px solid rgba(34, 197, 94, 0.4)'
+                      }}/>
+                      <span style={{fontSize: '11px', color: 'rgba(255,255,255,0.6)'}}>
+                        High EV (+3.0+)
+                      </span>
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                      <div style={{
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '3px',
+                        background: 'rgba(34, 197, 94, 0.1)',
+                        border: '1px solid rgba(34, 197, 94, 0.25)'
+                      }}/>
+                      <span style={{fontSize: '11px', color: 'rgba(255,255,255,0.6)'}}>
+                        Positive EV (+0.1 to +3.0)
+                      </span>
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                      <div style={{
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '3px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                      }}/>
+                      <span style={{fontSize: '11px', color: 'rgba(255,255,255,0.6)'}}>
+                        Neutral / Low EV
+                      </span>
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                      <div style={{
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '3px',
+                        background: 'rgba(59, 130, 246, 0.15)',
+                        border: '1px solid rgba(59, 130, 246, 0.3)'
+                      }}/>
+                      <span style={{fontSize: '11px', color: 'rgba(255,255,255,0.6)'}}>
+                        Recreational Player
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -773,7 +965,7 @@ const PokerSeatEVTool = () => {
           }}
         >
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '28px'}}>
-            <TrendingUp size={24} color="#FFB347" />
+            <TrendingUp size={24} color="#D4AF37" />
             <h2 style={{fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: 0}}>
               Key Insights
             </h2>
@@ -782,14 +974,14 @@ const PokerSeatEVTool = () => {
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px'}}>
             {/* Insight 1 */}
             <div style={{
-              background: 'rgba(255, 179, 71, 0.1)',
+              background: 'rgba(212, 175, 55, 0.08)',
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
               padding: '24px',
               borderRadius: '12px',
-              border: '1px solid rgba(255, 179, 71, 0.2)'
+              border: '1px solid rgba(212, 175, 55, 0.2)'
             }}>
-              <h3 style={{color: '#FFB347', fontSize: '14px', fontWeight: '600', marginBottom: '12px'}}>
+              <h3 style={{color: '#D4AF37', fontSize: '14px', fontWeight: '600', marginBottom: '12px'}}>
                 Position Matters Most
               </h3>
               <p style={{color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.7, margin: 0}}>
@@ -841,7 +1033,7 @@ const PokerSeatEVTool = () => {
             textAlign: 'center'
           }}>
             <p style={{color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: 0, lineHeight: 1.7}}>
-              <strong style={{color: '#FFB347'}}>Pro Tip:</strong> Don't just find fish — find <em>loose</em> fish and get direct position on them. 
+              <strong style={{color: '#D4AF37'}}>Pro Tip:</strong> Don't just find fish. Find <em>loose</em> fish and get direct position on them. 
               A tight fish in EP is worth almost nothing. A 50+ VPIP whale makes every seat at the table profitable.
             </p>
           </div>
