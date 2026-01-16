@@ -1059,10 +1059,11 @@ The 3-month program consists of:
         }
         
         .glass-card {
-          background: rgba(18, 18, 18, 0.8);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(212, 175, 55, 0.1);
+          background: rgba(18, 18, 18, 0.5);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         .card-hover {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -1481,6 +1482,24 @@ The 3-month program consists of:
         ))}
       </div>
 
+      {/* ==================== FIXED NAVBAR (z-9999) ==================== */}
+      {/* Outside Hero section so it doesn't get affected by the fade mask */}
+      <div 
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          padding: '20px 24px',
+          pointerEvents: 'auto'
+        }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <NachosPokerNavBar />
+        </div>
+      </div>
+
       {/* ==================== CINEMATIC HERO SECTION ==================== */}
       <section 
         ref={heroSectionRef}
@@ -1582,22 +1601,6 @@ The 3-month program consists of:
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
             </svg>
-          </div>
-        </div>
-
-        {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 50,
-            padding: '20px 24px'
-          }}
-        >
-          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-            <NachosPokerNavBar />
           </div>
         </div>
 
