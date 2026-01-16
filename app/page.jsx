@@ -1513,45 +1513,125 @@ The 3-month program consists of:
           zIndex: 2
         }}
       >
-        {/* === LAYER 16: FLOATING NACHOS (z-16) - Inside Hero, ABOVE Vignette === */}
-        {/* Sparse at top (distant stars), denser toward bottom */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 16, overflow: 'hidden', pointerEvents: 'none' }}>
+        {/* === LAYER 17: SHARP BOKEH EMBERS (z-17) - Above Vignette, Behind Coach === */}
+        {/* Tiny glowing embers that create parallax depth */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 17, overflow: 'hidden', pointerEvents: 'none' }}>
           
-          {/* === CRYSTAL CLEAR MICRO NACHOS === */}
-          
-          {/* Micro Nacho - Upper Left (near logo area) */}
+          {/* Ember 1 - Near top-left headline */}
           <div style={{
             position: 'absolute',
-            top: '12%',
-            left: '8%',
-            width: '18px',
-            height: '18px',
-            opacity: 0.4,
-            filter: 'blur(0px)',
-            animation: 'cinematicFloat 15s ease-in-out infinite',
-            animationDelay: '-3s'
+            top: '32%',
+            left: '12%',
+            width: '8px',
+            height: '8px',
+            filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat 8s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
             </svg>
           </div>
 
-          {/* Micro Nacho - Below CTA button area */}
+          {/* Ember 2 - Near top-left headline (slightly higher) */}
           <div style={{
             position: 'absolute',
-            top: '72%',
+            top: '28%',
             left: '18%',
-            width: '20px',
-            height: '20px',
-            opacity: 0.35,
-            filter: 'blur(0px)',
-            animation: 'cinematicFloat2 17s ease-in-out infinite',
-            animationDelay: '-7s'
+            width: '5px',
+            height: '5px',
+            filter: 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat2 10s ease-in-out infinite',
+            animationDelay: '-2s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
             </svg>
           </div>
+
+          {/* Ember 3 - Near coach's right shoulder */}
+          <div style={{
+            position: 'absolute',
+            top: '35%',
+            right: '28%',
+            width: '6px',
+            height: '6px',
+            filter: 'drop-shadow(0 0 7px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat 9s ease-in-out infinite',
+            animationDelay: '-4s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
+            </svg>
+          </div>
+
+          {/* Ember 4 - Lower-left void */}
+          <div style={{
+            position: 'absolute',
+            bottom: '28%',
+            left: '8%',
+            width: '10px',
+            height: '10px',
+            filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat2 7s ease-in-out infinite',
+            animationDelay: '-1s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
+            </svg>
+          </div>
+
+          {/* Ember 5 - Lower-left void (second) */}
+          <div style={{
+            position: 'absolute',
+            bottom: '22%',
+            left: '15%',
+            width: '4px',
+            height: '4px',
+            filter: 'drop-shadow(0 0 5px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat 11s ease-in-out infinite',
+            animationDelay: '-6s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
+            </svg>
+          </div>
+
+          {/* Ember 6 - Near CTA button */}
+          <div style={{
+            position: 'absolute',
+            top: '68%',
+            left: '22%',
+            width: '7px',
+            height: '7px',
+            filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat2 9s ease-in-out infinite',
+            animationDelay: '-3s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
+            </svg>
+          </div>
+
+          {/* Ember 7 - Floating accent (mid-left) */}
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '5%',
+            width: '12px',
+            height: '12px',
+            filter: 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.8))',
+            animation: 'cinematicFloat 6s ease-in-out infinite',
+            animationDelay: '-5s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FFD700" />
+            </svg>
+          </div>
+        </div>
+
+        {/* === LAYER 16: FLOATING NACHOS (z-16) - Inside Hero, ABOVE Vignette === */}
+        {/* Sparse at top (distant stars), denser toward bottom */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 16, overflow: 'hidden', pointerEvents: 'none' }}>
 
           {/* === HERO ACCENT NACHOS: Intentional Placement === */}
           
