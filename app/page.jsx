@@ -2027,7 +2027,7 @@ The 3-month program consists of:
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
       <div style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
-        {/* ==================== COACH SECTION - Consolidated Authority Artifact ==================== */}
+        {/* ==================== COACH SECTION - Bookend Symmetry + Luxury Metallic ==================== */}
         <div 
           ref={aboutSectionRef}
           className="coach-section-wrapper reveal-first"
@@ -2038,38 +2038,40 @@ The 3-month program consists of:
             position: 'relative'
           }}
         >
-          {/* Two-Column Grid Layout */}
+          {/* Two-Column Grid - ITEMS-STRETCH for Equal Heights */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '80px',
-            alignItems: 'center'
+            gap: '72px',
+            alignItems: 'stretch'
           }} className="coach-grid">
             
-            {/* LEFT COLUMN: Narrative with Unified Liquid Gold Typography */}
+            {/* LEFT COLUMN: Narrative - Flex Column to Fill Height */}
             <div style={{ 
-              maxWidth: '560px',
-              paddingLeft: '20px',
-              paddingRight: '40px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              maxWidth: '580px',
+              paddingRight: '24px',
               overflow: 'visible'
             }}>
-              {/* Headline - Single Unified Block with Liquid Gold Wash */}
+              {/* Headline - Wider Container for Balanced Line Breaks */}
               <h2 
                 className="coach-headline"
                 style={{
-                  fontSize: 'clamp(32px, 3.8vw, 46px)',
+                  fontSize: 'clamp(34px, 4vw, 50px)',
                   fontWeight: '800',
-                  lineHeight: 1.12,
-                  marginBottom: '40px',
-                  letterSpacing: '-0.02em',
+                  lineHeight: 1.1,
+                  marginBottom: '36px',
+                  letterSpacing: '-0.025em',
                   fontFamily: 'Manrope, Inter, sans-serif',
                   color: '#FFFFFF'
                 }}
               >
                 The Coach Behind{' '}
                 <span style={{ 
-                  color: '#FFB302',
-                  textShadow: '0 0 40px rgba(255, 179, 2, 0.3)'
+                  color: '#D3AF39',
+                  textShadow: '0 0 50px rgba(211, 175, 57, 0.35)'
                 }}>$5M+ in Student Profits</span>
               </h2>
               
@@ -2078,10 +2080,10 @@ The 3-month program consists of:
                 color: 'rgba(240, 240, 240, 0.92)',
                 fontSize: '17px',
                 lineHeight: 1.9,
-                marginBottom: '28px',
+                marginBottom: '24px',
                 letterSpacing: '0.01em'
               }}>
-                My students have generated over <strong style={{ color: '#FFB302' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#FFB302' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This is not theory. It is a system that produces results.
+                My students have generated over <strong style={{ color: '#D3AF39' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#D3AF39' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This is not theory. It is a system that produces results.
               </p>
               
               {/* Paragraph 2: The Method */}
@@ -2089,10 +2091,10 @@ The 3-month program consists of:
                 color: 'rgba(240, 240, 240, 0.72)',
                 fontSize: '17px',
                 lineHeight: 1.9,
-                marginBottom: '28px',
+                marginBottom: '24px',
                 letterSpacing: '0.01em'
               }}>
-                I do not teach you to memorize solver outputs. I teach you to <strong style={{ color: '#FFB302' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
+                I do not teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D3AF39' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
               </p>
               
               {/* Paragraph 3: The Journey */}
@@ -2100,14 +2102,14 @@ The 3-month program consists of:
                 color: 'rgba(240, 240, 240, 0.55)',
                 fontSize: '17px',
                 lineHeight: 1.9,
-                marginBottom: '48px',
+                marginBottom: '40px',
                 letterSpacing: '0.01em'
               }}>
                 I was not born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed was not more study. It was a better system.
               </p>
 
-              {/* CTA Button - Parent has overflow visible for glow bloom */}
-              <div style={{ overflow: 'visible', position: 'relative' }}>
+              {/* CTA Button - Overflow visible for glow bloom */}
+              <div style={{ overflow: 'visible', position: 'relative', marginTop: 'auto' }}>
                 <a 
                   href="https://calendly.com/freenachos/intro" 
                   target="_blank" 
@@ -2115,7 +2117,7 @@ The 3-month program consists of:
                   className="coach-cta-btn"
                   style={{
                     background: 'transparent',
-                    color: '#FFB302',
+                    color: '#D3AF39',
                     padding: '20px 40px',
                     borderRadius: '16px',
                     fontWeight: '600',
@@ -2124,7 +2126,7 @@ The 3-month program consists of:
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '12px',
-                    border: '2px solid rgba(255, 179, 2, 0.4)',
+                    border: '2px solid rgba(211, 175, 57, 0.4)',
                     transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                     position: 'relative'
                   }}
@@ -2135,11 +2137,13 @@ The 3-month program consists of:
               </div>
             </div>
             
-            {/* RIGHT COLUMN: Single Authority Artifact (Graph + Stats Integrated) */}
+            {/* RIGHT COLUMN: Consolidated Glass Pedestal - Flex Column Justify-Between */}
             <div 
               className="authority-artifact"
               style={{
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column'
               }}
             >
               {/* Gold Bloom Layer (Z-0) */}
@@ -2148,7 +2152,7 @@ The 3-month program consists of:
                 style={{
                   position: 'absolute',
                   inset: '-50px',
-                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(255, 179, 2, 0.2) 0%, rgba(255, 153, 0, 0.08) 50%, transparent 70%)',
+                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(211, 175, 57, 0.2) 0%, rgba(211, 175, 57, 0.08) 50%, transparent 70%)',
                   opacity: 0,
                   filter: 'blur(40px)',
                   transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -2157,20 +2161,24 @@ The 3-month program consists of:
                 }}
               />
               
-              {/* Single Glass Pedestal - Contains Graph AND Stats */}
+              {/* Single Elongated Glass Pedestal - Flex Column Justify-Between */}
               <div 
                 className="artifact-frame"
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.01) 100%)',
-                  backdropFilter: 'blur(24px) saturate(1.2)',
-                  WebkitBackdropFilter: 'blur(24px) saturate(1.2)',
-                  borderRadius: '24px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  backdropFilter: 'blur(40px) saturate(1.2)',
+                  WebkitBackdropFilter: 'blur(40px) saturate(1.2)',
+                  borderRadius: '40px',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
                   overflow: 'hidden',
                   transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
+                  boxShadow: '0 4px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}
               >
                 {/* Inner Luminance Glow Layer */}
@@ -2179,24 +2187,32 @@ The 3-month program consists of:
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    borderRadius: '24px',
-                    boxShadow: 'inset 0 0 60px rgba(255, 179, 2, 0)',
+                    borderRadius: '40px',
+                    boxShadow: 'inset 0 0 80px rgba(211, 175, 57, 0)',
                     transition: 'box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
                     pointerEvents: 'none',
                     zIndex: 10
                   }}
                 />
                 
-                {/* Graph Container */}
-                <div style={{ position: 'relative', padding: '24px 24px 16px 24px' }}>
+                {/* TOP: Graph Container - Flex Grow */}
+                <div style={{ 
+                  position: 'relative', 
+                  padding: '28px 28px 20px 28px',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
                   {/* Stealth Graph Image */}
                   <div 
                     className="stealth-graph-container"
                     style={{
-                      borderRadius: '16px',
+                      borderRadius: '24px',
                       overflow: 'hidden',
                       position: 'relative',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+                      boxShadow: '0 8px 40px rgba(0, 0, 0, 0.4)',
+                      flex: 1,
+                      minHeight: '200px'
                     }}
                   >
                     <img 
@@ -2205,9 +2221,10 @@ The 3-month program consists of:
                       alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
                       style={{
                         width: '100%',
-                        height: 'auto',
+                        height: '100%',
+                        objectFit: 'cover',
                         display: 'block',
-                        filter: 'brightness(0.4) saturate(0.6) contrast(1.15)',
+                        filter: 'brightness(0.3) saturate(0.5) contrast(1.2)',
                         transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
                         transform: 'scale(1)'
                       }}
@@ -2218,8 +2235,8 @@ The 3-month program consists of:
                       className="graph-hover-indicator"
                       style={{
                         position: 'absolute',
-                        bottom: '16px',
-                        right: '16px',
+                        bottom: '20px',
+                        right: '20px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
@@ -2227,7 +2244,7 @@ The 3-month program consists of:
                         backdropFilter: 'blur(12px)',
                         padding: '10px 18px',
                         borderRadius: '30px',
-                        border: '1px solid rgba(255, 179, 2, 0.4)',
+                        border: '1px solid rgba(211, 175, 57, 0.4)',
                         opacity: 0,
                         transform: 'translateY(12px) scale(0.95)',
                         transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -2237,15 +2254,15 @@ The 3-month program consists of:
                         width: '20px',
                         height: '20px',
                         borderRadius: '50%',
-                        background: 'rgba(255, 179, 2, 0.2)',
-                        border: '2px solid #FFB302',
+                        background: 'rgba(211, 175, 57, 0.2)',
+                        border: '2px solid #D3AF39',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}>
-                        <span style={{ color: '#FFB302', fontSize: '14px', fontWeight: '700' }}>+</span>
+                        <span style={{ color: '#D3AF39', fontSize: '14px', fontWeight: '700' }}>+</span>
                       </div>
-                      <span style={{ color: '#FFB302', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
+                      <span style={{ color: '#D3AF39', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
                     </div>
                   </div>
                   
@@ -2255,22 +2272,22 @@ The 3-month program consists of:
                     fontSize: '11px',
                     color: 'rgba(240, 240, 240, 0.35)',
                     fontStyle: 'italic',
-                    marginTop: '12px',
+                    marginTop: '16px',
                     letterSpacing: '0.04em'
                   }}>
                     Verified results at 1KNL+
                   </div>
                 </div>
                 
-                {/* INTEGRATED STATS BAR - Inside the same glass frame */}
+                {/* BOTTOM: Stats Bar - Elegant Row */}
                 <div 
                   className="stats-bar"
                   style={{
                     borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                    padding: '20px 24px',
+                    padding: '24px 32px',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '12px',
+                    gap: '16px',
                     transition: 'all 0.6s ease'
                   }}
                 >
@@ -2284,10 +2301,10 @@ The 3-month program consists of:
                       <div 
                         className="stat-value"
                         style={{ 
-                          fontSize: '22px', 
+                          fontSize: '24px', 
                           fontWeight: '800', 
-                          color: '#FFB302',
-                          marginBottom: '4px',
+                          color: '#D3AF39',
+                          marginBottom: '6px',
                           letterSpacing: '-0.02em',
                           transition: 'all 0.6s ease'
                         }}
@@ -2310,7 +2327,7 @@ The 3-month program consists of:
             </div>
           </div>
 
-          {/* Coach Section Styles */}
+          {/* Coach Section Styles - Luxury Metallic #D3AF39 */}
           <style>{`
             /* Authority Artifact Hover States */
             .authority-artifact:hover .artifact-bloom {
@@ -2318,16 +2335,16 @@ The 3-month program consists of:
             }
             
             .authority-artifact:hover .artifact-frame {
-              border-color: rgba(255, 179, 2, 0.3) !important;
+              border-color: rgba(211, 175, 57, 0.3) !important;
               box-shadow: 
-                0 25px 80px rgba(0, 0, 0, 0.5), 
-                0 0 60px rgba(255, 179, 2, 0.12),
+                0 30px 100px rgba(0, 0, 0, 0.5), 
+                0 0 80px rgba(211, 175, 57, 0.15),
                 inset 0 1px 0 rgba(255,255,255,0.08) !important;
               transform: translateY(-4px);
             }
             
             .authority-artifact:hover .inner-luminance {
-              box-shadow: inset 0 0 60px rgba(255, 179, 2, 0.1) !important;
+              box-shadow: inset 0 0 80px rgba(211, 175, 57, 0.12) !important;
             }
             
             .authority-artifact:hover .stealth-graph {
@@ -2341,19 +2358,19 @@ The 3-month program consists of:
             }
             
             .authority-artifact:hover .stat-value {
-              text-shadow: 0 0 20px rgba(255, 179, 2, 0.4);
+              text-shadow: 0 0 25px rgba(211, 175, 57, 0.5);
             }
             
             .authority-artifact:hover .stats-bar {
-              background: rgba(255, 179, 2, 0.03);
+              background: rgba(211, 175, 57, 0.03);
             }
             
-            /* CTA Button Hover */
+            /* CTA Button Hover - Luxury Metallic Glow */
             .coach-cta-btn:hover {
-              border-color: rgba(255, 179, 2, 0.7) !important;
-              box-shadow: 0 0 40px rgba(255, 179, 2, 0.25);
+              border-color: rgba(211, 175, 57, 0.7) !important;
+              box-shadow: 0 0 50px rgba(211, 175, 57, 0.2);
               transform: translateY(-2px);
-              background: rgba(255, 179, 2, 0.08);
+              background: rgba(211, 175, 57, 0.08);
             }
             
             /* Responsive */
@@ -2364,16 +2381,18 @@ The 3-month program consists of:
               }
               .coach-grid > div:first-child {
                 max-width: 100% !important;
-                padding-left: 0 !important;
                 padding-right: 0 !important;
+              }
+              .artifact-frame {
+                min-height: 400px;
               }
             }
             
             @media (max-width: 640px) {
               .stats-bar {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 16px !important;
-                padding: 20px 16px !important;
+                gap: 20px !important;
+                padding: 24px 20px !important;
               }
             }
           `}</style>
