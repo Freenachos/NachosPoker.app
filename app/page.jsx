@@ -33,8 +33,6 @@ const PokerToolboxHome = () => {
   const [slideDirection, setSlideDirection] = useState('right');
   const [expandedFAQ, setExpandedFAQ] = useState(0);
   const [showStickyCta, setShowStickyCta] = useState(false);
-  const [showGraphLightbox, setShowGraphLightbox] = useState(false);
-  const [testimonialLightbox, setTestimonialLightbox] = useState({ show: false, image: null, isBefore: false, imageAfter: null });
   const nachoRef = useRef(null);
   const aboutSectionRef = useRef(null);
   const heroSectionRef = useRef(null);
@@ -104,32 +102,32 @@ const PokerToolboxHome = () => {
     {
       icon: Crosshair,
       title: 'Surgical Leak Correction',
-      description: "We go beyond simple review by auditing your ranges against GTO standards. By identifying exactly where you are losing EV, we develop a personalized protocol to effectively plug your leaks and stabilize your win rate."
+      description: "We don't just chat. We audit your ranges against GTO to identify exactly where you are bleeding EV, then build a custom protocol to plug the leak."
     },
     {
       icon: Swords,
-      title: 'Weekly High-Stakes Study Group',
-      description: 'Join live weekly sessions with a community of motivated players. Dissect complex hands and debate lines in a high-performance environment designed to keep you consistent and accountable.'
+      title: 'Weekly High-Stakes War Room',
+      description: 'Join live study sessions with other crushers. Dissect hands, debate lines, and stay accountable in a high-performance environment.'
     },
     {
       icon: Zap,
       title: "The 'Nacho' Stat Validator",
-      description: "Gain exclusive access to a proprietary tool that compares your range structure directly to solver outputs. It provides an instant, clear visualization of where your strategy deviates from optimal play."
+      description: "Exclusive access to my proprietary tool. Instantly visualize where your range structure deviates from optimal play. It's an X-Ray for your game."
     },
     {
       icon: Brain,
       title: 'Performance by Design',
-      description: 'A complete mental operating system built for the rigors of professional poker. Master your focus, eliminate tilt, and build the long-term discipline required for high-volume grinding.'
+      description: 'A complete mental operating system tailored for poker. Eliminate tilt, master focus, and build the discipline required for high-volume grinding.'
     },
     {
       icon: Lock,
       title: 'The Strategy Vault',
-      description: 'Access an evolving library of high-stakes analysis and hand history reviews. Study the theoretical deep dives and core concepts used to successfully navigate and beat 1KNL.'
+      description: 'Unlock a growing library of high-stakes analysis, hand history reviews, and theoretical deep dives. The exact concepts used to beat 1KNL.'
     },
     {
       icon: MessageCircle,
       title: 'Direct Mentor Access',
-      description: 'Receive priority support and direct access to me via a private Discord. Post your hand breakdowns and get personalized answers to ensure you never have to solve a tough spot alone.'
+      description: 'You are never alone. Get direct priority support via my private Discord. Post hands, ask questions, and get answers from me personally.'
     }
   ];
 
@@ -292,7 +290,7 @@ The 3-month program consists of:
   };
 
   useEffect(() => {
-    const newNachos = Array.from({ length: 14 }, (_, i) => ({
+    const newNachos = Array.from({ length: 18 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -326,6 +324,70 @@ The 3-month program consists of:
     return () => observer.disconnect();
   }, []);
 
+  // Liquid Gold scroll animation for multiple section headlines
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      
+      // Helper function to handle liquid gold transition for any headline
+      const handleLiquidGold = (headlineSelector, sectionRef) => {
+        const headline = document.querySelector(headlineSelector);
+        if (!headline || !sectionRef?.current) return;
+        
+        const rect = sectionRef.current.getBoundingClientRect();
+        const sectionTop = rect.top;
+        const triggerStart = windowHeight * 0.8;
+        const triggerEnd = windowHeight * 0.3;
+        
+        if (sectionTop < triggerStart && sectionTop > triggerEnd) {
+          const progress = 1 - ((sectionTop - triggerEnd) / (triggerStart - triggerEnd));
+          if (progress > 0.5) {
+            headline.classList.add('scrolled');
+          } else {
+            headline.classList.remove('scrolled');
+          }
+        } else if (sectionTop <= triggerEnd) {
+          headline.classList.add('scrolled');
+        } else {
+          headline.classList.remove('scrolled');
+        }
+      };
+      
+      // Coach section headline
+      handleLiquidGold('.liquid-gold-headline', aboutSectionRef);
+      
+      // What You Get section headline (uses its own section as reference)
+      const benefitsSection = document.querySelector('.what-you-get-section');
+      if (benefitsSection) {
+        const headline = document.querySelector('.liquid-gold-headline-benefits');
+        if (headline) {
+          const rect = benefitsSection.getBoundingClientRect();
+          const sectionTop = rect.top;
+          const triggerStart = windowHeight * 0.8;
+          const triggerEnd = windowHeight * 0.3;
+          
+          if (sectionTop < triggerStart && sectionTop > triggerEnd) {
+            const progress = 1 - ((sectionTop - triggerEnd) / (triggerStart - triggerEnd));
+            if (progress > 0.5) {
+              headline.classList.add('scrolled');
+            } else {
+              headline.classList.remove('scrolled');
+            }
+          } else if (sectionTop <= triggerEnd) {
+            headline.classList.add('scrolled');
+          } else {
+            headline.classList.remove('scrolled');
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check initial state
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const eyeOffset = getEyeOffset();
 
   // ============================================
@@ -336,26 +398,15 @@ The 3-month program consists of:
   
   const nextVideo = () => {
     if (cinemaCarouselRef.current) {
-      cinemaCarouselRef.current.scrollBy({ left: 440, behavior: 'smooth' });
+      cinemaCarouselRef.current.scrollBy({ left: 412, behavior: 'smooth' });
     }
   };
 
   const prevVideo = () => {
     if (cinemaCarouselRef.current) {
-      cinemaCarouselRef.current.scrollBy({ left: -440, behavior: 'smooth' });
+      cinemaCarouselRef.current.scrollBy({ left: -412, behavior: 'smooth' });
     }
   };
-  
-  // Initialize carousel to middle set for infinite loop feel
-  useEffect(() => {
-    if (cinemaCarouselRef.current) {
-      // Scroll to the middle set of videos (skip first set)
-      const cardWidth = 440; // 400px card + 40px gap
-      const middleOffset = cardWidth * 5; // 5 videos in original array
-      cinemaCarouselRef.current.scrollLeft = middleOffset;
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const nextTestimonial = () => {
     setSlideDirection('right');
@@ -405,7 +456,6 @@ The 3-month program consists of:
     <img 
       src={src} 
       alt="Results graph"
-      loading="lazy"
       style={{
         width: '100%',
         height: '128px',
@@ -432,7 +482,6 @@ The 3-month program consists of:
         <img 
           src={imageBefore} 
           alt="Before coaching"
-          loading="lazy"
           style={{
             width: '100%',
             flex: 1,
@@ -455,7 +504,6 @@ The 3-month program consists of:
         <img 
           src={imageAfter} 
           alt="After coaching"
-          loading="lazy"
           style={{
             width: '100%',
             flex: 1,
@@ -718,19 +766,19 @@ The 3-month program consists of:
         <div 
           className="benefit-icon"
           style={{
-            width: '64px',
-            height: '64px',
-            borderRadius: '20px',
-            background: 'rgba(166, 137, 66, 0.08)',
-            border: '1px solid rgba(166, 137, 66, 0.25)',
+            width: '60px',
+            height: '60px',
+            borderRadius: '14px',
+            background: 'rgba(212, 175, 55, 0.08)',
+            border: '1px solid rgba(212, 175, 55, 0.3)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '28px',
+            marginBottom: '24px',
             pointerEvents: 'none'
           }}
         >
-          <Icon size={28} color="#A68942" strokeWidth={1.5} />
+          <Icon size={28} color="#D4AF37" strokeWidth={1.5} />
         </div>
         
         {/* Title */}
@@ -738,9 +786,9 @@ The 3-month program consists of:
           className="benefit-title"
           style={{
             color: '#F0F0F0',
-            fontSize: '20px',
+            fontSize: '18px',
             fontWeight: '700',
-            marginBottom: '16px',
+            marginBottom: '14px',
             lineHeight: 1.3,
             pointerEvents: 'none'
           }}
@@ -750,9 +798,9 @@ The 3-month program consists of:
         
         {/* Description */}
         <p style={{
-          color: 'rgba(240, 240, 240, 0.6)',
-          fontSize: '15px',
-          lineHeight: 1.8,
+          color: 'rgba(240, 240, 240, 0.65)',
+          fontSize: '14px',
+          lineHeight: 1.75,
           flex: 1,
           pointerEvents: 'none'
         }}>
@@ -764,41 +812,40 @@ The 3-month program consists of:
 
   const PricingCard = React.memo(({ plan }) => (
     <div 
-      className={`obsidian-pricing-card ${plan.featured ? 'featured' : ''}`}
+      className={`pricing-card ${plan.featured ? 'featured' : ''}`}
       style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(40px)',
-        WebkitBackdropFilter: 'blur(40px)',
-        border: plan.featured ? '2px solid rgba(166, 137, 66, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '40px',
-        padding: '48px 36px',
+        background: '#121212',
+        border: plan.featured ? '2px solid #D4AF37' : '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '20px',
+        padding: '40px 32px',
         position: 'relative',
-        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        transform: plan.featured ? 'scale(1.03)' : 'scale(1)',
+        zIndex: plan.featured ? 2 : 1,
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'visible',
+        minHeight: '560px',
         boxShadow: plan.featured 
-          ? '0 0 60px rgba(166, 137, 66, 0.15), 0 25px 60px rgba(0, 0, 0, 0.4)' 
-          : '0 10px 40px rgba(0, 0, 0, 0.3)'
+          ? '0 0 40px rgba(212, 175, 55, 0.2), 0 20px 50px rgba(0, 0, 0, 0.4)' 
+          : '0 10px 30px rgba(0, 0, 0, 0.3)'
       }}
     >
-      {/* Solid Gold Badge - 3D Pinned Effect */}
+      {/* Badge */}
       {plan.badge && (
         <div style={{
           position: 'absolute',
-          top: '-16px',
-          right: '24px',
-          background: 'linear-gradient(135deg, #A68942 0%, #B38F2D 100%)',
-          color: '#0A0A0A',
+          top: '-12px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: plan.featured ? '#D4AF37' : 'rgba(212, 175, 55, 0.15)',
+          color: plan.featured ? '#0a0a0a' : '#D4AF37',
           fontSize: '11px',
-          fontWeight: '800',
-          padding: '10px 20px',
-          borderRadius: '25px',
+          fontWeight: '700',
+          padding: '6px 16px',
+          borderRadius: '20px',
           textTransform: 'uppercase',
-          letterSpacing: '0.1em',
-          whiteSpace: 'nowrap',
-          boxShadow: '0 6px 20px rgba(166, 137, 66, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
-          zIndex: 10
+          letterSpacing: '0.08em',
+          whiteSpace: 'nowrap'
         }}>
           {plan.badge}
         </div>
@@ -806,28 +853,28 @@ The 3-month program consists of:
       
       {/* Plan Name */}
       <div style={{
-        color: '#A68942',
+        color: '#D4AF37',
         fontSize: '13px',
-        fontWeight: '700',
-        marginBottom: '20px',
-        marginTop: plan.badge ? '16px' : '0',
+        fontWeight: '600',
+        marginBottom: '24px',
+        marginTop: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '0.12em'
+        letterSpacing: '0.1em',
+        height: '16px'
       }}>
         {plan.name}
       </div>
       
-      {/* Price - Hero Treatment */}
+      {/* Price */}
       <div style={{
-        marginBottom: '12px'
+        marginBottom: '8px'
       }}>
         <span style={{
-          color: '#FFFFFF',
-          fontSize: '56px',
+          color: '#F0F0F0',
+          fontSize: '48px',
           fontWeight: '800',
           lineHeight: 1,
-          letterSpacing: '-0.03em',
-          fontFamily: 'Manrope, Inter, sans-serif'
+          letterSpacing: '-0.02em'
         }}>
           €{plan.totalPrice}
         </span>
@@ -836,24 +883,24 @@ The 3-month program consists of:
       {/* Payment Note */}
       <div style={{
         color: 'rgba(240, 240, 240, 0.5)',
-        fontSize: '14px',
+        fontSize: '13px',
         marginBottom: '8px',
-        lineHeight: 1.5,
-        minHeight: '21px'
+        lineHeight: 1.4,
+        minHeight: '18px'
       }}>
         {plan.paymentNote}
       </div>
       
-      {/* Savings text */}
+      {/* Savings text - fixed height container */}
       <div style={{
-        height: '24px',
-        marginBottom: '24px'
+        height: '20px',
+        marginBottom: '20px'
       }}>
         {plan.savings && (
           <span style={{
-            color: '#A68942',
-            fontSize: '14px',
-            fontWeight: '700'
+            color: '#D4AF37',
+            fontSize: '13px',
+            fontWeight: '600'
           }}>
             {plan.savings}
           </span>
@@ -863,40 +910,29 @@ The 3-month program consists of:
       {/* Divider */}
       <div style={{
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(166, 137, 66, 0.3), transparent)',
-        marginBottom: '28px'
+        background: 'linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent)',
+        marginBottom: '24px'
       }} />
       
       {/* Features */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
+        gap: '14px',
         flex: 1,
-        marginBottom: '32px'
+        marginBottom: '28px'
       }}>
         {plan.features.map((feature, idx) => (
           <div key={idx} style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '14px'
+            gap: '12px'
           }}>
-            <div style={{
-              width: '22px',
-              height: '22px',
-              borderRadius: '50%',
-              background: 'rgba(166, 137, 66, 0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0
-            }}>
-              <Check size={14} color="#A68942" strokeWidth={3} />
-            </div>
+            <Check size={16} color="#D4AF37" style={{ flexShrink: 0 }} />
             <span style={{
               color: 'rgba(240, 240, 240, 0.8)',
-              fontSize: '15px',
-              lineHeight: 1.5
+              fontSize: '14px',
+              lineHeight: 1.4
             }}>
               {feature}
             </span>
@@ -904,28 +940,30 @@ The 3-month program consists of:
         ))}
       </div>
       
-      {/* CTA Button - Solid Gold with Black Text */}
+      {/* CTA Button */}
       <a
         href="https://calendly.com/freenachos/intro"
         target="_blank"
         rel="noopener noreferrer"
-        className="pricing-cta-btn"
+        className="btn-hover"
         style={{
           display: 'block',
           width: '100%',
-          padding: '18px 24px',
-          borderRadius: '16px',
+          padding: plan.featured ? '18px 20px' : '16px 20px',
+          borderRadius: '12px',
           fontWeight: '700',
-          fontSize: '15px',
+          fontSize: plan.featured ? '15px' : '14px',
           textAlign: 'center',
           textDecoration: 'none',
           cursor: 'pointer',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-          background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
-          color: '#0A0A0A',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          background: '#FF9900',
+          color: '#0a0a0a',
           border: 'none',
           marginTop: 'auto',
-          boxShadow: '0 8px 24px rgba(166, 137, 66, 0.3)'
+          boxShadow: plan.featured 
+            ? '0 4px 20px rgba(255, 153, 0, 0.4)' 
+            : '0 2px 10px rgba(255, 153, 0, 0.2)'
         }}
       >
         {plan.buttonText}
@@ -935,94 +973,59 @@ The 3-month program consists of:
 
   const FAQItem = ({ item, index, isExpanded, onToggle }) => (
     <div 
-      className={`faq-console-item ${isExpanded ? 'expanded' : ''}`}
+      className="faq-item"
       style={{
-        background: isExpanded ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-        borderBottom: '1px solid rgba(166, 137, 66, 0.15)',
+        background: 'rgba(24, 24, 24, 0.9)',
+        border: '1px solid rgba(212, 175, 55, 0.2)',
+        borderRadius: '12px',
         overflow: 'hidden',
-        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+        transition: 'all 0.3s ease'
       }}
     >
       <button
         onClick={() => onToggle(index)}
         style={{
           width: '100%',
-          padding: '28px 0',
+          padding: '20px 24px',
           background: 'transparent',
           border: 'none',
           display: 'flex',
           alignItems: 'center',
-          gap: '24px',
+          justifyContent: 'space-between',
           cursor: 'pointer',
           textAlign: 'left'
         }}
       >
-        {/* Question Number */}
         <span style={{
-          color: '#A68942',
-          fontSize: '14px',
-          fontWeight: '700',
-          fontFamily: 'monospace',
-          letterSpacing: '0.05em',
-          flexShrink: 0,
-          width: '32px'
-        }}>
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        
-        {/* Question Text */}
-        <span style={{
-          color: isExpanded ? '#A68942' : '#F0F0F0',
-          fontSize: '17px',
+          color: '#F0F0F0',
+          fontSize: '15px',
           fontWeight: '600',
           flex: 1,
-          paddingRight: '16px',
-          transition: 'color 0.4s ease',
-          lineHeight: 1.5
+          paddingRight: '16px'
         }}>
           {item.question}
         </span>
-        
-        {/* Toggle Icon */}
-        <div style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '50%',
-          background: isExpanded ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-          border: `1px solid ${isExpanded ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-        }}>
-          <span style={{
-            color: '#A68942',
-            fontSize: '20px',
-            fontWeight: '300',
-            lineHeight: 1,
-            transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-            transform: isExpanded ? 'rotate(45deg)' : 'rotate(0deg)'
-          }}>
-            +
-          </span>
-        </div>
+        <ChevronDown 
+          size={20} 
+          color="#D4AF37"
+          style={{
+            transition: 'transform 0.3s ease',
+            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+            flexShrink: 0
+          }}
+        />
       </button>
-      
-      {/* Answer Section */}
       <div style={{
-        maxHeight: isExpanded ? '600px' : '0',
-        opacity: isExpanded ? 1 : 0,
+        maxHeight: isExpanded ? '500px' : '0',
         overflow: 'hidden',
-        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+        transition: 'max-height 0.4s ease'
       }}>
         <div style={{
-          padding: '0 0 32px 56px',
-          color: 'rgba(240, 240, 240, 0.75)',
-          fontSize: '16px',
-          lineHeight: 1.85,
-          whiteSpace: 'pre-line',
-          maxWidth: '700px'
+          padding: '0 24px 20px',
+          color: 'rgba(240, 240, 240, 0.7)',
+          fontSize: '14px',
+          lineHeight: 1.8,
+          whiteSpace: 'pre-line'
         }}>
           {item.answer}
         </div>
@@ -1036,40 +1039,32 @@ The 3-month program consists of:
 
   return (
     <div style={{minHeight: '100vh', background: '#0A0A0A', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
-      {/* High-End Film Grain Overlay - Cinematic Projector Effect */}
+      {/* Noise/Grain Texture Overlay */}
       <div 
-        className="film-grain-overlay"
+        className="noise-overlay"
         style={{
           position: 'fixed',
-          top: '-50%',
-          left: '-50%',
-          width: '200%',
-          height: '200%',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           pointerEvents: 'none',
           zIndex: 9999,
-          opacity: 0.035,
-          mixBlendMode: 'overlay'
+          opacity: 0.03
         }}
       />
 
-      {/* Floating Discord DM Button - Only visible after scrolling to About section */}
+      {/* Sticky CTA Button - Only visible after scrolling to About section */}
       {showStickyCta && (
         <div className="sticky-cta">
           <a 
-            href="https://discord.com/users/420357572109926411" 
+            href="https://calendly.com/freenachos/intro" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="sticky-cta-btn discord-btn"
+            className="sticky-cta-btn"
           >
-            <svg 
-              width="20" 
-              height="20" 
-              viewBox="0 0 24 24" 
-              fill="#FFFFFF"
-            >
-              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-            </svg>
-            Discord DM
+            <Calendar size={18} />
+            Apply Now
           </a>
         </div>
       )}
@@ -1082,9 +1077,9 @@ The 3-month program consists of:
           scroll-behavior: smooth;
         }
 
-        /* High-End Film Grain - Static for Performance */
-        .film-grain-overlay {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='filmGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='5' stitchTiles='stitch' seed='0'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23filmGrain)'/%3E%3C/svg%3E");
+        /* Noise Texture Overlay */
+        .noise-overlay {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
         /* Scroll Reveal Animation - Museum Float (Buttery Momentum) */
@@ -1218,49 +1213,38 @@ The 3-month program consists of:
         }
         
         .cta-primary:hover {
-          box-shadow: 0 0 25px rgba(166, 137, 66, 0.4), 0 12px 45px rgba(166, 137, 66, 0.35);
-          background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%);
+          box-shadow: 0 0 20px rgba(255, 153, 0, 0.4), 0 10px 40px rgba(255, 153, 0, 0.3);
+          background: #FFa31a;
         }
 
         .sticky-cta {
           position: fixed;
-          bottom: 32px;
-          right: 32px;
+          bottom: 24px;
+          right: 24px;
           z-index: 1000;
-          animation: fadeInUp 0.4s ease-out 1s both, discordShake 0.6s ease-in-out 1.5s;
-        }
-        
-        @keyframes discordShake {
-          0%, 100% { transform: rotate(0deg); }
-          15% { transform: rotate(-8deg); }
-          30% { transform: rotate(8deg); }
-          45% { transform: rotate(-6deg); }
-          60% { transform: rotate(6deg); }
-          75% { transform: rotate(-3deg); }
-          90% { transform: rotate(3deg); }
+          animation: fadeInUp 0.4s ease-out 1s both;
         }
 
         .sticky-cta-btn {
-          background: #5865F2;
-          color: #FFFFFF;
-          padding: 14px 24px;
+          background: #FF9900;
+          color: #0a0a0a;
+          padding: 16px 28px;
           border-radius: 50px;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 15px;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4), 0 0 0 4px rgba(88, 101, 242, 0.15);
+          box-shadow: 0 8px 32px rgba(255, 153, 0, 0.5), 0 0 0 4px rgba(255, 153, 0, 0.15);
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
         }
 
         .sticky-cta-btn:hover {
-          background: #4752C4;
           transform: scale(1.05);
-          box-shadow: 0 12px 32px rgba(88, 101, 242, 0.5), 0 0 0 6px rgba(88, 101, 242, 0.2);
+          box-shadow: 0 12px 40px rgba(255, 153, 0, 0.6), 0 0 0 6px rgba(255, 153, 0, 0.2);
         }
         
         .spark-border {
@@ -1363,20 +1347,17 @@ The 3-month program consists of:
         }
 
         .benefit-card {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(40px);
-          -webkit-backdrop-filter: blur(40px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 32px;
-          padding: 40px;
+          background: #1A1A1A;
+          border: 1px solid rgba(212, 175, 55, 0.2);
+          border-radius: 16px;
+          padding: 32px;
           position: relative;
           overflow: hidden;
           height: 100%;
           display: flex;
           flex-direction: column;
           cursor: default;
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+          transition: border-color 0.4s ease;
         }
 
         .benefit-card > * {
@@ -1390,7 +1371,7 @@ The 3-month program consists of:
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(90deg, transparent, #A68942, transparent);
+          background: linear-gradient(90deg, transparent, #D4AF37, transparent);
           opacity: 0;
           transition: opacity 0.4s ease;
         }
@@ -1400,9 +1381,7 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover {
-          border-color: rgba(166, 137, 66, 0.4);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.1);
-          transform: translateY(-6px);
+          border-color: rgba(212, 175, 55, 0.4);
         }
 
         .benefit-card .benefit-icon {
@@ -1410,9 +1389,9 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-icon {
-          background: rgba(166, 137, 66, 0.15);
-          border-color: rgba(166, 137, 66, 0.5);
-          box-shadow: 0 0 30px rgba(166, 137, 66, 0.25);
+          background: rgba(212, 175, 55, 0.15);
+          border-color: rgba(212, 175, 55, 0.6);
+          box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
         }
 
         .benefit-card .benefit-title {
@@ -1420,7 +1399,20 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-title {
-          color: #A68942;
+          color: #D4AF37;
+        }
+
+        .pricing-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .pricing-card.featured:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 50px rgba(212, 175, 55, 0.25), 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .faq-item:hover {
+          border-color: rgba(212, 175, 55, 0.4);
         }
 
         .script-title {
@@ -1535,95 +1527,6 @@ The 3-month program consists of:
           mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
-
-        /* ==================== COMPREHENSIVE MOBILE RESPONSIVE FIXES ==================== */
-        
-        /* Tablet Breakpoint */
-        @media (max-width: 1024px) {
-          .museum-section {
-            padding-top: 160px !important;
-            padding-bottom: 160px !important;
-          }
-        }
-        
-        /* Mobile Breakpoint */
-        @media (max-width: 768px) {
-          /* Reduce Museum Spacing on Mobile */
-          .museum-section,
-          [style*="paddingTop: '256px'"],
-          [style*="paddingTop: 256px"] {
-            padding-top: 100px !important;
-            padding-bottom: 100px !important;
-          }
-          
-          /* Hero Padding Fix */
-          .hero-content-wrapper {
-            padding: 0 20px !important;
-            padding-top: 120px !important;
-          }
-          
-          /* Main Container Padding */
-          .main-content {
-            padding: 0 16px !important;
-          }
-          
-          /* Reduce Section Margins */
-          .section-margin {
-            margin-bottom: 100px !important;
-          }
-          
-          /* Card Padding Reduction */
-          .obsidian-card,
-          .obsidian-pricing-card,
-          .qualification-card {
-            padding: 28px !important;
-            border-radius: 24px !important;
-          }
-          
-          /* Sticky CTA */
-          .sticky-cta {
-            bottom: 20px !important;
-            right: 20px !important;
-          }
-          
-          .sticky-cta-btn {
-            padding: 12px 18px !important;
-            font-size: 14px !important;
-          }
-        }
-        
-        /* Small Mobile Breakpoint */
-        @media (max-width: 480px) {
-          /* Further reduce spacing */
-          .museum-section {
-            padding-top: 80px !important;
-            padding-bottom: 80px !important;
-          }
-          
-          /* Headlines */
-          h2 {
-            font-size: 28px !important;
-          }
-          
-          /* Card adjustments */
-          .obsidian-card,
-          .obsidian-pricing-card {
-            padding: 24px !important;
-            border-radius: 20px !important;
-          }
-          
-          /* Navigation buttons */
-          .testimonial-nav-btn,
-          .youtube-nav-btn {
-            width: 40px !important;
-            height: 40px !important;
-          }
-          
-          /* FAQ Console padding */
-          .faq-console-container {
-            padding: 12px 20px !important;
-          }
-        }
       `}</style>
 
       {/* ==================== LAYER 0: BACKGROUND GLOWS (Fixed, z-0) ==================== */}
@@ -1732,14 +1635,14 @@ The 3-month program consists of:
             width: '8px',
             height: '8px',
             opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat 25s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
                 <radialGradient id="emberGlow1" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlow1)" />
@@ -1754,7 +1657,7 @@ The 3-month program consists of:
             width: '10px',
             height: '10px',
             opacity: 0.9,
-            filter: 'blur(1px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(1px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat2 28s ease-in-out infinite',
             animationDelay: '-8s'
           }}>
@@ -1762,7 +1665,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlow2" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlow2)" />
@@ -1777,7 +1680,7 @@ The 3-month program consists of:
             width: '4px',
             height: '4px',
             opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 8px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 8px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat 22s ease-in-out infinite',
             animationDelay: '-12s'
           }}>
@@ -1785,7 +1688,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlow3" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlow3)" />
@@ -1800,7 +1703,7 @@ The 3-month program consists of:
             width: '6px',
             height: '6px',
             opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 10px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat2 26s ease-in-out infinite',
             animationDelay: '-15s'
           }}>
@@ -1808,7 +1711,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlow4" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlow4)" />
@@ -1823,7 +1726,7 @@ The 3-month program consists of:
             width: '5px',
             height: '5px',
             opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 10px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat 24s ease-in-out infinite',
             animationDelay: '-18s'
           }}>
@@ -1831,7 +1734,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlow5" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlow5)" />
@@ -1851,7 +1754,7 @@ The 3-month program consists of:
             width: '5px',
             height: '5px',
             opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat 20s ease-in-out infinite',
             animationDelay: '-5s'
           }}>
@@ -1859,7 +1762,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlowFront1" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlowFront1)" />
@@ -1874,7 +1777,7 @@ The 3-month program consists of:
             width: '7px',
             height: '7px',
             opacity: 0.9,
-            filter: 'blur(1px) drop-shadow(0 0 5px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 14px rgba(255, 153, 0, 0.4))',
+            filter: 'blur(1px) drop-shadow(0 0 5px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 14px rgba(167, 138, 67, 0.4))',
             animation: 'cinematicFloat2 23s ease-in-out infinite',
             animationDelay: '-10s'
           }}>
@@ -1882,7 +1785,7 @@ The 3-month program consists of:
               <defs>
                 <radialGradient id="emberGlowFront2" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#FFD700" />
+                  <stop offset="100%" stopColor="#A78A43" />
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlowFront2)" />
@@ -1908,7 +1811,7 @@ The 3-month program consists of:
             animation: 'cinematicFloat 38s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
 
@@ -1925,7 +1828,7 @@ The 3-month program consists of:
             animationDelay: '-20s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
 
@@ -1942,7 +1845,7 @@ The 3-month program consists of:
             animationDelay: '-15s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
 
@@ -1959,7 +1862,7 @@ The 3-month program consists of:
             animationDelay: '-25s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
 
@@ -1976,7 +1879,7 @@ The 3-month program consists of:
             animationDelay: '-8s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
         </div>
@@ -1988,7 +1891,7 @@ The 3-month program consists of:
           right: '-5%',
           width: '800px',
           height: '800px',
-          background: 'radial-gradient(circle, rgba(255, 153, 0, 0.3) 0%, rgba(212, 175, 55, 0.12) 40%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(167, 138, 67, 0.3) 0%, rgba(167, 138, 67, 0.12) 40%, transparent 70%)',
           filter: 'blur(120px)',
           zIndex: 5,
           pointerEvents: 'none'
@@ -2044,12 +1947,11 @@ The 3-month program consists of:
         >
           {/* Max-Width Container - Prevents Ultra-Wide Stretch */}
           <div 
-            className="hero-inner-container"
             style={{
               width: '100%',
               maxWidth: '1280px',
               margin: '0 auto',
-              padding: '0 clamp(20px, 5vw, 48px)',
+              padding: '0 48px',
               paddingTop: '140px',
               paddingBottom: '80px'
             }}
@@ -2066,18 +1968,18 @@ The 3-month program consists of:
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: 'rgba(212, 175, 55, 0.1)',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  background: 'rgba(167, 138, 67, 0.1)',
+                  border: '1px solid rgba(167, 138, 67, 0.3)',
                   borderRadius: '50px',
                   padding: '10px 20px',
                   marginBottom: '32px',
                   backdropFilter: 'blur(8px)'
                 }}
               >
-                <Users size={16} color="#D4AF37" />
+                <Users size={16} color="#A78A43" />
                 <span style={{ 
                   fontSize: '13px', 
-                  color: '#D4AF37', 
+                  color: '#A78A43', 
                   fontWeight: '600',
                   letterSpacing: '0.03em'
                 }}>
@@ -2097,8 +1999,8 @@ The 3-month program consists of:
               }}>
                 Master High-Stakes<br />
                 Theory & <span style={{ 
-                  color: '#D4AF37',
-                  textShadow: '0 0 80px rgba(212, 175, 55, 0.4)'
+                  color: '#A78A43',
+                  textShadow: '0 0 80px rgba(167, 138, 67, 0.4)'
                 }}>Exploit the<br />Population</span>.
               </h1>
               
@@ -2121,7 +2023,7 @@ The 3-month program consists of:
                 rel="noopener noreferrer"
                 className="btn-hover cta-primary"
                 style={{
-                  background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
+                  background: '#A78A43',
                   color: '#0a0a0a',
                   padding: '20px 44px',
                   borderRadius: '14px',
@@ -2131,9 +2033,8 @@ The 3-month program consists of:
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '12px',
-                  boxShadow: '0 8px 35px rgba(166, 137, 66, 0.4)',
-                  letterSpacing: '0.01em',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                  boxShadow: '0 4px 30px rgba(167, 138, 67, 0.4)',
+                  letterSpacing: '0.01em'
                 }}
               >
                 Apply for Mentorship <ArrowRight size={20} />
@@ -2188,426 +2089,288 @@ The 3-month program consists of:
       />
 
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
-      <div className="main-content-container" style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 24px)'}}>
+      <div style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
-        {/* ==================== COACH SECTION - Bookend Symmetry + Luxury Metallic ==================== */}
+        {/* ==================== COACH SECTION - Museum Exhibit Layout ==================== */}
         <div 
           ref={aboutSectionRef}
-          className="coach-section-wrapper reveal-first museum-section"
+          className="reveal-first coach-museum-section"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)',
+            paddingTop: '256px',
+            paddingBottom: '256px',
+            marginBottom: '0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             position: 'relative'
           }}
         >
-          {/* Two-Column Grid - ITEMS-STRETCH for Equal Heights */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '72px',
-            alignItems: 'stretch'
-          }} className="coach-grid">
-            
-            {/* LEFT COLUMN: Narrative - Flex Column to Fill Height */}
-            <div style={{ 
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              maxWidth: '580px',
-              paddingRight: '24px',
-              overflow: 'visible'
-            }}>
-              {/* Headline - Wider Container for Balanced Line Breaks */}
-              <h2 
-                className="coach-headline"
-                style={{
-                  fontSize: 'clamp(34px, 4vw, 50px)',
-                  fontWeight: '800',
-                  lineHeight: 1.1,
-                  marginBottom: '36px',
-                  letterSpacing: '-0.025em',
-                  fontFamily: 'Manrope, Inter, sans-serif',
-                  color: '#FFFFFF'
-                }}
-              >
-                The Coach Behind{' '}
-                <span style={{ 
-                  color: '#A68942',
-                  textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
-                }}>$5M+ in Student Profits</span>
-              </h2>
-              
-              {/* Paragraph 1: The Authority */}
-              <p style={{
-                color: 'rgba(240, 240, 240, 0.92)',
-                fontSize: '17px',
-                lineHeight: 1.9,
-                marginBottom: '24px',
-                letterSpacing: '0.01em'
-              }}>
-                My students have generated over <strong style={{ color: '#A68942' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#A68942' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This is not theory. It is a system that produces results.
-              </p>
-              
-              {/* Paragraph 2: The Method */}
-              <p style={{
-                color: 'rgba(240, 240, 240, 0.72)',
-                fontSize: '17px',
-                lineHeight: 1.9,
-                marginBottom: '24px',
-                letterSpacing: '0.01em'
-              }}>
-                I do not teach you to memorize solver outputs. I teach you to <strong style={{ color: '#A68942' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
-              </p>
-              
-              {/* Paragraph 3: The Journey */}
-              <p style={{
-                color: 'rgba(240, 240, 240, 0.55)',
-                fontSize: '17px',
-                lineHeight: 1.9,
-                marginBottom: '40px',
-                letterSpacing: '0.01em'
-              }}>
-                I was not born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed was not more study. It was a better system.
-              </p>
-
-              {/* CTA Button - Overflow visible for glow bloom */}
-              <div style={{ overflow: 'visible', position: 'relative', marginTop: 'auto' }}>
-                <a 
-                  href="https://calendly.com/freenachos/intro" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="coach-cta-btn"
-                  style={{
-                    background: 'transparent',
-                    color: '#A68942',
-                    padding: '20px 40px',
-                    borderRadius: '16px',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    border: '2px solid rgba(166, 137, 66, 0.4)',
-                    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                    position: 'relative'
-                  }}
-                >
-                  <span style={{ position: 'relative', zIndex: 1 }}>Book a Free Intro Call</span>
-                  <ArrowRight size={18} style={{ position: 'relative', zIndex: 1 }} />
-                </a>
-              </div>
-            </div>
-            
-            {/* RIGHT COLUMN: Consolidated Glass Pedestal - Flex Column Justify-Between */}
-            <div 
-              className="authority-artifact"
+          {/* Liquid Gold Header - Centered */}
+          <div style={{ 
+            textAlign: 'center',
+            maxWidth: '768px',
+            marginBottom: '80px'
+          }}>
+            <h2 
+              className="liquid-gold-headline"
               style={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column'
+                fontSize: 'clamp(36px, 4.5vw, 56px)',
+                fontWeight: '800',
+                color: '#FFFFFF',
+                marginBottom: '32px',
+                lineHeight: 1.08,
+                letterSpacing: '-0.025em',
+                fontFamily: 'Manrope, Inter, sans-serif',
+                transition: 'color 0.3s ease'
               }}
             >
-              {/* Gold Bloom Layer (Z-0) */}
-              <div 
-                className="artifact-bloom"
-                style={{
-                  position: 'absolute',
-                  inset: '-50px',
-                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(166, 137, 66, 0.2) 0%, rgba(166, 137, 66, 0.08) 50%, transparent 70%)',
-                  opacity: 0,
-                  filter: 'blur(40px)',
-                  transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                  pointerEvents: 'none',
-                  zIndex: 0
-                }}
-              />
-              
-              {/* Single Elongated Glass Pedestal - Flex Column Justify-Between */}
-              <div 
-                className="artifact-frame"
-                style={{
-                  position: 'relative',
-                  zIndex: 1,
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  backdropFilter: 'blur(40px) saturate(1.2)',
-                  WebkitBackdropFilter: 'blur(40px) saturate(1.2)',
-                  borderRadius: '40px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  overflow: 'hidden',
-                  transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                  boxShadow: '0 4px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
-                }}
-              >
-                {/* Inner Luminance Glow Layer */}
-                <div 
-                  className="inner-luminance"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '40px',
-                    boxShadow: 'inset 0 0 80px rgba(166, 137, 66, 0)',
-                    transition: 'box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                    pointerEvents: 'none',
-                    zIndex: 10
-                  }}
-                />
-                
-                {/* TOP: Graph Container - Flex Grow */}
-                <div style={{ 
-                  position: 'relative', 
-                  padding: '28px 28px 20px 28px',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}>
-                  {/* Clickable Stealth Graph Image - Opens Lightbox */}
-                  <div 
-                    onClick={() => setShowGraphLightbox(true)}
-                    className="stealth-graph-container"
-                    style={{
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      position: 'relative',
-                      boxShadow: '0 8px 40px rgba(0, 0, 0, 0.4)',
-                      flex: 1,
-                      minHeight: '200px',
-                      display: 'block',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img 
-                      className="stealth-graph"
-                      src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
-                      alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
-                      loading="lazy"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        filter: 'brightness(0.3) saturate(0.5) contrast(1.2)',
-                        transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-                        transform: 'scale(1)'
-                      }}
-                    />
-                    
-                    {/* Hover Indicator */}
-                    <div 
-                      className="graph-hover-indicator"
-                      style={{
-                        position: 'absolute',
-                        bottom: '20px',
-                        right: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: 'rgba(10, 10, 10, 0.85)',
-                        backdropFilter: 'blur(12px)',
-                        padding: '10px 18px',
-                        borderRadius: '30px',
-                        border: '1px solid rgba(166, 137, 66, 0.4)',
-                        opacity: 0,
-                        transform: 'translateY(12px) scale(0.95)',
-                        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-                      }}
-                    >
-                      <div style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '50%',
-                        background: 'rgba(166, 137, 66, 0.2)',
-                        border: '2px solid #A68942',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <span style={{ color: '#A68942', fontSize: '14px', fontWeight: '700' }}>+</span>
-                      </div>
-                      <span style={{ color: '#A68942', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
-                    </div>
-                  </div>
-                  
-                  {/* Caption */}
-                  <div style={{ 
-                    textAlign: 'center',
-                    fontSize: '11px',
-                    color: 'rgba(240, 240, 240, 0.35)',
-                    fontStyle: 'italic',
-                    marginTop: '16px',
-                    letterSpacing: '0.04em'
-                  }}>
-                    Verified results at 1KNL+
-                  </div>
-                </div>
-                
-                {/* BOTTOM: Stats Bar - Elegant Row */}
-                <div 
-                  className="stats-bar"
-                  style={{
-                    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                    padding: '24px 32px',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '16px',
-                    transition: 'all 0.6s ease'
-                  }}
-                >
-                  {[
-                    { value: '$5M+', label: 'Student Profits' },
-                    { value: '200+', label: 'Players Coached' },
-                    { value: '6.2bb', label: 'Win Rate' },
-                    { value: '10M+', label: 'Hands Played' }
-                  ].map((stat, idx) => (
-                    <div key={idx} style={{ textAlign: 'center' }}>
-                      <div 
-                        className="stat-value"
-                        style={{ 
-                          fontSize: '24px', 
-                          fontWeight: '800', 
-                          color: '#A68942',
-                          marginBottom: '6px',
-                          letterSpacing: '-0.02em',
-                          transition: 'all 0.6s ease'
-                        }}
-                      >
-                        {stat.value}
-                      </div>
-                      <div style={{ 
-                        fontSize: '9px', 
-                        color: 'rgba(255, 255, 255, 0.5)', 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.1em',
-                        fontWeight: '500'
-                      }}>
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              The Coach Behind <span className="liquid-gold-accent" style={{ 
+                color: '#D4AF37',
+                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)',
+                transition: 'all 0.3s ease'
+              }}>$5M+</span> in Student Profits
+            </h2>
+            
+            {/* Centered Subtext Block */}
+            <div style={{
+              color: 'rgba(240, 240, 240, 0.75)',
+              fontSize: '18px',
+              lineHeight: 1.85,
+              textAlign: 'center'
+            }}>
+              <p style={{ marginBottom: '20px' }}>
+                My students have generated over <strong style={{ color: '#D4AF37' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#D4AF37' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This isn't theory. It's a system that produces results.
+              </p>
+              <p style={{ marginBottom: '20px', color: 'rgba(240, 240, 240, 0.65)' }}>
+                I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D4AF37' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way. GTO is the diagnostic tool. Exploitation is the profit engine.
+              </p>
+              <p style={{ color: 'rgba(240, 240, 240, 0.55)' }}>
+                I wasn't born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed wasn't more study. It was a better system. That same system is now the foundation of my mentorship, and it's responsible for the results you see above.
+              </p>
             </div>
           </div>
 
-          {/* Coach Section Styles - Luxury Metallic #A68942 */}
+          {/* Stats Row - Centered Pills */}
+          <div style={{ 
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '16px',
+            marginBottom: '72px',
+            maxWidth: '768px'
+          }}>
+            {[
+              { value: '$5M+', label: 'Student Profits' },
+              { value: '200+', label: 'Players Coached' },
+              { value: '6.2bb/100', label: 'Win Rate at 1KNL+' },
+              { value: '10M+', label: 'Hands Played' }
+            ].map((stat, idx) => (
+              <div 
+                key={idx}
+                style={{ 
+                  padding: '20px 28px',
+                  background: 'rgba(212, 175, 55, 0.08)',
+                  border: '1px solid rgba(212, 175, 55, 0.25)',
+                  borderRadius: '16px',
+                  transition: 'all 0.3s ease'
+                }}
+                className="stat-pill"
+              >
+                <div style={{ fontSize: '28px', fontWeight: '800', color: '#D4AF37', marginBottom: '4px' }}>{stat.value}</div>
+                <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+          
+          {/* The "Artifact" Graph Display - Glass Plinth */}
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            maxWidth: '520px',
+            width: '100%'
+          }}>
+            {/* Amber Glow Anchor - Behind the frame */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '120%',
+              height: '120%',
+              background: 'radial-gradient(ellipse at center, rgba(255, 153, 0, 0.20) 0%, rgba(212, 175, 55, 0.08) 40%, transparent 70%)',
+              filter: 'blur(60px)',
+              pointerEvents: 'none',
+              zIndex: 0
+            }} />
+            
+            {/* Glass Plinth Container */}
+            <div style={{
+              position: 'relative',
+              zIndex: 1,
+              background: 'rgba(255, 255, 255, 0.03)',
+              backdropFilter: 'blur(64px)',
+              WebkitBackdropFilter: 'blur(64px)',
+              border: '1px solid rgba(255, 255, 255, 0.10)',
+              borderRadius: '24px',
+              padding: '20px',
+              boxShadow: '0 32px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            }}>
+              <div style={{
+                borderRadius: '16px',
+                overflow: 'hidden'
+              }}>
+                <img 
+                  src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
+                  alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block'
+                  }}
+                />
+              </div>
+            </div>
+            
+            {/* Caption */}
+            <div style={{ 
+              textAlign: 'center',
+              fontSize: '13px',
+              color: 'rgba(240, 240, 240, 0.45)',
+              fontStyle: 'italic',
+              marginTop: '20px',
+              zIndex: 1
+            }}>
+              Verified results at 1KNL+
+            </div>
+          </div>
+
+          {/* CTA Button - Centered */}
+          <a 
+            href="https://calendly.com/freenachos/intro" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn-hover"
+            style={{
+              marginTop: '64px',
+              background: 'transparent',
+              color: '#D4AF37',
+              padding: '18px 36px',
+              borderRadius: '14px',
+              fontWeight: '600',
+              fontSize: '16px',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              border: '2px solid rgba(212, 175, 55, 0.5)',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            Book a Free Intro Call <ArrowRight size={18} />
+          </a>
+
+          {/* Liquid Gold Scroll Animation & Stat Pill Styles */}
           <style>{`
-            /* Authority Artifact Hover States */
-            .authority-artifact:hover .artifact-bloom {
-              opacity: 1 !important;
-            }
-            
-            .authority-artifact:hover .artifact-frame {
-              border-color: rgba(166, 137, 66, 0.3) !important;
-              box-shadow: 
-                0 30px 100px rgba(0, 0, 0, 0.5), 
-                0 0 80px rgba(166, 137, 66, 0.15),
-                inset 0 1px 0 rgba(255,255,255,0.08) !important;
-              transform: translateY(-4px);
-            }
-            
-            .authority-artifact:hover .inner-luminance {
-              box-shadow: inset 0 0 80px rgba(166, 137, 66, 0.12) !important;
-            }
-            
-            .authority-artifact:hover .stealth-graph {
-              filter: brightness(1.1) saturate(1) contrast(1.05) !important;
-              transform: scale(1.01) !important;
-            }
-            
-            .authority-artifact:hover .graph-hover-indicator {
-              opacity: 1 !important;
-              transform: translateY(0) scale(1) !important;
-            }
-            
-            .authority-artifact:hover .stat-value {
-              text-shadow: 0 0 25px rgba(166, 137, 66, 0.5);
-            }
-            
-            .authority-artifact:hover .stats-bar {
-              background: rgba(166, 137, 66, 0.03);
-            }
-            
-            /* CTA Button Hover - Luxury Metallic Glow */
-            .coach-cta-btn:hover {
-              border-color: rgba(166, 137, 66, 0.7) !important;
-              box-shadow: 0 0 50px rgba(166, 137, 66, 0.2);
+            .stat-pill:hover {
+              background: rgba(212, 175, 55, 0.15) !important;
+              border-color: rgba(212, 175, 55, 0.4) !important;
               transform: translateY(-2px);
-              background: rgba(166, 137, 66, 0.08);
             }
             
-            /* Responsive */
-            @media (max-width: 1024px) {
-              .coach-grid {
-                grid-template-columns: 1fr !important;
-                gap: 64px !important;
-              }
-              .coach-grid > div:first-child {
-                max-width: 100% !important;
-                padding-right: 0 !important;
-              }
-              .artifact-frame {
-                min-height: 400px;
-              }
+            .liquid-gold-headline.scrolled {
+              color: #FF9900 !important;
+              text-shadow: 0 0 80px rgba(255, 153, 0, 0.5);
             }
             
-            @media (max-width: 640px) {
-              .stats-bar {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 20px !important;
-                padding: 24px 20px !important;
+            .liquid-gold-headline.scrolled .liquid-gold-accent {
+              color: #FFB347 !important;
+              text-shadow: 0 0 100px rgba(255, 153, 0, 0.7);
+            }
+            
+            @media (max-width: 768px) {
+              .coach-museum-section {
+                padding-top: 160px !important;
+                padding-bottom: 160px !important;
               }
             }
           `}</style>
         </div>
 
-        {/* ==================== WHAT YOU GET - Museum Standard ==================== */}
+        {/* ==================== WHAT YOU GET - Interactive Gallery ==================== */}
         <div 
           id="mentorship"
-          className="reveal museum-section"
+          className="reveal what-you-get-section"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)'
+            paddingTop: '256px',
+            paddingBottom: '256px',
+            marginBottom: '0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
         >
-          {/* Header - Centered with Liquid Gold */}
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 8vw, 80px)' }}>
-            <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
-              fontWeight: '800',
-              marginBottom: '20px',
-              letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif'
+          {/* Centered Authority Header */}
+          <div style={{ 
+            textAlign: 'center',
+            marginBottom: '80px',
+            maxWidth: '672px'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(212, 175, 55, 0.08)',
+              border: '1px solid rgba(212, 175, 55, 0.2)',
+              borderRadius: '30px',
+              padding: '8px 20px',
+              marginBottom: '28px'
             }}>
-              <span style={{ color: '#FFFFFF' }}>What You </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.3)'
+              <Sparkles size={16} color="#D4AF37" />
+              <span style={{ fontSize: '13px', color: '#D4AF37', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                Exclusive Access
+              </span>
+            </div>
+            <h2 
+              className="liquid-gold-headline-benefits"
+              style={{
+                fontSize: 'clamp(38px, 5vw, 56px)',
+                fontWeight: '800',
+                color: '#FFFFFF',
+                marginBottom: '24px',
+                lineHeight: 1.08,
+                letterSpacing: '-0.025em',
+                fontFamily: 'Manrope, Inter, sans-serif',
+                transition: 'all 0.4s ease'
+              }}
+            >
+              What You <span className="liquid-gold-accent-benefits" style={{ 
+                color: '#D4AF37',
+                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)',
+                transition: 'all 0.4s ease'
               }}>Get</span>
             </h2>
             <p style={{
               fontSize: '18px',
-              color: 'rgba(240, 240, 240, 0.55)',
-              maxWidth: '600px',
-              margin: '0 auto',
-              lineHeight: 1.7
+              color: 'rgba(240, 240, 240, 0.6)',
+              lineHeight: 1.85,
+              maxWidth: '520px',
+              margin: '0 auto'
             }}>
               Everything you need to transform from a struggling reg into a high-stakes crusher
             </p>
           </div>
           
-          {/* 6 Obsidian Slab Cards - Directly on Background */}
+          {/* Ghost Grid - Icons Float on the Void */}
           <div 
-            className="benefits-grid-museum"
+            className="ghost-benefits-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '48px'
+              gap: '48px',
+              maxWidth: '1200px',
+              width: '100%'
             }}
           >
             {mentorshipBenefits.map((benefit, idx) => {
@@ -2615,71 +2378,76 @@ The 3-month program consists of:
               return (
                 <div 
                   key={idx}
-                  className="obsidian-card"
+                  className="ghost-benefit-item"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    backdropFilter: 'blur(40px)',
-                    WebkitBackdropFilter: 'blur(40px)',
-                    borderRadius: '32px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    padding: '40px',
+                    padding: '48px 36px',
+                    borderRadius: '24px',
+                    transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+                    cursor: 'default',
                     position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                    background: 'transparent',
+                    border: '1px solid transparent'
                   }}
                 >
-                  {/* Step Number - Metallic Gold */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '24px',
-                    right: '24px',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: '#A68942',
-                    letterSpacing: '0.1em',
-                    opacity: 0.6
-                  }}>
-                    {String(idx + 1).padStart(2, '0')}
-                  </div>
-                  
-                  {/* Icon */}
-                  <div style={{
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '20px',
-                    background: 'rgba(166, 137, 66, 0.08)',
-                    border: '1px solid rgba(166, 137, 66, 0.25)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '28px',
-                    transition: 'all 0.5s ease'
-                  }} className="obsidian-icon">
-                    <Icon size={28} color="#A68942" strokeWidth={1.5} />
+                  {/* Icon with Gradient Effect */}
+                  <div 
+                    className="ghost-icon-container"
+                    style={{
+                      position: 'relative',
+                      width: '72px',
+                      height: '72px',
+                      borderRadius: '18px',
+                      background: 'transparent',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '28px',
+                      transition: 'all 0.5s ease'
+                    }}
+                  >
+                    {/* Gold Bloom Glow - Hidden by default */}
+                    <div 
+                      className="icon-bloom"
+                      style={{
+                        position: 'absolute',
+                        inset: '-20px',
+                        background: 'radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%)',
+                        filter: 'blur(20px)',
+                        opacity: 0,
+                        transition: 'opacity 0.5s ease',
+                        pointerEvents: 'none'
+                      }}
+                    />
+                    {/* Icon with Gold-to-White gradient appearance */}
+                    <Icon 
+                      size={36} 
+                      strokeWidth={1.5}
+                      style={{
+                        color: '#D4AF37',
+                        filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))',
+                        transition: 'all 0.4s ease'
+                      }}
+                      className="ghost-icon"
+                    />
                   </div>
                   
                   {/* Title */}
-                  <h3 
-                    className="obsidian-title"
-                    style={{
-                      color: '#F0F0F0',
-                      fontSize: '20px',
-                      fontWeight: '700',
-                      marginBottom: '16px',
-                      lineHeight: 1.3,
-                      transition: 'color 0.4s ease'
-                    }}
-                  >
+                  <h3 style={{
+                    color: '#F0F0F0',
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    marginBottom: '14px',
+                    lineHeight: 1.3,
+                    transition: 'color 0.4s ease'
+                  }}>
                     {benefit.title}
                   </h3>
                   
                   {/* Description */}
                   <p style={{
-                    color: 'rgba(240, 240, 240, 0.6)',
+                    color: 'rgba(240, 240, 240, 0.5)',
                     fontSize: '15px',
-                    lineHeight: 1.8,
-                    flex: 1
+                    lineHeight: 1.8
                   }}>
                     {benefit.description}
                   </p>
@@ -2688,387 +2456,234 @@ The 3-month program consists of:
             })}
           </div>
           
-          {/* Obsidian Card Styles */}
+          {/* Ghost Grid Interactive Styles */}
           <style>{`
-            .obsidian-card {
-              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            /* Default: Naked/Ghost state - floating on void */
+            .ghost-benefit-item {
+              background: transparent !important;
+              border: 1px solid transparent !important;
             }
             
-            .obsidian-card:hover {
-              border-color: rgba(166, 137, 66, 0.4) !important;
-              box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 40px rgba(166, 137, 66, 0.1) !important;
-              transform: translateY(-6px);
+            /* Hover: Glass Reveal with Bloom */
+            .ghost-benefit-item:hover {
+              background: rgba(255, 255, 255, 0.05) !important;
+              backdrop-filter: blur(24px);
+              -webkit-backdrop-filter: blur(24px);
+              border: 1px solid rgba(255, 255, 255, 0.10) !important;
+              transform: translateY(-8px);
+              box-shadow: 0 32px 64px rgba(0, 0, 0, 0.3);
             }
             
-            .obsidian-card:hover .obsidian-icon {
-              background: rgba(166, 137, 66, 0.15) !important;
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              box-shadow: 0 0 30px rgba(166, 137, 66, 0.25);
+            /* Icon bloom on hover */
+            .ghost-benefit-item:hover .icon-bloom {
+              opacity: 1 !important;
             }
             
-            .obsidian-card:hover .obsidian-title {
-              color: #A68942 !important;
+            /* Icon brightens on hover */
+            .ghost-benefit-item:hover .ghost-icon {
+              color: #FFFFFF !important;
+              filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.6)) !important;
             }
             
+            /* Liquid Gold scroll animation for this section */
+            .liquid-gold-headline-benefits.scrolled {
+              color: #FF9900 !important;
+              text-shadow: 0 0 80px rgba(255, 153, 0, 0.5);
+            }
+            
+            .liquid-gold-headline-benefits.scrolled .liquid-gold-accent-benefits {
+              color: #FFB347 !important;
+              text-shadow: 0 0 100px rgba(255, 153, 0, 0.7);
+            }
+            
+            /* Responsive Grid */
             @media (max-width: 1024px) {
-              .benefits-grid-museum {
+              .ghost-benefits-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 32px !important;
               }
             }
-            
             @media (max-width: 680px) {
-              .benefits-grid-museum {
+              .ghost-benefits-grid {
                 grid-template-columns: 1fr !important;
                 gap: 24px !important;
+              }
+              .what-you-get-section {
+                padding-top: 160px !important;
+                padding-bottom: 160px !important;
               }
             }
           `}</style>
         </div>
 
-        {/* ==================== TESTIMONIALS - Museum Gallery ==================== */}
+        {/* ==================== TESTIMONIALS - Individual Cards Only ==================== */}
         <div 
           id="testimonials"
-          className="reveal museum-section"
+          className="reveal"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)',
-            position: 'relative',
+            paddingTop: '60px',
+            paddingBottom: '120px',
+            marginBottom: '250px',
             overflow: 'visible'
           }}
         >
-          {/* Header - Centered with Liquid Gold */}
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 8vw, 80px)' }}>
+          {/* Centered Header */}
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
+              fontSize: 'clamp(38px, 5vw, 56px)',
               fontWeight: '800',
-              marginBottom: '20px',
+              marginBottom: '16px',
+              lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif'
+              fontFamily: 'Manrope, Inter, sans-serif',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
             }}>
-              <span style={{ color: '#FFFFFF' }}>What My Students </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.3)'
-              }}>Say</span>
+              What Players Say
             </h2>
             <p style={{
-              fontSize: '18px',
-              color: 'rgba(240, 240, 240, 0.55)',
-              maxWidth: '550px',
+              fontSize: '17px',
+              color: '#8A8A8A',
+              maxWidth: '480px',
               margin: '0 auto',
               lineHeight: 1.7
             }}>
-              Real results from real players who transformed their game
+              Results from real students who've been through the mentorship
             </p>
           </div>
 
-          {/* Carousel Container */}
-          <div 
-            className="testimonial-carousel-container"
-            style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 'clamp(16px, 3vw, 32px)',
-              padding: '0 clamp(50px, 8vw, 60px)',
-              overflow: 'visible'
-            }}
-          >
-            
-            {/* Left Navigation Arrow - Floating Glass Circle */}
-            <button 
-              onClick={prevTestimonial}
-              className="testimonial-nav-btn"
-              style={{
-                position: 'absolute',
-                left: '0',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                zIndex: 10
-              }}
-            >
-              <ChevronLeft size={24} color="#A68942" />
-            </button>
-
+          {/* Testimonial Carousel with Side Previews */}
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '20px',
+            padding: '0 20px'
+          }}>
             {/* Left Preview Card */}
             <div 
               onClick={prevTestimonial}
               className="testimonial-preview-card"
               style={{
-                flex: '0 0 220px',
-                height: '320px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(40px)',
-                WebkitBackdropFilter: 'blur(40px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '28px',
-                padding: '24px',
+                flex: '0 0 200px',
+                height: '280px',
+                background: 'rgba(15, 15, 15, 0.6)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '20px',
+                padding: '20px',
                 opacity: 0.5,
-                transform: 'scale(0.92)',
+                transform: 'scale(0.9)',
                 cursor: 'pointer',
-                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
               }}
             >
-              {/* Preview Graph */}
               <div style={{
-                borderRadius: '16px',
+                background: 'rgba(15, 15, 15, 0.8)',
+                borderRadius: '8px',
+                padding: '8px',
+                marginBottom: '12px',
+                border: '1px solid rgba(255, 179, 71, 0.1)',
                 overflow: 'hidden',
-                marginBottom: '16px',
-                height: '100px',
-                flexShrink: 0,
-                border: '1px solid rgba(166, 137, 66, 0.15)'
+                height: '80px',
+                flexShrink: 0
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].image || testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].imageAfter} 
                   alt="Results"
-                  loading="lazy"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
                 />
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '13px',
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: '12px',
                 fontStyle: 'italic',
                 flex: 1,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: 4,
-                WebkitBoxOrient: 'vertical',
-                lineHeight: 1.6
+                WebkitBoxOrient: 'vertical'
               }}>
                 "{testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].quote.substring(0, 100)}..."
               </div>
-              <div style={{
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: '12px',
-                fontWeight: '600',
-                marginTop: '12px',
-                flexShrink: 0
-              }}>
-                {testimonials[(currentTestimonialIndex - 1 + testimonials.length) % testimonials.length].name}
-              </div>
             </div>
 
-            {/* Main Testimonial Card - Obsidian Style */}
+            {/* Main Testimonial Card */}
             <div 
               key={currentTestimonialIndex}
-              className="testimonial-main-card"
+              className="main-testimonial-card"
               style={{
-                flex: '0 0 640px',
-                maxWidth: '640px',
-                minHeight: '520px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(40px)',
-                WebkitBackdropFilter: 'blur(40px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '32px',
+                flex: '0 0 550px',
+                background: 'rgba(18, 18, 18, 0.5)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(212, 175, 55, 0.2)',
+                borderRadius: '24px',
                 padding: '40px',
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                animation: `${slideDirection === 'right' ? 'slideInRight' : 'slideInLeft'} 0.4s ease-out`,
-                boxShadow: '0 8px 40px rgba(0, 0, 0, 0.3)'
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.1)',
+                animation: slideDirection === 'right' ? 'slideInRight 0.4s ease-out' : 'slideInLeft 0.4s ease-out'
               }}
             >
-              {/* Student Verified Badge */}
-              <div style={{
-                position: 'absolute',
-                top: '24px',
-                right: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'rgba(166, 137, 66, 0.1)',
-                border: '1px solid rgba(166, 137, 66, 0.3)',
-                borderRadius: '20px',
-                padding: '6px 14px'
-              }}>
-                <CheckCircle size={14} color="#A68942" />
-                <span style={{ color: '#A68942', fontSize: '11px', fontWeight: '600', letterSpacing: '0.05em' }}>
-                  VERIFIED
-                </span>
-              </div>
-
-              {/* Graph/Results Image - Clickable for Lightbox */}
-              <div 
-                onClick={() => {
-                  const t = testimonials[currentTestimonialIndex];
-                  if (t.hasBeforeAfter) {
-                    setTestimonialLightbox({ 
-                      show: true, 
-                      image: t.imageBefore, 
-                      isBefore: true,
-                      imageAfter: t.imageAfter 
-                    });
-                  } else {
-                    setTestimonialLightbox({ 
-                      show: true, 
-                      image: t.image, 
-                      isBefore: false,
-                      imageAfter: null 
-                    });
-                  }
-                }}
-                className="testimonial-graph-clickable"
-                style={{
-                  borderRadius: '20px',
-                  overflow: 'hidden',
-                  marginBottom: '28px',
-                  height: '180px',
-                  flexShrink: 0,
-                  border: '1px solid rgba(166, 137, 66, 0.2)',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  transition: 'all 0.4s ease'
-                }}
-              >
-                {testimonials[currentTestimonialIndex].hasBeforeAfter ? (
-                  <BeforeAfterGraph 
-                    imageBefore={testimonials[currentTestimonialIndex].imageBefore}
-                    imageAfter={testimonials[currentTestimonialIndex].imageAfter}
-                  />
-                ) : (
-                  <TestimonialGraph src={testimonials[currentTestimonialIndex].image} />
-                )}
-                
-                {/* Hover Indicator */}
-                <div 
-                  className="graph-expand-indicator"
-                  style={{
-                    position: 'absolute',
-                    bottom: '12px',
-                    right: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: 'rgba(10, 10, 10, 0.85)',
-                    backdropFilter: 'blur(12px)',
-                    padding: '8px 14px',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(166, 137, 66, 0.4)',
-                    opacity: 0,
-                    transform: 'translateY(8px)',
-                    transition: 'all 0.4s ease'
-                  }}
-                >
-                  <span style={{ color: '#A68942', fontSize: '11px', fontWeight: '600' }}>Click to Expand</span>
-                </div>
-              </div>
-
               {/* Quote */}
-              <div style={{
-                position: 'relative',
-                flex: 1,
-                marginBottom: '24px'
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '16px',
+                lineHeight: 1.8,
+                fontStyle: 'italic',
+                marginBottom: '24px',
+                minHeight: '120px'
               }}>
-                {/* Gold Quote Mark */}
+                "{testimonials[currentTestimonialIndex].quote}"
+              </p>
+              
+              {/* Results Image */}
+              {(testimonials[currentTestimonialIndex].image || testimonials[currentTestimonialIndex].imageAfter) && (
                 <div style={{
-                  position: 'absolute',
-                  top: '-8px',
-                  left: '-8px',
-                  fontSize: '72px',
-                  color: 'rgba(166, 137, 66, 0.15)',
-                  fontFamily: 'Georgia, serif',
-                  lineHeight: 1,
-                  pointerEvents: 'none'
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  marginBottom: '24px',
+                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                  maxHeight: '200px'
                 }}>
-                  "
+                  <img 
+                    src={testimonials[currentTestimonialIndex].image || testimonials[currentTestimonialIndex].imageAfter}
+                    alt="Results graph"
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
                 </div>
-                <p style={{
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  fontSize: '16px',
-                  lineHeight: 1.85,
-                  fontStyle: 'italic',
-                  paddingLeft: '24px',
-                  paddingRight: '8px'
-                }}>
-                  {testimonials[currentTestimonialIndex].quote}
-                </p>
-              </div>
-
-              {/* Star Rating */}
-              <div style={{
-                display: 'flex',
-                gap: '4px',
-                marginBottom: '20px'
-              }}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={18} fill="#A68942" color="#A68942" />
-                ))}
-              </div>
-
-              {/* Author Info with Gold Ring Avatar */}
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '16px',
-                flexShrink: 0 
-              }}>
-                {/* Avatar with Gold Ring */}
+              )}
+              
+              {/* Author Info */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <div style={{
-                  width: '52px',
-                  height: '52px',
+                  width: '48px',
+                  height: '48px',
                   borderRadius: '50%',
-                  padding: '2px',
-                  background: 'linear-gradient(135deg, #A68942 0%, rgba(166, 137, 66, 0.5) 100%)',
-                  boxShadow: '0 0 20px rgba(166, 137, 66, 0.25)'
+                  background: 'linear-gradient(135deg, #D4AF37, #FF9900)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: '#0a0a0a'
                 }}>
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '50%',
-                    background: '#1a1a1a',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px',
-                    fontWeight: '700',
-                    color: '#A68942'
-                  }}>
-                    {testimonials[currentTestimonialIndex].name.charAt(0)}
-                  </div>
+                  {testimonials[currentTestimonialIndex].name.charAt(0)}
                 </div>
-                
                 <div>
-                  <div style={{
-                    color: '#ffffff',
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    marginBottom: '4px'
-                  }}>
+                  <div style={{ color: '#fff', fontWeight: '600', fontSize: '15px' }}>
                     {testimonials[currentTestimonialIndex].name}
                   </div>
-                  {testimonials[currentTestimonialIndex].subtitle && (
-                    <div style={{
-                      color: 'rgba(255,255,255,0.5)',
-                      fontSize: '13px'
-                    }}>
-                      {testimonials[currentTestimonialIndex].subtitle}
-                    </div>
-                  )}
+                  <div style={{ color: 'rgba(212, 175, 55, 0.8)', fontSize: '13px' }}>
+                    {testimonials[currentTestimonialIndex].result}
+                  </div>
                 </div>
               </div>
             </div>
@@ -3078,236 +2693,214 @@ The 3-month program consists of:
               onClick={nextTestimonial}
               className="testimonial-preview-card"
               style={{
-                flex: '0 0 220px',
-                height: '320px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(40px)',
-                WebkitBackdropFilter: 'blur(40px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '28px',
-                padding: '24px',
+                flex: '0 0 200px',
+                height: '280px',
+                background: 'rgba(15, 15, 15, 0.6)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '20px',
+                padding: '20px',
                 opacity: 0.5,
-                transform: 'scale(0.92)',
+                transform: 'scale(0.9)',
                 cursor: 'pointer',
-                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
               }}
             >
-              {/* Preview Graph */}
               <div style={{
-                borderRadius: '16px',
+                background: 'rgba(15, 15, 15, 0.8)',
+                borderRadius: '8px',
+                padding: '8px',
+                marginBottom: '12px',
+                border: '1px solid rgba(255, 179, 71, 0.1)',
                 overflow: 'hidden',
-                marginBottom: '16px',
-                height: '100px',
-                flexShrink: 0,
-                border: '1px solid rgba(166, 137, 66, 0.15)'
+                height: '80px',
+                flexShrink: 0
               }}>
                 <img 
                   src={testimonials[(currentTestimonialIndex + 1) % testimonials.length].image || testimonials[(currentTestimonialIndex + 1) % testimonials.length].imageAfter} 
                   alt="Results"
-                  loading="lazy"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
                 />
               </div>
               <div style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: '13px',
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: '12px',
                 fontStyle: 'italic',
                 flex: 1,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
                 WebkitLineClamp: 4,
-                WebkitBoxOrient: 'vertical',
-                lineHeight: 1.6
+                WebkitBoxOrient: 'vertical'
               }}>
                 "{testimonials[(currentTestimonialIndex + 1) % testimonials.length].quote.substring(0, 100)}..."
               </div>
-              <div style={{
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: '12px',
-                fontWeight: '600',
-                marginTop: '12px',
-                flexShrink: 0
-              }}>
-                {testimonials[(currentTestimonialIndex + 1) % testimonials.length].name}
-              </div>
             </div>
+          </div>
 
-            {/* Right Navigation Arrow - Floating Glass Circle */}
+          {/* Carousel Controls */}
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '40px'
+          }}>
             <button 
-              onClick={nextTestimonial}
-              className="testimonial-nav-btn"
+              className="cinema-nav-btn"
+              onClick={prevTestimonial}
               style={{
-                position: 'absolute',
-                right: '0',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '56px',
-                height: '56px',
+                width: '52px',
+                height: '52px',
                 borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: 'rgba(212, 175, 55, 0.1)',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                zIndex: 10
+                transition: 'all 0.3s ease'
               }}
             >
-              <ChevronRight size={24} color="#A68942" />
+              <ChevronLeft size={22} color="#D4AF37" />
+            </button>
+            
+            {/* Counter */}
+            <div style={{
+              color: 'rgba(240, 240, 240, 0.6)',
+              fontSize: '14px',
+              fontWeight: '500',
+              minWidth: '60px',
+              textAlign: 'center'
+            }}>
+              {currentTestimonialIndex + 1} / {testimonials.length}
+            </div>
+            
+            <button 
+              className="cinema-nav-btn"
+              onClick={nextTestimonial}
+              style={{
+                width: '52px',
+                height: '52px',
+                borderRadius: '50%',
+                background: 'rgba(212, 175, 55, 0.1)',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <ChevronRight size={22} color="#D4AF37" />
             </button>
           </div>
 
-          {/* Dot Indicators */}
-          <div style={{
-            display: 'flex',
-            gap: '12px',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: '48px'
-          }}>
-            {testimonials.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  setSlideDirection(idx > currentTestimonialIndex ? 'right' : 'left');
-                  setCurrentTestimonialIndex(idx);
-                }}
-                style={{
-                  width: idx === currentTestimonialIndex ? '32px' : '10px',
-                  height: '10px',
-                  borderRadius: '5px',
-                  background: idx === currentTestimonialIndex ? '#A68942' : 'rgba(255, 255, 255, 0.2)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.4s ease'
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Testimonial Section Styles */}
+          {/* Testimonial styles */}
           <style>{`
-            .testimonial-nav-btn:hover {
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              background: rgba(166, 137, 66, 0.1) !important;
-              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
-              transform: translateY(-50%) scale(1.1);
-            }
-            
             .testimonial-preview-card:hover {
-              opacity: 0.7 !important;
+              opacity: 0.8 !important;
               transform: scale(0.95) !important;
-              border-color: rgba(166, 137, 66, 0.3) !important;
+              border-color: rgba(212, 175, 55, 0.2) !important;
             }
-            
-            .testimonial-main-card:hover {
-              border-color: rgba(166, 137, 66, 0.3) !important;
-              box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 50px rgba(166, 137, 66, 0.1) !important;
-            }
-            
-            .testimonial-graph-clickable:hover {
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(166, 137, 66, 0.15) !important;
-            }
-            
-            .testimonial-graph-clickable:hover .graph-expand-indicator {
-              opacity: 1 !important;
-              transform: translateY(0) !important;
-            }
-            
-            @media (max-width: 1200px) {
+            @media (max-width: 1024px) {
               .testimonial-preview-card {
                 display: none !important;
               }
-              .testimonial-main-card {
+              .main-testimonial-card {
                 flex: 1 !important;
-                max-width: 100% !important;
-              }
-            }
-            
-            @media (max-width: 680px) {
-              .testimonial-main-card {
-                padding: 24px !important;
-                min-height: auto !important;
-                border-radius: 24px !important;
-              }
-              .testimonial-nav-btn {
-                width: 40px !important;
-                height: 40px !important;
-              }
-              .testimonial-graph-clickable {
-                height: 140px !important;
+                max-width: 600px !important;
               }
             }
           `}</style>
         </div>
-        {/* ==================== PROOF IN THE PROCESS - YouTube Cinema ==================== */}
+        {/* ==================== DEAD SPACE: Cinema Transition Zone ==================== */}
+        {/* 40vh of darkness with drifting nachos before YouTube section */}
+        <div style={{ height: '40vh', position: 'relative', zIndex: 0 }} />
+
+        {/* ==================== YOUTUBE CINEMA SECTION ==================== */}
+        {/* Premium Masterclass Library - Warm Gold Cinema */}
         <div 
-          className="reveal museum-section"
+          className="reveal"
           id="videos"
           style={{
             position: 'relative',
             zIndex: 30,
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)'
+            paddingTop: '100px',
+            paddingBottom: '160px',
+            marginBottom: '200px'
           }}
         >
-          {/* Centered Liquid Gold Header */}
+          {/* Cinematic Heading - Centered Museum Style */}
           <div style={{ 
             textAlign: 'center',
-            marginBottom: 'clamp(48px, 8vw, 80px)'
+            marginBottom: '72px',
+            padding: '0 24px'
           }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
+              fontSize: 'clamp(38px, 5vw, 60px)',
               fontWeight: '800',
               marginBottom: '24px',
-              lineHeight: 1.1,
+              lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif'
+              fontFamily: 'Manrope, Inter, sans-serif',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 50%, #FF9900 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: 'none',
+              filter: 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))'
             }}>
-              <span style={{ color: '#FFFFFF' }}>Proof in the </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
-              }}>Process</span>
+              Proof in the Process.
             </h2>
             <p style={{
               fontSize: '18px',
-              color: 'rgba(240, 240, 240, 0.55)',
+              color: '#8A8A8A',
               maxWidth: '560px',
               margin: '0 auto',
-              lineHeight: 1.8
+              lineHeight: 1.85,
+              fontWeight: '400'
             }}>
-              Watch the data-driven methodology that generates elite-level win rates
+              Watch the high-stakes logic in action. No theory—just raw execution and population exploits.
             </p>
           </div>
 
-          {/* Cinema Carousel Container with Edge Fade Mask */}
-          <div 
-            style={{ 
-              position: 'relative',
-              maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)'
-            }}
-          >
-            {/* Snap Scroll Carousel - Infinite Loop */}
+          {/* Cinema Carousel Container */}
+          <div style={{ position: 'relative' }}>
+            {/* Gradient Fade Edges */}
+            <div style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: '100px',
+              background: 'linear-gradient(to right, #0A0A0A 0%, transparent 100%)',
+              zIndex: 10,
+              pointerEvents: 'none'
+            }} />
+            <div style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: '100px',
+              background: 'linear-gradient(to left, #0A0A0A 0%, transparent 100%)',
+              zIndex: 10,
+              pointerEvents: 'none'
+            }} />
+
+            {/* Snap Scroll Carousel */}
             <div 
               ref={cinemaCarouselRef}
-              className="cinema-carousel-stealth"
+              className="cinema-carousel"
               style={{
                 display: 'flex',
-                gap: '40px',
-                padding: '40px 80px',
+                gap: '32px',
+                padding: '40px 24px',
                 overflowX: 'auto',
                 scrollSnapType: 'x mandatory',
                 scrollBehavior: 'smooth',
@@ -3315,504 +2908,397 @@ The 3-month program consists of:
                 msOverflowStyle: 'none'
               }}
             >
-              {/* Triple the videos array for infinite loop feel */}
-              {[...videos, ...videos, ...videos].map((video, idx) => (
+              {videos.map((video, idx) => (
                 <a
-                  key={`${video.id}-${idx}`}
+                  key={video.id}
                   href={video.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="stealth-video-card"
+                  className="cinema-video-card"
                   style={{
-                    flex: '0 0 400px',
-                    scrollSnapAlign: 'center',
+                    flex: '0 0 380px',
+                    scrollSnapAlign: 'start',
                     textDecoration: 'none',
                     position: 'relative'
                   }}
                 >
-                  {/* Gold Bloom Glow Layer */}
+                  {/* Gold Bloom Glow Layer - Pulsing on Hover */}
                   <div 
-                    className="stealth-bloom"
+                    className="cinema-bloom"
                     style={{
                       position: 'absolute',
-                      inset: '-40px',
-                      background: 'radial-gradient(circle at 50% 50%, rgba(166, 137, 66, 0.3) 0%, transparent 70%)',
+                      inset: '-30px',
+                      background: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.4) 0%, rgba(255, 153, 0, 0.2) 40%, transparent 70%)',
                       opacity: 0,
-                      transition: 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                      filter: 'blur(40px)',
+                      filter: 'blur(30px)',
                       zIndex: 0,
                       pointerEvents: 'none'
                     }}
                   />
                   
-                  {/* Obsidian Slab Card Container */}
+                  {/* Thumbnail Container */}
                   <div 
-                    className="stealth-card-frame"
+                    className="cinema-thumbnail-wrap"
                     style={{
                       position: 'relative',
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      backdropFilter: 'blur(40px)',
-                      WebkitBackdropFilter: 'blur(40px)',
                       borderRadius: '32px',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
                       overflow: 'hidden',
-                      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
                       zIndex: 1
                     }}
                   >
-                    {/* Thumbnail with Stealth Filter */}
+                    {/* Thumbnail Image - Warm Gold Tint Default */}
                     <div 
-                      className="stealth-thumbnail"
+                      className="cinema-thumbnail"
                       style={{
                         width: '100%',
-                        height: '240px',
+                        height: '220px',
                         backgroundImage: `url(${video.thumbnail})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        filter: 'saturate(0.2) brightness(0.5) contrast(1.1)',
-                        transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                        position: 'relative'
+                        filter: 'sepia(0.4) saturate(0.8) brightness(0.6) hue-rotate(-10deg)',
+                        transition: 'all 0.5s ease-in-out'
                       }}
                     />
                     
-                    {/* Custom Gold Play Button - Minimalist */}
+                    {/* Permanent Play Icon - Subtle Default, Bright on Hover */}
                     <div 
-                      className="stealth-play-btn"
+                      className="cinema-play-icon"
                       style={{
                         position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '72px',
-                        height: '72px',
-                        borderRadius: '50%',
-                        background: 'rgba(10, 10, 10, 0.7)',
-                        backdropFilter: 'blur(12px)',
-                        border: '2px solid rgba(166, 137, 66, 0.5)',
+                        inset: 0,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        opacity: 0,
-                        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                        zIndex: 5
+                        background: 'transparent',
+                        transition: 'all 0.4s ease'
                       }}
                     >
-                      <svg 
-                        width="28" 
-                        height="28" 
-                        viewBox="0 0 24 24" 
-                        fill="none"
+                      <div 
+                        className="play-button-inner"
                         style={{
-                          marginLeft: '3px',
-                          filter: 'drop-shadow(0 0 15px rgba(166, 137, 66, 0.5))'
-                        }}
-                      >
-                        <polygon 
-                          points="5,3 5,21 19,12" 
-                          fill="#A68942"
-                        />
-                      </svg>
-                    </div>
-                    
-                    {/* Video Title Section */}
-                    <div style={{
-                      padding: '24px',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.05)'
-                    }}>
-                      <h4 
-                        className="stealth-title"
-                        style={{
-                          color: '#F0F0F0',
-                          fontSize: '16px',
-                          fontWeight: '600',
-                          lineHeight: 1.5,
-                          marginBottom: '12px',
-                          transition: 'color 0.4s ease'
-                        }}
-                      >
-                        {video.title}
-                      </h4>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        <div style={{
-                          width: '24px',
-                          height: '24px',
+                          width: '72px',
+                          height: '72px',
                           borderRadius: '50%',
-                          background: 'rgba(166, 137, 66, 0.15)',
+                          background: 'rgba(0, 0, 0, 0.3)',
+                          backdropFilter: 'blur(4px)',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          <Play size={12} color="#A68942" fill="#A68942" />
-                        </div>
-                        <span style={{
-                          color: 'rgba(240, 240, 240, 0.5)',
-                          fontSize: '13px',
-                          fontWeight: '500'
-                        }}>
-                          Nachos Poker
-                        </span>
+                          justifyContent: 'center',
+                          border: '2px solid rgba(212, 175, 55, 0.4)',
+                          transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)'
+                        }}
+                      >
+                        <svg 
+                          width="28" 
+                          height="28" 
+                          viewBox="0 0 24 24" 
+                          fill="none"
+                          className="play-triangle"
+                          style={{
+                            marginLeft: '3px',
+                            transition: 'all 0.4s ease'
+                          }}
+                        >
+                          <polygon 
+                            points="5,3 19,12 5,21" 
+                            fill="rgba(212, 175, 55, 0.6)"
+                            stroke="rgba(212, 175, 55, 0.8)"
+                            strokeWidth="1.5"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </div>
+                    </div>
+                  </div>
+                  
+                  {/* Video Title - Parallax Layer */}
+                  <div 
+                    className="cinema-title-wrap"
+                    style={{
+                      padding: '20px 8px 0',
+                      transition: 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+                      zIndex: 1,
+                      position: 'relative'
+                    }}
+                  >
+                    <h4 style={{
+                      color: '#F0F0F0',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      lineHeight: 1.5,
+                      marginBottom: '8px'
+                    }}>
+                      {video.title}
+                    </h4>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      color: '#6B6B6B',
+                      fontSize: '13px'
+                    }}>
+                      <Youtube size={14} color="#D4AF37" />
+                      <span>Nachos Poker</span>
                     </div>
                   </div>
                 </a>
               ))}
             </div>
+
+            {/* Navigation Controls */}
+            <div style={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'center',
+              marginTop: '48px'
+            }}>
+              <button 
+                className="cinema-nav-btn"
+                onClick={prevVideo}
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  background: 'rgba(212, 175, 55, 0.1)',
+                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <ChevronLeft size={24} color="#D4AF37" />
+              </button>
+              <button 
+                className="cinema-nav-btn"
+                onClick={nextVideo}
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  background: 'rgba(212, 175, 55, 0.1)',
+                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <ChevronRight size={24} color="#D4AF37" />
+              </button>
+            </div>
+
+            {/* View All Link */}
+            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+              <a 
+                href="https://www.youtube.com/@nachospoker" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  color: '#D4AF37',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  opacity: 0.8,
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+              >
+                View all on YouTube <ExternalLink size={14} />
+              </a>
+            </div>
           </div>
 
-          {/* Navigation Controls - Glass Circles */}
-          <div style={{
-            display: 'flex',
-            gap: '20px',
-            justifyContent: 'center',
-            marginTop: '56px'
-          }}>
-            <button 
-              className="youtube-nav-btn"
-              onClick={prevVideo}
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              <ChevronLeft size={24} color="#A68942" />
-            </button>
-            <button 
-              className="youtube-nav-btn"
-              onClick={nextVideo}
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              <ChevronRight size={24} color="#A68942" />
-            </button>
-          </div>
-
-          {/* View All Link */}
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <a 
-              href="https://www.youtube.com/@nachospoker" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="youtube-view-all"
-              style={{
-                color: '#A68942',
-                fontSize: '14px',
-                fontWeight: '600',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 24px',
-                borderRadius: '30px',
-                border: '1px solid rgba(166, 137, 66, 0.3)',
-                background: 'rgba(166, 137, 66, 0.05)',
-                transition: 'all 0.4s ease'
-              }}
-            >
-              View all on YouTube <ExternalLink size={14} />
-            </a>
-          </div>
-
-          {/* Stealth Video Card Styles */}
+          {/* Cinema Carousel Styles - Warm Gold Cinema */}
           <style>{`
-            .cinema-carousel-stealth::-webkit-scrollbar {
+            .cinema-carousel::-webkit-scrollbar {
               display: none;
             }
             
-            /* Stealth-to-Vibrant Reveal */
-            .stealth-video-card:hover .stealth-thumbnail {
-              filter: saturate(1) brightness(1) contrast(1) !important;
-              transform: scale(1.02);
+            @keyframes bloomPulse {
+              0%, 100% { opacity: 0.8; transform: scale(1); }
+              50% { opacity: 1; transform: scale(1.05); }
             }
             
-            .stealth-video-card:hover .stealth-bloom {
+            .cinema-video-card:hover .cinema-bloom {
               opacity: 1 !important;
+              animation: bloomPulse 2s ease-in-out infinite;
             }
             
-            .stealth-video-card:hover .stealth-card-frame {
-              border-color: rgba(166, 137, 66, 0.4) !important;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.2) !important;
-              transform: translateY(-8px);
+            .cinema-video-card:hover .cinema-thumbnail-wrap {
+              transform: scale(1.05);
+              border-color: rgba(212, 175, 55, 0.5);
+              box-shadow: 0 0 50px rgba(212, 175, 55, 0.35);
             }
             
-            .stealth-video-card:hover .stealth-play-btn {
-              opacity: 1 !important;
-              transform: translate(-50%, -50%) scale(1.1);
-              border-color: rgba(166, 137, 66, 0.8) !important;
-              box-shadow: 0 0 40px rgba(166, 137, 66, 0.4);
+            .cinema-video-card:hover .cinema-thumbnail {
+              transform: scale(1.08);
+              filter: sepia(0) saturate(1) brightness(1) hue-rotate(0deg) !important;
             }
             
-            .stealth-video-card:hover .stealth-title {
-              color: #A68942 !important;
-            }
-            
-            /* Navigation Buttons */
-            .youtube-nav-btn:hover {
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              background: rgba(166, 137, 66, 0.1) !important;
-              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
+            .cinema-video-card:hover .play-button-inner {
+              background: rgba(212, 175, 55, 0.2) !important;
+              border-color: rgba(255, 215, 0, 0.8) !important;
               transform: scale(1.1);
+              box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             }
             
-            .youtube-view-all:hover {
-              background: rgba(166, 137, 66, 0.15) !important;
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              box-shadow: 0 0 30px rgba(166, 137, 66, 0.2);
+            .cinema-video-card:hover .play-triangle polygon {
+              fill: #FFD700 !important;
+              stroke: #FFFFFF !important;
+            }
+            
+            .cinema-video-card:hover .cinema-title-wrap {
+              transform: translateY(-4px);
+            }
+            
+            .cinema-nav-btn:hover {
+              background: rgba(212, 175, 55, 0.2) !important;
+              border-color: rgba(212, 175, 55, 0.5) !important;
+              transform: scale(1.05);
             }
             
             @media (max-width: 768px) {
-              .stealth-video-card {
-                flex: 0 0 300px !important;
+              .cinema-video-card {
+                flex: 0 0 320px !important;
               }
-              .stealth-thumbnail {
-                height: 170px !important;
-              }
-              .stealth-play-btn {
-                width: 56px !important;
-                height: 56px !important;
-              }
-              .youtube-nav-btn {
-                width: 44px !important;
-                height: 44px !important;
-              }
-            }
-            
-            @media (max-width: 480px) {
-              .stealth-video-card {
-                flex: 0 0 280px !important;
-              }
-              .stealth-thumbnail {
-                height: 150px !important;
-              }
-              .stealth-card-frame {
-                border-radius: 24px !important;
+              .cinema-thumbnail {
+                height: 180px !important;
               }
             }
           `}</style>
         </div>
 
-        {/* ==================== INVESTMENT SECTION - Museum Standard ==================== */}
+        {/* ==================== PRICING SECTION - Centered Anchor ==================== */}
         <div 
-          id="pricing"
-          className="reveal museum-section"
+          className="reveal"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)',
-            position: 'relative',
-            overflow: 'visible'
+            paddingTop: '60px',
+            paddingBottom: '120px',
+            marginBottom: '250px'
           }}
         >
-          {/* Centered Liquid Gold Header */}
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 8vw, 80px)' }}>
+          {/* Centered Header */}
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
+              fontSize: 'clamp(38px, 5vw, 56px)',
               fontWeight: '800',
-              marginBottom: '20px',
+              marginBottom: '16px',
+              lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif'
+              fontFamily: 'Manrope, Inter, sans-serif',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
             }}>
-              <span style={{ color: '#FFFFFF' }}>Choose Your </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
-              }}>Commitment</span>
+              Investment
             </h2>
             <p style={{
-              fontSize: '18px',
-              color: 'rgba(240, 240, 240, 0.55)',
-              maxWidth: '500px',
-              margin: '0 auto',
-              lineHeight: 1.7
+              color: '#8A8A8A',
+              fontSize: '17px',
+              lineHeight: 1.7,
+              maxWidth: '480px',
+              margin: '0 auto'
             }}>
-              Investment tiers designed for serious players ready to level up
+              Choose the commitment level that fits your goals
             </p>
           </div>
 
-          {/* Pricing Cards Grid - Items Stretch for Equal Heights */}
-          <div 
-            className="pricing-grid-museum"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '40px',
-              alignItems: 'stretch',
-              maxWidth: '1200px',
-              margin: '0 auto',
-              overflow: 'visible'
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '28px',
+            alignItems: 'stretch',
+            maxWidth: '1100px',
+            margin: '0 auto'
+          }}>
             {pricingPlans.map((plan, idx) => (
               <PricingCard key={idx} plan={plan} />
             ))}
           </div>
-
-          {/* Pricing Section Styles */}
-          <style>{`
-            .obsidian-pricing-card:hover {
-              border-color: rgba(166, 137, 66, 0.5) !important;
-              transform: translateY(-8px) scale(1.02);
-              box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.5),
-                0 0 60px rgba(166, 137, 66, 0.15) !important;
-            }
-            
-            .obsidian-pricing-card.featured {
-              transform: scale(1.02);
-              z-index: 2;
-            }
-            
-            .obsidian-pricing-card.featured:hover {
-              transform: translateY(-8px) scale(1.04);
-            }
-            
-            .pricing-cta-btn:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 12px 35px rgba(166, 137, 66, 0.45) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
-            }
-            
-            @media (max-width: 1024px) {
-              .pricing-grid-museum {
-                grid-template-columns: 1fr !important;
-                gap: 32px !important;
-                max-width: 450px !important;
-              }
-              .obsidian-pricing-card.featured {
-                transform: scale(1) !important;
-              }
-              .obsidian-pricing-card.featured:hover {
-                transform: translateY(-8px) scale(1.02) !important;
-              }
-            }
-          `}</style>
         </div>
 
-        {/* ==================== QUALIFICATION SECTION - Dual Pillar Museum ==================== */}
+        {/* ==================== GOOD FIT SECTION - Floating Layout ==================== */}
         <div 
-          className="reveal museum-section"
+          className="reveal"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)',
-            position: 'relative'
+            paddingTop: '60px',
+            paddingBottom: '120px',
+            marginBottom: '250px'
           }}
         >
-          {/* Centered Global Header */}
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 8vw, 80px)' }}>
+          {/* Centered Header */}
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
+              fontSize: 'clamp(36px, 4.5vw, 52px)',
               fontWeight: '800',
-              marginBottom: '20px',
+              color: '#FFFFFF',
+              marginBottom: '16px',
+              lineHeight: 1.08,
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              <span style={{ color: '#FFFFFF' }}>Is This Right </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
-              }}>For You?</span>
+              Is This Right <span style={{ 
+                color: '#D4AF37',
+                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)'
+              }}>For You</span>?
             </h2>
           </div>
 
-          {/* Dual-Pillar Grid - Items Stretch for Equal Heights */}
-          <div 
-            className="qualification-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '48px',
-              alignItems: 'stretch',
-              maxWidth: '1100px',
-              margin: '0 auto'
-            }}
-          >
-            {/* LEFT PILLAR: This Is For You - Obsidian Slab */}
-            <div 
-              className="qualification-card positive"
-              style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(40px)',
-                WebkitBackdropFilter: 'blur(40px)',
-                borderRadius: '40px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '48px',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              {/* Header with Liquid Gold */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '64px',
+            maxWidth: '950px',
+            margin: '0 auto'
+          }}>
+            {/* Good Fit Column */}
+            <div>
               <h3 style={{
-                fontSize: '24px',
+                fontSize: '22px',
                 fontWeight: '700',
-                marginBottom: '36px',
-                letterSpacing: '-0.01em'
+                color: '#F0F0F0',
+                marginBottom: '28px'
               }}>
-                <span style={{ color: '#FFFFFF' }}>This is </span>
-                <span style={{ 
-                  color: '#A68942',
-                  textShadow: '0 0 30px rgba(166, 137, 66, 0.3)'
-                }}>for you</span>
-                <span style={{ color: '#FFFFFF' }}> if...</span>
+                You're a good fit if:
               </h3>
-              
-              {/* Qualification Points */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '20px',
-                flex: 1
+                gap: '16px'
               }}>
                 {goodFitReasons.map((reason, idx) => (
                   <div key={idx} style={{
                     display: 'flex',
                     alignItems: 'flex-start',
-                    gap: '16px'
+                    gap: '12px'
                   }}>
                     <div style={{
-                      width: '28px',
-                      height: '28px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
-                      background: 'rgba(166, 137, 66, 0.15)',
-                      border: '1px solid rgba(166, 137, 66, 0.3)',
+                      background: 'rgba(212, 175, 55, 0.2)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                       marginTop: '2px'
                     }}>
-                      <Check size={16} color="#A68942" strokeWidth={3} />
+                      <Check size={14} color="#D4AF37" />
                     </div>
                     <span style={{
-                      color: 'rgba(240, 240, 240, 0.85)',
-                      fontSize: '16px',
-                      lineHeight: 1.7
+                      color: 'rgba(240, 240, 240, 0.8)',
+                      fontSize: '15px',
+                      lineHeight: 1.6
                     }}>
                       {reason}
                     </span>
@@ -3821,63 +3307,44 @@ The 3-month program consists of:
               </div>
             </div>
 
-            {/* RIGHT PILLAR: This Is NOT For You - Obsidian Slab (Subdued) */}
-            <div 
-              className="qualification-card negative"
-              style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(40px)',
-                WebkitBackdropFilter: 'blur(40px)',
-                borderRadius: '40px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '48px',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              {/* Header - Stealth White */}
+            {/* Not a Fit Column */}
+            <div>
               <h3 style={{
                 fontSize: '24px',
                 fontWeight: '700',
-                color: 'rgba(255, 255, 255, 0.7)',
-                marginBottom: '36px',
-                letterSpacing: '-0.01em'
+                color: '#F0F0F0',
+                marginBottom: '24px'
               }}>
-                This is NOT for you if...
+                Not a fit if:
               </h3>
-              
-              {/* Disqualification Points */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '20px',
-                flex: 1
+                gap: '16px'
               }}>
                 {notAFitReasons.map((reason, idx) => (
                   <div key={idx} style={{
                     display: 'flex',
                     alignItems: 'flex-start',
-                    gap: '16px'
+                    gap: '12px'
                   }}>
                     <div style={{
-                      width: '28px',
-                      height: '28px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      background: 'rgba(239, 68, 68, 0.2)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                       marginTop: '2px'
                     }}>
-                      <X size={16} color="rgba(255, 255, 255, 0.4)" strokeWidth={2.5} />
+                      <X size={14} color="#ef4444" />
                     </div>
                     <span style={{
-                      color: 'rgba(240, 240, 240, 0.5)',
-                      fontSize: '16px',
-                      lineHeight: 1.7
+                      color: 'rgba(240, 240, 240, 0.55)',
+                      fontSize: '15px',
+                      lineHeight: 1.6
                     }}>
                       {reason}
                     </span>
@@ -3887,124 +3354,78 @@ The 3-month program consists of:
             </div>
           </div>
 
-          {/* CTA Button - Centered Below */}
+          {/* CTA Button */}
           <div style={{
             textAlign: 'center',
-            marginTop: '64px'
+            marginTop: '56px'
           }}>
             <a 
               href="https://calendly.com/freenachos/intro"
               target="_blank"
               rel="noopener noreferrer"
-              className="qualification-cta-btn"
+              className="btn-hover cta-primary"
               style={{
-                background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
-                color: '#0A0A0A',
-                padding: '20px 48px',
-                borderRadius: '20px',
+                background: '#FF9900',
+                color: '#0a0a0a',
+                padding: '20px 44px',
+                borderRadius: '14px',
                 fontWeight: '700',
                 fontSize: '16px',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '12px',
-                boxShadow: '0 8px 30px rgba(166, 137, 66, 0.35)',
-                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                gap: '10px',
+                boxShadow: '0 6px 30px rgba(255, 153, 0, 0.45)'
               }}
             >
-              Book Free Intro Call
-              <ArrowRight size={18} />
+              Book Free Intro Call <ArrowRight size={18} />
             </a>
           </div>
-
-          {/* Qualification Section Styles */}
-          <style>{`
-            .qualification-card:hover {
-              border-color: rgba(255, 255, 255, 0.15) !important;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-              transform: translateY(-4px);
-            }
-            
-            .qualification-card.positive:hover {
-              border-color: rgba(166, 137, 66, 0.3) !important;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(166, 137, 66, 0.1);
-            }
-            
-            .qualification-cta-btn:hover {
-              transform: translateY(-3px);
-              box-shadow: 0 12px 40px rgba(166, 137, 66, 0.45) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
-            }
-            
-            @media (max-width: 900px) {
-              .qualification-grid {
-                grid-template-columns: 1fr !important;
-                gap: 32px !important;
-              }
-              .qualification-card {
-                padding: 32px !important;
-                border-radius: 28px !important;
-              }
-            }
-            
-            @media (max-width: 480px) {
-              .qualification-card {
-                padding: 24px !important;
-                border-radius: 24px !important;
-              }
-            }
-          `}</style>
         </div>
 
-        {/* ==================== FAQ SECTION - Interactive Console ==================== */}
+        {/* ==================== FAQ - Narrow Glass Accordion ==================== */}
         <div 
-          className="reveal museum-section"
+          className="reveal"
           style={{
-            paddingTop: 'clamp(100px, 15vw, 256px)',
-            paddingBottom: 'clamp(100px, 15vw, 256px)',
-            marginBottom: 'clamp(80px, 12vw, 200px)',
-            position: 'relative'
+            paddingTop: '60px',
+            paddingBottom: '120px',
+            marginBottom: '250px'
           }}
         >
-          {/* Centered Liquid Gold Header */}
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 8vw, 80px)' }}>
+          {/* Centered Header */}
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <h2 style={{
-              fontSize: 'clamp(36px, 4vw, 52px)',
+              fontSize: 'clamp(36px, 4.5vw, 52px)',
               fontWeight: '800',
-              marginBottom: '20px',
+              marginBottom: '16px',
+              lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif'
+              fontFamily: 'Manrope, Inter, sans-serif',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
             }}>
-              <span style={{ color: '#FFFFFF' }}>Frequently Asked </span>
-              <span style={{ 
-                color: '#A68942',
-                textShadow: '0 0 50px rgba(166, 137, 66, 0.35)'
-              }}>Questions</span>
+              Questions & Answers
             </h2>
             <p style={{
-              fontSize: '18px',
-              color: 'rgba(240, 240, 240, 0.55)',
-              maxWidth: '500px',
-              margin: '0 auto',
-              lineHeight: 1.7
+              color: '#8A8A8A',
+              fontSize: '17px',
+              lineHeight: 1.7,
+              maxWidth: '480px',
+              margin: '0 auto'
             }}>
               Everything you need to know about the mentorship
             </p>
           </div>
 
-          {/* FAQ Console Container */}
-          <div 
-            className="faq-console-container"
-            style={{
-              maxWidth: '900px',
-              margin: '0 auto',
-              background: 'rgba(255, 255, 255, 0.02)',
-              backdropFilter: 'blur(40px)',
-              WebkitBackdropFilter: 'blur(40px)',
-              borderRadius: 'clamp(24px, 5vw, 40px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              padding: 'clamp(12px, 3vw, 16px) clamp(20px, 5vw, 48px)',
-              overflow: 'hidden'
+          {/* Narrow Accordion Container - max-w-3xl */}
+          <div style={{
+            maxWidth: '768px',
+            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
           }}>
             {faqItems.map((item, idx) => (
               <FAQItem 
@@ -4016,69 +3437,6 @@ The 3-month program consists of:
               />
             ))}
           </div>
-
-          {/* Final CTA - The Anchor */}
-          <div style={{
-            textAlign: 'center',
-            marginTop: '80px'
-          }}>
-            <a 
-              href="https://calendly.com/freenachos/intro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="final-cta-btn"
-              style={{
-                background: 'linear-gradient(135deg, #A68942 0%, #C9A534 100%)',
-                color: '#0A0A0A',
-                padding: '24px 56px',
-                borderRadius: '24px',
-                fontWeight: '700',
-                fontSize: '18px',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '14px',
-                boxShadow: '0 12px 50px rgba(166, 137, 66, 0.4), 0 0 100px rgba(166, 137, 66, 0.2)',
-                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                position: 'relative'
-              }}
-            >
-              <span>Book Free Intro Call</span>
-              <ArrowRight size={20} strokeWidth={2.5} />
-            </a>
-            
-            {/* Subtext */}
-            <p style={{
-              marginTop: '24px',
-              color: 'rgba(240, 240, 240, 0.4)',
-              fontSize: '14px'
-            }}>
-              No commitment required. Let's see if we're a good fit.
-            </p>
-          </div>
-
-          {/* FAQ Console Styles */}
-          <style>{`
-            .faq-console-item:first-child {
-              border-top: 1px solid rgba(166, 137, 66, 0.15);
-            }
-            
-            .faq-console-item:hover {
-              background: rgba(255, 255, 255, 0.03) !important;
-            }
-            
-            .faq-console-item.expanded {
-              background: rgba(166, 137, 66, 0.03) !important;
-            }
-            
-            .final-cta-btn:hover {
-              transform: translateY(-4px) scale(1.02);
-              box-shadow: 
-                0 20px 60px rgba(166, 137, 66, 0.5),
-                0 0 120px rgba(166, 137, 66, 0.3) !important;
-              background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%) !important;
-            }
-          `}</style>
         </div>
 
         {/* ==================== AUTHORITY VAULT SECTION ==================== */}
@@ -4298,252 +3656,6 @@ The 3-month program consists of:
           </p>
         </div>
       </div>
-
-      {/* ==================== GRAPH LIGHTBOX MODAL ==================== */}
-      {showGraphLightbox && (
-        <div 
-          className="graph-lightbox-overlay"
-          onClick={() => setShowGraphLightbox(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px',
-            background: 'rgba(0, 0, 0, 0.9)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            animation: 'lightboxFadeIn 0.3s ease'
-          }}
-        >
-          {/* Glass Container */}
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'relative',
-              maxWidth: '1200px',
-              width: '100%',
-              background: 'rgba(255, 255, 255, 0.03)',
-              backdropFilter: 'blur(40px)',
-              WebkitBackdropFilter: 'blur(40px)',
-              borderRadius: '32px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              padding: '24px',
-              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(166, 137, 66, 0.1)',
-              animation: 'lightboxScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setShowGraphLightbox(false)}
-              style={{
-                position: 'absolute',
-                top: '-20px',
-                right: '-20px',
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                background: 'rgba(10, 10, 10, 0.9)',
-                border: '2px solid #A68942',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                zIndex: 10
-              }}
-              className="lightbox-close-btn"
-            >
-              <X size={24} color="#A68942" strokeWidth={2.5} />
-            </button>
-            
-            {/* Full Size Image */}
-            <img 
-              src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
-              alt="Freenachos Results Graph - Full Size"
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '20px',
-                display: 'block'
-              }}
-            />
-            
-            {/* Caption */}
-            <div style={{
-              textAlign: 'center',
-              marginTop: '20px',
-              fontSize: '14px',
-              color: 'rgba(240, 240, 240, 0.6)'
-            }}>
-              Verified results at 1KNL+ &nbsp;•&nbsp; 6.2bb/100 win rate &nbsp;•&nbsp; 10M+ hands
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Lightbox Animations */}
-      <style>{`
-        @keyframes lightboxFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes lightboxScaleIn {
-          from { 
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to { 
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        .lightbox-close-btn:hover {
-          background: rgba(166, 137, 66, 0.15) !important;
-          transform: scale(1.1);
-          box-shadow: 0 0 30px rgba(166, 137, 66, 0.3);
-        }
-      `}</style>
-
-      {/* ==================== TESTIMONIAL GRAPH LIGHTBOX MODAL ==================== */}
-      {testimonialLightbox.show && (
-        <div 
-          className="testimonial-lightbox-overlay"
-          onClick={() => setTestimonialLightbox({ show: false, image: null, isBefore: false, imageAfter: null })}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px',
-            background: 'rgba(0, 0, 0, 0.92)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            animation: 'lightboxFadeIn 0.3s ease'
-          }}
-        >
-          {/* Glass Container */}
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'relative',
-              maxWidth: '1000px',
-              width: '100%',
-              background: 'rgba(255, 255, 255, 0.03)',
-              backdropFilter: 'blur(40px)',
-              WebkitBackdropFilter: 'blur(40px)',
-              borderRadius: '32px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              padding: '24px',
-              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.5), 0 0 80px rgba(166, 137, 66, 0.1)',
-              animation: 'lightboxScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setTestimonialLightbox({ show: false, image: null, isBefore: false, imageAfter: null })}
-              style={{
-                position: 'absolute',
-                top: '-20px',
-                right: '-20px',
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                background: 'rgba(10, 10, 10, 0.9)',
-                border: '2px solid #A68942',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                zIndex: 10
-              }}
-              className="lightbox-close-btn"
-            >
-              <X size={24} color="#A68942" strokeWidth={2.5} />
-            </button>
-            
-            {/* Before/After Toggle for dual images */}
-            {testimonialLightbox.imageAfter && (
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '16px',
-                marginBottom: '20px'
-              }}>
-                <button
-                  onClick={() => setTestimonialLightbox(prev => ({ ...prev, isBefore: true }))}
-                  style={{
-                    padding: '10px 24px',
-                    borderRadius: '25px',
-                    border: testimonialLightbox.isBefore ? '2px solid #A68942' : '1px solid rgba(255, 255, 255, 0.2)',
-                    background: testimonialLightbox.isBefore ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    color: testimonialLightbox.isBefore ? '#A68942' : 'rgba(255, 255, 255, 0.6)',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  Before
-                </button>
-                <button
-                  onClick={() => setTestimonialLightbox(prev => ({ ...prev, isBefore: false }))}
-                  style={{
-                    padding: '10px 24px',
-                    borderRadius: '25px',
-                    border: !testimonialLightbox.isBefore ? '2px solid #A68942' : '1px solid rgba(255, 255, 255, 0.2)',
-                    background: !testimonialLightbox.isBefore ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    color: !testimonialLightbox.isBefore ? '#A68942' : 'rgba(255, 255, 255, 0.6)',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  After
-                </button>
-              </div>
-            )}
-            
-            {/* Full Size Image */}
-            <img 
-              src={testimonialLightbox.imageAfter 
-                ? (testimonialLightbox.isBefore ? testimonialLightbox.image : testimonialLightbox.imageAfter)
-                : testimonialLightbox.image
-              }
-              alt="Student Results Graph - Full Size"
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '20px',
-                display: 'block',
-                maxHeight: '70vh',
-                objectFit: 'contain'
-              }}
-            />
-            
-            {/* Caption */}
-            <div style={{
-              textAlign: 'center',
-              marginTop: '20px',
-              fontSize: '14px',
-              color: 'rgba(240, 240, 240, 0.6)'
-            }}>
-              {testimonialLightbox.imageAfter 
-                ? (testimonialLightbox.isBefore ? 'Before coaching' : 'After coaching with Nachos Poker')
-                : 'Verified student results'
-              }
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
