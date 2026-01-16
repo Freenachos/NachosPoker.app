@@ -1052,17 +1052,21 @@ The 3-month program consists of:
         }}
       />
 
-      {/* Sticky CTA Button - Only visible after scrolling to About section */}
+      {/* Floating Discord DM Button - Only visible after scrolling to About section */}
       {showStickyCta && (
         <div className="sticky-cta">
           <a 
-            href="https://calendly.com/freenachos/intro" 
+            href="https://discord.com/users/420357572109926411" 
             target="_blank" 
             rel="noopener noreferrer"
             className="sticky-cta-btn"
           >
-            <Calendar size={18} />
-            Apply Now
+            <img 
+              src="https://e7.pngegg.com/pngimages/686/413/png-clipart-discord-computer-icons-android-android-smiley-online-chat.png" 
+              alt="Discord"
+              style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+            />
+            Discord DM
           </a>
         </div>
       )}
@@ -1217,8 +1221,8 @@ The 3-month program consists of:
 
         .sticky-cta {
           position: fixed;
-          bottom: 24px;
-          right: 24px;
+          bottom: 32px;
+          right: 32px;
           z-index: 1000;
           animation: fadeInUp 0.4s ease-out 1s both;
         }
@@ -1564,12 +1568,12 @@ The 3-month program consists of:
           
           /* Sticky CTA */
           .sticky-cta {
-            bottom: 16px !important;
-            right: 16px !important;
+            bottom: 20px !important;
+            right: 20px !important;
           }
           
           .sticky-cta-btn {
-            padding: 14px 20px !important;
+            padding: 12px 18px !important;
             font-size: 14px !important;
           }
         }
