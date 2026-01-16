@@ -249,8 +249,8 @@ The 3-month program consists of:
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -50px 0px',
-      threshold: 0.1
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.15
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -261,8 +261,8 @@ The 3-month program consists of:
       });
     }, observerOptions);
 
-    // Observe all elements with the 'reveal' class
-    const revealElements = document.querySelectorAll('.reveal');
+    // Observe all elements with 'reveal' or 'reveal-first' class
+    const revealElements = document.querySelectorAll('.reveal, .reveal-first');
     revealElements.forEach(el => observer.observe(el));
 
     return () => observer.disconnect();
@@ -357,6 +357,237 @@ The 3-month program consists of:
       <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8"/>
     </svg>
   );
+
+  // ============================================
+  // NAVBAR COMPONENT - Floating Overlay Style
+  // ============================================
+  
+  const NachosPokerNavBar = () => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    
+    const navLinks = [
+      { label: 'Mentorship', href: '#mentorship' },
+      { label: 'Results', href: '#testimonials' },
+      { label: 'Tools', href: '#tools' },
+      { label: 'Videos', href: '#videos' },
+    ];
+
+    return (
+      <nav 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          zIndex: 50,
+          padding: '20px 0'
+        }}
+      >
+        {/* Inner container - aligned with hero max-w-7xl (1280px) */}
+        <div 
+          style={{
+            maxWidth: '1280px',
+            width: '100%',
+            margin: '0 auto',
+            padding: '0 48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          {/* Logo */}
+          <a 
+            href="/" 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              textDecoration: 'none'
+            }}
+          >
+            {/* Nacho Icon */}
+            <svg width="36" height="36" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3))' }}>
+              <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#D4AF37" stroke="#B8941F" strokeWidth="2"/>
+              <ellipse cx="50" cy="50" rx="18" ry="14" fill="#D4AF37" />
+              <ellipse cx="42" cy="48" rx="6" ry="7" fill="white" />
+              <ellipse cx="58" cy="48" rx="6" ry="7" fill="white" />
+              <circle cx="42" cy="49" r="3" fill="#0A0A0A"/>
+              <circle cx="58" cy="49" r="3" fill="#0A0A0A"/>
+              <path d="M42 60 Q50 68 58 60" fill="none" stroke="#0A0A0A" strokeWidth="2.5" strokeLinecap="round"/>
+            </svg>
+            
+            <span style={{
+              fontSize: '22px',
+              fontWeight: '700',
+              color: '#D4AF37',
+              letterSpacing: '-0.02em',
+              fontFamily: 'Manrope, Inter, sans-serif'
+            }}>
+              Freenachos
+            </span>
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <div 
+            className="nav-links-desktop"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            {navLinks.map((link, idx) => (
+              <a
+                key={idx}
+                href={link.href}
+                style={{
+                  color: '#A1A1AA',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  padding: '10px 18px',
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = '#FFFFFF';
+                  e.target.style.background = 'rgba(212, 175, 55, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = '#A1A1AA';
+                  e.target.style.background = 'transparent';
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+            
+            {/* CTA Button */}
+            <a
+              href="https://calendly.com/freenachos/intro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-hover"
+              style={{
+                background: 'transparent',
+                border: '1.5px solid #D4AF37',
+                color: '#D4AF37',
+                fontSize: '14px',
+                fontWeight: '600',
+                padding: '10px 22px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                marginLeft: '12px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#D4AF37';
+                e.target.style.color = '#0A0A0A';
+                e.target.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.color = '#D4AF37';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              Book Call
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="nav-mobile-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              display: 'none',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '8px'
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2">
+              {mobileMenuOpen ? (
+                <path d="M6 6L18 18M6 18L18 6" strokeLinecap="round"/>
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round"/>
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div 
+            className="nav-mobile-menu"
+            style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              background: 'rgba(10, 10, 10, 0.98)',
+              backdropFilter: 'blur(20px)',
+              borderTop: '1px solid rgba(212, 175, 55, 0.2)',
+              padding: '20px 48px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}
+          >
+            {navLinks.map((link, idx) => (
+              <a
+                key={idx}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  color: '#A1A1AA',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  padding: '14px 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)'
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              href="https://calendly.com/freenachos/intro"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                background: '#D4AF37',
+                color: '#0A0A0A',
+                fontSize: '15px',
+                fontWeight: '600',
+                padding: '14px 24px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                textAlign: 'center',
+                marginTop: '12px'
+              }}
+            >
+              Book Call
+            </a>
+          </div>
+        )}
+
+        {/* Responsive Styles */}
+        <style>{`
+          @media (max-width: 768px) {
+            .nav-links-desktop {
+              display: none !important;
+            }
+            .nav-mobile-btn {
+              display: block !important;
+            }
+          }
+        `}</style>
+      </nav>
+    );
+  };
 
   // Graph image component for testimonials
   const TestimonialGraph = ({ src }) => (
@@ -981,19 +1212,36 @@ The 3-month program consists of:
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
         
+        /* Smooth Scroll Behavior */
+        html {
+          scroll-behavior: smooth;
+        }
+
         /* Noise Texture Overlay */
         .noise-overlay {
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-        /* Scroll Reveal Animation */
+        /* Scroll Reveal Animation - Museum Float */
         .reveal {
           opacity: 0;
-          transform: translateY(32px);
-          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(48px);
+          transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
         .reveal.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* First Section - Extra Dramatic Entrance */
+        .reveal-first {
+          opacity: 0;
+          transform: translateY(60px);
+          transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal-first.visible {
           opacity: 1;
           transform: translateY(0);
         }
@@ -1382,10 +1630,10 @@ The 3-month program consists of:
           }
         }
 
-        /* Ghost Fade Mask - 75% solid, 25% fade */
+        /* Ghost Fade Mask - Aggressive Vanishing Effect */
         .hero-image-mask {
-          mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+          mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+          -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
         }
       `}</style>
 
@@ -1398,6 +1646,9 @@ The 3-month program consists of:
           overflow: 'hidden'
         }}
       >
+        {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
+        <NachosPokerNavBar />
+
         {/* === LAYER A: Atmospheric Shapes (z-0) - Deep Background === */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
           {/* Massive Atmospheric Shape - Top Right Corner */}
@@ -1551,7 +1802,7 @@ The 3-month program consists of:
               maxWidth: '1280px',
               margin: '0 auto',
               padding: '0 48px',
-              paddingTop: '60px',
+              paddingTop: '140px',
               paddingBottom: '80px'
             }}
           >
@@ -1662,14 +1913,37 @@ The 3-month program consists of:
             }
           }
         `}</style>
+
+        {/* === FLOOR FOG: Atmospheric Transition (z-25) === */}
+        <div 
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            height: '35vh',
+            background: 'linear-gradient(to top, #0A0A0A 0%, rgba(10, 10, 10, 0.8) 40%, rgba(10, 10, 10, 0) 100%)',
+            zIndex: 25,
+            pointerEvents: 'none'
+          }}
+        />
       </section>
+
+      {/* ==================== MUSEUM SPACER: Pure Atmosphere ==================== */}
+      <div 
+        style={{
+          height: '280px',
+          position: 'relative',
+          zIndex: 1
+        }}
+      />
 
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
       <div style={{position: 'relative', zIndex: 2, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
-        {/* About Section */}
+        {/* About Section - First Card with Extra Dramatic Entrance */}
         <div 
-          className="glass-card reveal"
+          className="glass-card reveal-first"
           style={{
             borderRadius: '24px',
             padding: '64px',
@@ -1813,6 +2087,7 @@ The 3-month program consists of:
 
         {/* What You Get in the Mentorship Program Section */}
         <div 
+          id="mentorship"
           className="glass-card reveal"
           style={{
             borderRadius: '24px',
@@ -1886,6 +2161,7 @@ The 3-month program consists of:
 
         {/* Testimonials Section */}
         <div 
+          id="testimonials"
           className="glass-card reveal"
           style={{
             borderRadius: '24px',
