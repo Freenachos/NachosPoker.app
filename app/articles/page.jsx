@@ -41,7 +41,7 @@ import {
   ClipboardPaste,
   Calendar
 } from 'lucide-react';
-import { articlesApi, authApi } from '@/lib/supabaseClient';
+import { articlesApi, authApi, storageApi } from '@/lib/supabaseClient';
 
 /**
  * FreeNachos Articles Page
@@ -569,6 +569,10 @@ export default function FreeNachosArticles() {
   const [scheduleDate, setScheduleDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
   
+  // Image upload
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  
   const [nachos, setNachos] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const nachoRef = useRef(null);
@@ -708,6 +712,41 @@ export default function FreeNachosArticles() {
     }
   };
   
+  // Handle pasted images in the Notion modal
+  const handlePasteWithImages = async (e) => {
+    const clipboardData = e.clipboardData;
+    if (!clipboardData) return;
+    
+    const items = Array.from(clipboardData.items);
+    const imageItems = items.filter(item => item.type.startsWith('image/'));
+    
+    if (imageItems.length > 0) {
+      e.preventDefault();
+      setUploadingImages(true);
+      
+      try {
+        const newUrls = [];
+        for (const item of imageItems) {
+          const file = item.getAsFile();
+          if (file) {
+            const url = await storageApi.uploadImage(file);
+            newUrls.push(url);
+          }
+        }
+        setUploadedImages([...uploadedImages, ...newUrls]);
+        
+        // Add image URLs to the text content
+        const imageText = newUrls.map(url => `\n${url}\n`).join('');
+        setNotionContent(prev => prev + imageText);
+      } catch (err) {
+        console.error('Error uploading image:', err);
+        setError('Failed to upload image: ' + err.message);
+      } finally {
+        setUploadingImages(false);
+      }
+    }
+  };
+  
   // Notion paste handler
   const handleNotionPaste = () => {
     if (!notionContent.trim()) return;
@@ -738,6 +777,7 @@ export default function FreeNachosArticles() {
     });
     
     setNotionContent('');
+    setUploadedImages([]);
     setShowNotionPaste(false);
   };
 
@@ -1069,7 +1109,7 @@ export default function FreeNachosArticles() {
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: '4px 0 0' }}>Copy your Notion content and paste it here</p>
             </div>
           </div>
-          <button onClick={() => { setShowNotionPaste(false); setNotionContent(''); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
+          <button onClick={() => { setShowNotionPaste(false); setNotionContent(''); setUploadedImages([]); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
             <X size={18} color="rgba(255,255,255,0.6)" />
           </button>
         </div>
@@ -1078,14 +1118,28 @@ export default function FreeNachosArticles() {
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: 0, lineHeight: 1.6 }}>
             <strong style={{ color: '#FFB347' }}>Supported:</strong> Headings, paragraphs, lists, code blocks, quotes, callouts, <strong>**bold**</strong>, <em>*italic*</em>
             <br />
-            <strong style={{ color: '#FFB347' }}>Images:</strong> Replace Notion image attachments with direct URLs (paste URL on its own line)
+            <strong style={{ color: '#FFB347' }}>Images:</strong> Paste images directly (auto-uploads) or paste image URLs on their own line
           </p>
         </div>
+        
+        {uploadingImages && (
+          <div style={{ background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', border: '1px solid rgba(59, 130, 246, 0.2)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Loader size={16} className="spin" color="#60a5fa" />
+            <p style={{ color: '#60a5fa', fontSize: '13px', margin: 0 }}>Uploading image...</p>
+          </div>
+        )}
+        
+        {uploadedImages.length > 0 && !uploadingImages && (
+          <div style={{ background: 'rgba(34, 197, 94, 0.1)', borderRadius: '8px', padding: '12px 16px', marginBottom: '16px', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+            <p style={{ color: '#22c55e', fontSize: '13px', margin: 0 }}>✓ {uploadedImages.length} image{uploadedImages.length > 1 ? 's' : ''} uploaded</p>
+          </div>
+        )}
         
         <textarea
           value={notionContent}
           onChange={(e) => setNotionContent(e.target.value)}
-          placeholder="Paste your Notion content here (Ctrl+V / Cmd+V)..."
+          onPaste={handlePasteWithImages}
+          placeholder="Paste your Notion content here (Ctrl+V / Cmd+V)... You can also paste images directly!"
           style={{
             flex: 1,
             minHeight: '250px',
@@ -1106,24 +1160,24 @@ export default function FreeNachosArticles() {
         
         <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
           <button 
-            onClick={() => { setShowNotionPaste(false); setNotionContent(''); }} 
+            onClick={() => { setShowNotionPaste(false); setNotionContent(''); setUploadedImages([]); }} 
             style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', padding: '14px', color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}
           >
             Cancel
           </button>
           <button 
             onClick={handleNotionPaste} 
-            disabled={!notionContent.trim()}
+            disabled={!notionContent.trim() || uploadingImages}
             style={{ 
               flex: 2, 
-              background: notionContent.trim() ? '#FFB347' : 'rgba(255, 179, 71, 0.3)', 
+              background: (notionContent.trim() && !uploadingImages) ? '#FFB347' : 'rgba(255, 179, 71, 0.3)', 
               border: 'none', 
               borderRadius: '8px', 
               padding: '14px', 
-              color: notionContent.trim() ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
+              color: (notionContent.trim() && !uploadingImages) ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
               fontSize: '14px', 
               fontWeight: '600', 
-              cursor: notionContent.trim() ? 'pointer' : 'not-allowed',
+              cursor: (notionContent.trim() && !uploadingImages) ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
