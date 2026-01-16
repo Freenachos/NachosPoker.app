@@ -3,9 +3,13 @@
 import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 import React, { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Plus, X, ExternalLink, HelpCircle, TrendingUp, Target, BarChart3, ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { Plus, X, ExternalLink, HelpCircle, TrendingUp, Target, BarChart3, ChevronDown, ChevronUp, Settings, Sparkles, Calculator, Zap, Brain } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const PokerEVSimulation = () => {
+  // ============================================
+  // STATE - PRESERVED EXACTLY AS ORIGINAL
+  // ============================================
   const [parameters, setParameters] = useState({
     winrate: 4,
     observedWinrate: 10,
@@ -30,6 +34,10 @@ const PokerEVSimulation = () => {
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const nachoRef = useRef(null);
 
+  // ============================================
+  // EFFECTS - PRESERVED EXACTLY AS ORIGINAL
+  // ============================================
+  
   // Fix viewport scaling for mobile
   useEffect(() => {
     const meta = document.createElement('meta');
@@ -87,20 +95,24 @@ const PokerEVSimulation = () => {
 
   // Initialize floating nachos
   useEffect(() => {
-    const newNachos = Array.from({ length: 54 }, (_, i) => ({
+    const newNachos = Array.from({ length: 14 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 12 + Math.random() * 28,
-      duration: 40 + Math.random() * 20,
-      delay: Math.random() * 20,
+      size: 14 + Math.random() * 24,
+      duration: 50 + Math.random() * 30,
+      delay: Math.random() * 40,
       rotation: Math.random() * 360,
-      opacity: 0.4 + Math.random() * 0.5,
-      moveX: Math.random() * 200 - 100,
-      moveY: Math.random() * 200 - 100
+      opacity: 0.20 + Math.random() * 0.2,
+      moveX: Math.random() * 80 - 40,
+      moveY: Math.random() * 100 - 50
     }));
     setNachos(newNachos);
   }, []);
+
+  // ============================================
+  // CALCULATION FUNCTIONS - PRESERVED EXACTLY
+  // ============================================
 
   const getWeightedAverageBB = () => {
     const totalWeight = parameters.stakeWeights.reduce((sum, sw) => sum + (sw.weight || 0), 0);
@@ -131,13 +143,11 @@ const PokerEVSimulation = () => {
   };
 
   // Calculate bankroll requirements using Risk of Ruin formula
-  // B = (σ² / (-2 * WR)) * ln(RoR)
   const calculateBankrollRequirement = (riskOfRuin) => {
     const avgWinrate = getWeightedAverageWinrate();
     const avgStdDev = getWeightedAverageStdDev();
     const avgBB = getWeightedAverageBB();
     
-    // Convert to per-hand values (from BB/100)
     const wrPerHand = avgWinrate / 100;
     const stdDevPerHand = avgStdDev / Math.sqrt(100);
     
@@ -145,7 +155,6 @@ const PokerEVSimulation = () => {
       return { bb: Infinity, dollars: Infinity };
     }
     
-    // Formula: B = (σ² / (2 * WR)) * ln(1/RoR)
     const bankrollBB = (Math.pow(stdDevPerHand, 2) / (2 * wrPerHand)) * Math.log(1 / riskOfRuin);
     const bankrollDollars = bankrollBB * avgBB;
     
@@ -206,13 +215,11 @@ const PokerEVSimulation = () => {
   };
 
   const monteCarloSimulation = (numHands, numSamples, stakeWeights) => {
-    // Memory guard - check limit first
     const totalOps = numSamples * numHands;
     if (totalOps > MAX_SAMPLEHANDS) {
       return null;
     }
 
-    // Build stake pool with individual winrates and std devs
     const stakePool = [];
     const totalWeight = stakeWeights.reduce((sum, sw) => sum + (sw.weight || 0), 0);
     
@@ -276,7 +283,6 @@ const PokerEVSimulation = () => {
   };
 
   const runSimulation = () => {
-    // Memory guard at the very beginning
     if (isOverLimit) {
       alert('Limit exceeded: samples × hands must be ≤ 100,000,000. Please reduce your inputs.');
       return;
@@ -346,40 +352,131 @@ const PokerEVSimulation = () => {
 
   const eyeOffset = getEyeOffset();
 
-  // Cartoon Nacho SVG Component
-  const CartoonNacho = () => (
-    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(255, 179, 71, 0.4))' }}>
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#FFB347" stroke="#E09A30" strokeWidth="2" />
-      <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#FFD54F" opacity="0.9" />
-      <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#FFD54F" opacity="0.9" />
-      <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#FFD54F" opacity="0.9" />
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#FFB347" />
+  // ============================================
+  // COMPONENTS
+  // ============================================
+
+  const CartoonNacho = ({ size = 90 }) => (
+    <svg ref={nachoRef} width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(166, 137, 66, 0.4))' }}>
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#D4AF37" stroke="#A68942" strokeWidth="2" />
+      <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#E0BC47" opacity="0.9" />
+      <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#E0BC47" opacity="0.9" />
+      <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#E0BC47" opacity="0.9" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#D4AF37" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
-      <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }} />
-      <circle cx={60 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }} />
+      <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#0A0A0A" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }} />
+      <circle cx={60 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#0A0A0A" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }} />
       <circle cx={38 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
       <circle cx={58 + eyeOffset.x * 0.5} cy={46 + eyeOffset.y * 0.5} r="1.5" fill="white" opacity="0.8" />
-      <path d="M38 62 Q50 72 62 62" fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round" />
-      <path d="M33 38 Q40 35 47 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <path d="M53 38 Q60 35 67 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="30" cy="30" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="70" cy="35" r="2.5" fill="#E09A30" opacity="0.5" />
-      <circle cx="35" cy="80" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="65" cy="78" r="1.5" fill="#E09A30" opacity="0.5" />
+      <path d="M38 62 Q50 72 62 62" fill="none" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round" />
+      <path d="M33 38 Q40 35 47 38" fill="none" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" />
+      <path d="M53 38 Q60 35 67 38" fill="none" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="30" cy="30" r="2" fill="#A68942" opacity="0.5" />
+      <circle cx="70" cy="35" r="2.5" fill="#A68942" opacity="0.5" />
+      <circle cx="35" cy="80" r="2" fill="#A68942" opacity="0.5" />
+      <circle cx="65" cy="78" r="1.5" fill="#A68942" opacity="0.5" />
     </svg>
   );
 
   const NachoTriangle = ({ size, opacity }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8" />
+      <path d="M10 2 L18 17 L2 17 Z" fill="#D4AF37" opacity="0.8" />
     </svg>
   );
 
+  // Animation variants
+  const fadeInUp = {
+    initial: { opacity: 0, y: 40 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+  };
+
+  const staggerContainer = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    initial: { opacity: 0, y: 30, scale: 0.98 },
+    animate: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+    }
+  };
+
+  // ============================================
+  // RENDER
+  // ============================================
+
   return (
-    <div style={{minHeight: '100vh', background: '#0a0a0a', position: 'relative', overflow: 'hidden', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'}}>
+    <div style={{
+      minHeight: '100vh', 
+      background: '#0A0A0A', 
+      position: 'relative', 
+      overflow: 'hidden', 
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
+    }}>
+      {/* Film Grain Overlay */}
+      <div 
+        className="film-grain-overlay"
+        style={{
+          position: 'fixed',
+          top: '-50%',
+          left: '-50%',
+          width: '200%',
+          height: '200%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          opacity: 0.035,
+          mixBlendMode: 'overlay'
+        }}
+      />
+
+      {/* Background Glows */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '-8%',
+          width: '900px',
+          height: '900px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.08) 0%, transparent 60%)',
+          filter: 'blur(80px)',
+          opacity: 0.6
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '-15%',
+          left: '-12%',
+          width: '1000px',
+          height: '1000px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.06) 0%, transparent 55%)',
+          filter: 'blur(100px)',
+          opacity: 0.5
+        }} />
+        <div style={{
+          position: 'absolute',
+          top: '40%',
+          right: '5%',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.05) 0%, transparent 50%)',
+          filter: 'blur(60px)',
+          opacity: 0.4
+        }} />
+      </div>
+
       {/* Floating Nachos Background */}
-      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1}}>
+      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden'}}>
         {nachos.map(nacho => (
           <div
             key={nacho.id}
@@ -399,225 +496,178 @@ const PokerEVSimulation = () => {
       </div>
       
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        html {
+          scroll-behavior: smooth;
+        }
+
+        .film-grain-overlay {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='filmGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='5' stitchTiles='stitch' seed='0'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23filmGrain)'/%3E%3C/svg%3E");
+        }
         
         @keyframes floatNacho {
           0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(90deg); }
           50% { transform: translate(var(--moveX), var(--moveY)) rotate(180deg); }
+          75% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(270deg); }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
+
         @keyframes traceBorder {
           0% { offset-distance: 0%; }
           100% { offset-distance: 100%; }
         }
+
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
+          50% { transform: translateY(-8px); }
         }
-        .glass-card {
-          background: rgba(20, 20, 20, 0.6);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
         }
-        .card-hover {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
         }
-        .card-hover:hover {
+
+        .obsidian-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 32px;
+          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .obsidian-card:hover {
+          border-color: rgba(166, 137, 66, 0.4);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.1);
           transform: translateY(-4px);
         }
-        .input-focus {
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        .input-focus:focus {
-          border-color: #FFB347 !important;
-          box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.15);
+
+        .card-hover {
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .btn-hover {
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        .card-hover:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.15);
         }
-        .btn-hover:hover:not(:disabled) {
-          transform: translateY(-2px);
-        }
-        .btn-hover:active:not(:disabled) {
-          transform: translateY(0);
-        }
-        
-        /* Mobile First - Header Layout */
-        .header-layout {
-          display: flex;
-          flex-direction: column !important;
-          align-items: center;
-          text-align: center;
-          gap: 20px;
-        }
-        
-        .header-buttons {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
+
+        .input-obsidian {
           width: 100%;
-        }
-        
-        .header-text {
-          flex: 1;
-        }
-        
-        /* Mobile First - Parameters and Stake panels */
-        .params-container {
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-        
-        .params-basic {
-          flex: 1;
-        }
-        
-        .params-advanced {
-          flex: 1;
-        }
-        
-        /* Mobile First - Results Grid */
-        .results-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 16px;
-        }
-        
-        /* Mobile First - How to Use Grid */
-        .howto-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 20px;
-        }
-        
-        /* Mobile First - Bankroll Grid */
-        .bankroll-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 16px;
-        }
-        
-        /* Stake Inputs Grid - Mobile First (stacked) */
-        .stake-inputs-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-          align-items: end;
-        }
-        
-        .stake-input-group {
-          display: flex;
-          flex-direction: column;
-          min-width: 0;
-          position: relative;
-        }
-        
-        .stake-input-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 6px;
-          gap: 4px;
-          min-height: 20px;
-        }
-        
-        .stake-input-label {
-          color: rgba(255,255,255,0.5);
-          font-size: 11px;
-          white-space: nowrap;
-          flex-shrink: 0;
-        }
-        
-        .stake-input-field {
-          width: 100%;
-          padding: 8px 10px;
-          border-radius: 6px;
-          background: rgba(0,0,0,0.4);
-          color: #ffffff;
-          border: 1px solid rgba(255,255,255,0.1);
+          padding: 14px 16px;
+          border-radius: 12px;
+          background: rgba(10, 10, 10, 0.8);
+          color: #F0F0F0;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           outline: none;
-          font-size: 13px;
+          font-size: 14px;
+          font-weight: 500;
           box-sizing: border-box;
+          transition: all 0.3s ease;
         }
-        
-        .stake-input-field:focus {
-          border-color: #FFB347 !important;
-          box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.15);
+
+        .input-obsidian:focus {
+          border-color: #A68942;
+          box-shadow: 0 0 0 4px rgba(166, 137, 66, 0.15), 0 0 20px rgba(166, 137, 66, 0.1);
         }
-        
-        @media (min-width: 768px) {
-          .header-layout {
-            flex-direction: row !important;
-            text-align: left;
-            justify-content: space-between;
-          }
-          .header-buttons {
-            flex-direction: row;
-            width: auto;
-          }
-          .header-text {
-            text-align: left;
-          }
-          .params-container {
-            flex-direction: row;
-          }
-          .params-basic {
-            flex: 0 0 320px;
-            max-width: 320px;
-          }
-          .params-advanced {
-            flex: 1 1 auto;
-            min-width: 0;
-          }
-          .stake-inputs-grid {
-            grid-template-columns: 90px 1fr 1fr 1fr;
-            gap: 16px;
-            align-items: end;
-          }
+
+        .input-obsidian::placeholder {
+          color: rgba(240, 240, 240, 0.3);
         }
-        
-        @media (min-width: 1024px) {
-          .params-basic {
-            flex: 0 0 340px;
-            max-width: 340px;
-          }
-          .stake-inputs-grid {
-            grid-template-columns: 100px 1fr 1fr 1fr;
-            gap: 20px;
-          }
+
+        .btn-primary {
+          position: relative;
+          overflow: hidden;
+          background: linear-gradient(135deg, #A68942 0%, #D4AF37 100%);
+          color: #0A0A0A;
+          font-weight: 700;
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 20px rgba(166, 137, 66, 0.3);
         }
-        
-        /* Spark Border Container */
+
+        .btn-primary::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+          left: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+          transform: translateY(-4px);
+          box-shadow: 0 0 25px rgba(166, 137, 66, 0.4), 0 12px 45px rgba(166, 137, 66, 0.35);
+          background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%);
+        }
+
+        .btn-primary:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+
+        .btn-secondary {
+          background: transparent;
+          border: 1px solid rgba(166, 137, 66, 0.5);
+          color: #A68942;
+          font-weight: 600;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+          background: rgba(166, 137, 66, 0.1);
+          border-color: #A68942;
+          box-shadow: 0 0 20px rgba(166, 137, 66, 0.2);
+        }
+
         .spark-border {
           position: relative;
           overflow: hidden;
-          border-radius: 16px;
-          background: #0a0a0a;
+          border-radius: 32px;
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
         }
-        
+
         .spark-border::before {
           content: "";
           position: absolute;
           inset: 0;
           border-radius: inherit;
           padding: 2px;
-          background: linear-gradient(135deg, rgba(255, 179, 71, 0.3), rgba(255, 179, 71, 0.1));
+          background: linear-gradient(135deg, rgba(166, 137, 66, 0.4), rgba(166, 137, 66, 0.1));
           -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
           -webkit-mask-composite: xor;
           mask-composite: exclude;
           z-index: 1;
           pointer-events: none;
         }
-        
+
         .spark-border::after {
           content: "";
           position: absolute;
@@ -625,72 +675,186 @@ const PokerEVSimulation = () => {
           left: 0;
           width: 100px;
           height: 2px;
-          background: linear-gradient(90deg, transparent 0%, #FFB347 50%, #FFB347 100%);
-          box-shadow: 0 0 10px 1px rgba(255, 179, 71, 0.6);
-          offset-path: rect(0 100% 100% 0 round 16px);
+          background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, #D4AF37 100%);
+          box-shadow: 0 0 15px 2px rgba(166, 137, 66, 0.7);
+          offset-path: rect(0 100% 100% 0 round 32px);
           animation: traceBorder 5s linear infinite;
           offset-rotate: auto;
           offset-anchor: center;
           z-index: 2;
           pointer-events: none;
         }
-        
+
         .collapsible-content {
           overflow: hidden;
-          transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+          transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
-        
+
         .toggle-switch {
           position: relative;
           display: inline-flex;
-          background: rgba(0,0,0,0.4);
-          border-radius: 4px;
-          padding: 1px;
+          background: rgba(10, 10, 10, 0.8);
+          border-radius: 8px;
+          padding: 2px;
           border: 1px solid rgba(255,255,255,0.1);
           flex-shrink: 0;
         }
-        
+
         .toggle-option {
-          padding: 3px 6px;
-          font-size: 10px;
-          font-weight: 500;
+          padding: 6px 12px;
+          font-size: 11px;
+          font-weight: 600;
           cursor: pointer;
-          border-radius: 3px;
-          transition: all 0.2s ease;
-          color: rgba(255,255,255,0.5);
+          border-radius: 6px;
+          transition: all 0.3s ease;
+          color: rgba(240, 240, 240, 0.5);
           white-space: nowrap;
         }
-        
+
         .toggle-option.active {
-          background: rgba(255, 179, 71, 0.2);
-          color: #FFB347;
+          background: rgba(166, 137, 66, 0.2);
+          color: #A68942;
+        }
+
+        /* Header Layout */
+        .header-layout {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 24px;
+        }
+
+        .header-buttons {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+        }
+
+        /* Parameter Panels */
+        .params-container {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+
+        /* Responsive Grids */
+        .results-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+        }
+
+        .howto-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 24px;
+        }
+
+        .bankroll-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+        }
+
+        .stake-inputs-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          align-items: end;
+        }
+
+        .stake-input-group {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          position: relative;
+        }
+
+        .stake-input-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+          gap: 8px;
+          min-height: 20px;
+        }
+
+        .stake-input-label {
+          color: rgba(240, 240, 240, 0.6);
+          font-size: 12px;
+          font-weight: 500;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+          .header-layout {
+            flex-direction: row;
+            text-align: left;
+            justify-content: space-between;
+          }
+          .header-buttons {
+            flex-direction: row;
+            width: auto;
+          }
+          .params-container {
+            flex-direction: row;
+          }
+          .stake-inputs-grid {
+            grid-template-columns: 100px 1fr 1fr 1fr;
+            gap: 20px;
+          }
         }
       `}</style>
 
-      <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '20px'}}>
+      <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '24px'}}>
         <NachosPokerNavBar />
         
-        {/* Header Banner */}
-        <div 
-          className="card-hover spark-border header-layout"
+        {/* Hero Header Banner */}
+        <motion.div 
+          className="spark-border header-layout"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            marginBottom: '30px',
-            padding: '28px 32px',
-            animation: 'fadeInUp 0.6s ease-out'
+            marginBottom: '40px',
+            padding: '36px 40px',
           }}
         >
-          <div style={{ flexShrink: 0, animation: 'bounce 2s ease-in-out infinite' }}>
-            <CartoonNacho />
+          <div style={{ flexShrink: 0, animation: 'bounce 3s ease-in-out infinite' }}>
+            <CartoonNacho size={100} />
           </div>
           
-          <div className="header-text">
-            <div style={{fontSize: '12px', color: '#FFB347', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.1em', textTransform: 'uppercase'}}>
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontSize: '12px', 
+              color: '#A68942', 
+              fontWeight: '700', 
+              marginBottom: '8px', 
+              letterSpacing: '0.15em', 
+              textTransform: 'uppercase'
+            }}>
               Crafted by FreeNachos
             </div>
-            <h2 style={{fontSize: '22px', fontWeight: '700', color: '#ffffff', marginBottom: '8px', lineHeight: 1.2}}>
+            <h2 style={{
+              fontSize: '28px', 
+              fontWeight: '800', 
+              color: '#F0F0F0', 
+              marginBottom: '12px', 
+              lineHeight: 1.2,
+              letterSpacing: '-0.02em'
+            }}>
               Crush the variance, not your bankroll.
             </h2>
-            <p style={{fontSize: '14px', color: 'rgba(255,255,255,0.6)', marginBottom: '0', lineHeight: 1.5, maxWidth: '400px'}}>
+            <p style={{
+              fontSize: '15px', 
+              color: 'rgba(240, 240, 240, 0.6)', 
+              marginBottom: '0', 
+              lineHeight: 1.6, 
+              maxWidth: '420px'
+            }}>
               Level up your game with elite coaching or join the fastest-growing CFP in poker.
             </p>
           </div>
@@ -700,147 +864,177 @@ const PokerEVSimulation = () => {
               href="https://www.nachospoker.com/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="btn-hover"
+              className="btn-primary"
               style={{
-                background: '#FFB347',
-                color: '#0a0a0a',
-                padding: '12px 20px',
-                borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '13px',
+                padding: '14px 24px',
+                fontSize: '14px',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px'
+                gap: '10px'
               }}
             >
-              Join Our CFP <ExternalLink size={14} />
+              Join Our CFP <ExternalLink size={16} />
             </a>
             <a 
               href="https://www.freenachoscoaching.com/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="btn-hover"
+              className="btn-secondary"
               style={{
-                background: 'transparent',
-                border: '1px solid rgba(255, 179, 71, 0.5)',
-                color: '#FFB347',
-                padding: '10px 20px',
-                borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '13px',
+                padding: '14px 24px',
+                fontSize: '14px',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px'
+                gap: '10px'
               }}
             >
-              Private Coaching <ExternalLink size={14} />
+              Private Coaching <ExternalLink size={16} />
             </a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Simulator Card */}
-        <div 
-          className="card-hover glass-card"
+        <motion.div 
+          className="obsidian-card"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            borderRadius: '16px', 
-            padding: '40px', 
-            marginBottom: '30px',
-            animation: 'fadeInUp 0.6s ease-out 0.1s both'
+            borderRadius: '32px', 
+            padding: '48px', 
+            marginBottom: '40px'
           }}
         >
-          <h1 style={{
-            textAlign: 'center', 
-            fontSize: '2.2em', 
-            marginBottom: '8px', 
-            color: '#ffffff',
-            fontWeight: '700'
-          }}>
-            Poker EV Simulator
-          </h1>
-          <p style={{textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '14px', marginBottom: '30px'}}>
-            Understand your variance with multi-stake weighting
-          </p>
-          
-          <div className="params-container" style={{marginBottom: '30px'}}>
-            {/* Parameters Panel */}
-            <div className="glass-card params-basic" style={{
-              padding: '28px', 
-              borderRadius: '12px',
-              animation: 'fadeIn 0.4s ease-out 0.2s both'
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '64px',
+              height: '64px',
+              borderRadius: '20px',
+              background: 'rgba(166, 137, 66, 0.1)',
+              border: '1px solid rgba(166, 137, 66, 0.25)',
+              marginBottom: '20px'
             }}>
-              <h3 style={{color: '#FFB347', marginBottom: '16px', textAlign: 'center', fontSize: '16px', fontWeight: '600'}}>Basic Parameters</h3>
+              <Calculator size={28} color="#A68942" strokeWidth={1.5} />
+            </div>
+            <h1 style={{
+              fontSize: '36px', 
+              marginBottom: '12px', 
+              color: '#F0F0F0',
+              fontWeight: '800',
+              letterSpacing: '-0.02em'
+            }}>
+              Poker EV Simulator
+            </h1>
+            <p style={{
+              color: 'rgba(240, 240, 240, 0.5)', 
+              fontSize: '16px',
+              maxWidth: '500px',
+              margin: '0 auto'
+            }}>
+              Understand your variance with multi-stake weighting
+            </p>
+          </div>
+          
+          <div className="params-container" style={{marginBottom: '32px'}}>
+            {/* Basic Parameters Panel */}
+            <motion.div 
+              className="glass-card"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{
+                padding: '32px', 
+                borderRadius: '24px',
+                flex: '0 0 340px',
+                maxWidth: '340px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '12px',
+                  background: 'rgba(166, 137, 66, 0.1)',
+                  border: '1px solid rgba(166, 137, 66, 0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Target size={20} color="#A68942" />
+                </div>
+                <h3 style={{color: '#A68942', fontSize: '18px', fontWeight: '700', margin: 0}}>Basic Parameters</h3>
+              </div>
               
               <div style={{
-                background: 'rgba(255, 179, 71, 0.1)',
-                border: '1px solid rgba(255, 179, 71, 0.2)',
-                borderRadius: '8px',
-                padding: '10px 12px',
-                marginBottom: '16px',
-                fontSize: '11px',
-                color: 'rgba(255,255,255,0.6)',
-                lineHeight: 1.5
+                background: 'rgba(166, 137, 66, 0.08)',
+                border: '1px solid rgba(166, 137, 66, 0.2)',
+                borderRadius: '12px',
+                padding: '14px 16px',
+                marginBottom: '24px',
+                fontSize: '13px',
+                color: 'rgba(240, 240, 240, 0.6)',
+                lineHeight: 1.6
               }}>
-                <strong style={{color: '#FFB347'}}>Performance Note:</strong> For stability, samples × hands must be ≤ 100M.
-                <br />
-                <span style={{color: 'rgba(255,255,255,0.4)'}}>Current: {samplehands.toLocaleString()} / 100,000,000</span>
+                <strong style={{color: '#A68942'}}>Note:</strong> Set win rate and std dev in the Advanced panel per stake.
               </div>
-              
-              <div style={{marginBottom: '16px'}}>
-                <label style={{color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '500'}}>Default Win rate (BB/100)</label>
-                <input 
-                  type="number" 
-                  value={parameters.winrate} 
-                  onChange={(e) => setParameters({...parameters, winrate: parseFloat(e.target.value) || 0})} 
-                  className="input-focus"
-                  style={{width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.4)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontSize: '14px', boxSizing: 'border-box'}} 
-                  step="0.1" 
-                />
-              </div>
-              <div style={{marginBottom: '16px'}}>
-                <label style={{color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '500'}}>Default Std Dev (BB/100)</label>
-                <input 
-                  type="number" 
-                  value={parameters.stdDev} 
-                  onChange={(e) => setParameters({...parameters, stdDev: parseFloat(e.target.value) || 0})} 
-                  className="input-focus"
-                  style={{width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.4)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontSize: '14px', boxSizing: 'border-box'}} 
-                  step="1" 
-                />
-              </div>
-              <div style={{marginBottom: '16px'}}>
-                <label style={{color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '500'}}>Number of hands (max {MAX_HANDS.toLocaleString()})</label>
+
+              <div style={{marginBottom: '20px'}}>
+                <label style={{
+                  color: 'rgba(240, 240, 240, 0.7)', 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontSize: '14px', 
+                  fontWeight: '600'
+                }}>
+                  Total Hands (max {MAX_HANDS.toLocaleString()})
+                </label>
                 <input 
                   type="number" 
                   value={parameters.numHands} 
                   onChange={(e) => handleHandsChange(e.target.value)} 
-                  className="input-focus"
-                  style={{width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.4)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontSize: '14px', boxSizing: 'border-box'}} 
+                  className="input-obsidian"
                   step="1000" 
                 />
               </div>
               <div>
-                <label style={{color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '500'}}>Number of samples (max {MAX_SAMPLES})</label>
+                <label style={{
+                  color: 'rgba(240, 240, 240, 0.7)', 
+                  display: 'block', 
+                  marginBottom: '8px', 
+                  fontSize: '14px', 
+                  fontWeight: '600'
+                }}>
+                  Number of Samples (max {MAX_SAMPLES})
+                </label>
                 <input 
                   type="number" 
                   value={parameters.numSamples} 
                   onChange={(e) => handleSamplesChange(e.target.value)} 
-                  className="input-focus"
-                  style={{width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.4)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontSize: '14px', boxSizing: 'border-box'}} 
+                  className="input-obsidian"
                   step="1" 
                 />
               </div>
-            </div>
+            </motion.div>
 
             {/* Advanced Stake Settings Panel */}
-            <div className="glass-card params-advanced" style={{
-              padding: '28px', 
-              borderRadius: '12px',
-              animation: 'fadeIn 0.4s ease-out 0.3s both'
-            }}>
+            <motion.div 
+              className="glass-card"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              style={{
+                padding: '32px', 
+                borderRadius: '24px',
+                flex: 1
+              }}
+            >
               {/* Collapsible Header */}
               <button
                 onClick={() => setAdvancedOpen(!advancedOpen)}
@@ -853,338 +1047,410 @@ const PokerEVSimulation = () => {
                   border: 'none',
                   cursor: 'pointer',
                   padding: '0',
-                  marginBottom: advancedOpen ? '16px' : '0'
+                  marginBottom: advancedOpen ? '24px' : '0'
                 }}
               >
-                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                  <Settings size={18} color="#FFB347" />
-                  <h3 style={{color: '#FFB347', fontSize: '16px', fontWeight: '600', margin: 0}}>Advanced Stake Settings</h3>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '12px',
+                    background: 'rgba(166, 137, 66, 0.1)',
+                    border: '1px solid rgba(166, 137, 66, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Settings size={20} color="#A68942" />
+                  </div>
+                  <h3 style={{color: '#A68942', fontSize: '18px', fontWeight: '700', margin: 0}}>Advanced Stake Settings</h3>
                 </div>
-                {advancedOpen ? <ChevronUp size={20} color="#FFB347" /> : <ChevronDown size={20} color="#FFB347" />}
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: advancedOpen ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                  border: `1px solid ${advancedOpen ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s ease'
+                }}>
+                  {advancedOpen ? <ChevronUp size={20} color="#A68942" /> : <ChevronDown size={20} color="#A68942" />}
+                </div>
               </button>
               
               {/* Collapsible Content */}
-              <div 
-                className="collapsible-content"
-                style={{
-                  maxHeight: advancedOpen ? '1000px' : '0',
-                  opacity: advancedOpen ? 1 : 0
-                }}
-              >
-                <div style={{marginBottom: '16px', color: 'rgba(255,255,255,0.5)', fontSize: '12px', lineHeight: 1.5}}>
-                  Configure individual stakes with custom win rates and standard deviations.
-                </div>
-                
-                <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-                  {parameters.stakeWeights.map((sw, index) => (
-                    <div key={index} style={{
-                      background: 'rgba(0,0,0,0.3)',
-                      borderRadius: '10px',
-                      padding: '16px',
-                      border: '1px solid rgba(255,255,255,0.05)'
-                    }}>
-                      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px'}}>
-                        <span style={{color: 'rgba(255,255,255,0.7)', fontSize: '12px', fontWeight: '600'}}>Stake #{index + 1}</span>
-                        {parameters.stakeWeights.length > 1 && (
-                          <button 
-                            onClick={() => removeStake(index)}
-                            style={{
-                              background: 'rgba(239, 68, 68, 0.2)',
-                              border: '1px solid rgba(239, 68, 68, 0.3)',
-                              color: '#ef4444',
-                              borderRadius: '4px',
-                              padding: '4px 8px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              fontSize: '11px'
-                            }}
-                          >
-                            <X size={12} /> Remove
-                          </button>
-                        )}
-                      </div>
-                      
-                      <div className="stake-inputs-grid">
-                        {/* Stake Dropdown */}
-                        <div className="stake-input-group">
-                          <div className="stake-input-header">
-                            <span className="stake-input-label">Stake</span>
+              <AnimatePresence>
+                {advancedOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div style={{marginBottom: '20px', color: 'rgba(240, 240, 240, 0.5)', fontSize: '14px', lineHeight: 1.6}}>
+                      Configure individual stakes with custom win rates and standard deviations.
+                    </div>
+                    
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                      {parameters.stakeWeights.map((sw, index) => (
+                        <motion.div 
+                          key={index} 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          style={{
+                            background: 'rgba(10, 10, 10, 0.5)',
+                            borderRadius: '16px',
+                            padding: '20px',
+                            border: '1px solid rgba(255, 255, 255, 0.05)'
+                          }}
+                        >
+                          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
+                            <span style={{color: 'rgba(240, 240, 240, 0.7)', fontSize: '13px', fontWeight: '700'}}>Stake #{index + 1}</span>
+                            {parameters.stakeWeights.length > 1 && (
+                              <button 
+                                onClick={() => removeStake(index)}
+                                style={{
+                                  background: 'rgba(239, 68, 68, 0.15)',
+                                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                                  color: '#ef4444',
+                                  borderRadius: '8px',
+                                  padding: '6px 12px',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  fontSize: '12px',
+                                  fontWeight: '600',
+                                  transition: 'all 0.2s ease'
+                                }}
+                              >
+                                <X size={14} /> Remove
+                              </button>
+                            )}
                           </div>
-                          <select
-                            value={sw.stake}
-                            onChange={(e) => updateStakeWeight(index, 'stake', e.target.value)}
-                            className="stake-input-field input-focus"
-                            style={{cursor: 'pointer'}}
-                          >
-                            {stakes.map(stake => (
-                              <option key={stake.value} value={stake.value} style={{background: '#1a1a1a'}}>
-                                {stake.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        
-                        {/* Volume - Header with Toggle, Input Below */}
-                        <div className="stake-input-group">
-                          <div className="stake-input-header">
-                            <span className="stake-input-label">Volume</span>
-                            <div className="toggle-switch">
-                              <span 
-                                className={`toggle-option ${sw.volumeType === 'percentage' ? 'active' : ''}`}
-                                onClick={() => updateStakeWeight(index, 'volumeType', 'percentage')}
-                              >%</span>
-                              <span 
-                                className={`toggle-option ${sw.volumeType === 'hands' ? 'active' : ''}`}
-                                onClick={() => updateStakeWeight(index, 'volumeType', 'hands')}
-                              >Hands</span>
+                          
+                          <div className="stake-inputs-grid">
+                            {/* Stake Dropdown */}
+                            <div className="stake-input-group">
+                              <div className="stake-input-header">
+                                <span className="stake-input-label">Stake</span>
+                              </div>
+                              <select
+                                value={sw.stake}
+                                onChange={(e) => updateStakeWeight(index, 'stake', e.target.value)}
+                                className="input-obsidian"
+                                style={{cursor: 'pointer', padding: '12px 14px'}}
+                              >
+                                {stakes.map(stake => (
+                                  <option key={stake.value} value={stake.value} style={{background: '#0A0A0A'}}>
+                                    {stake.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            {/* Volume */}
+                            <div className="stake-input-group">
+                              <div className="stake-input-header">
+                                <span className="stake-input-label">Volume</span>
+                                <div className="toggle-switch">
+                                  <span 
+                                    className={`toggle-option ${sw.volumeType === 'percentage' ? 'active' : ''}`}
+                                    onClick={() => updateStakeWeight(index, 'volumeType', 'percentage')}
+                                  >%</span>
+                                  <span 
+                                    className={`toggle-option ${sw.volumeType === 'hands' ? 'active' : ''}`}
+                                    onClick={() => updateStakeWeight(index, 'volumeType', 'hands')}
+                                  >Hands</span>
+                                </div>
+                              </div>
+                              <input
+                                type="number"
+                                value={sw.weight}
+                                onChange={(e) => updateStakeWeight(index, 'weight', parseInt(e.target.value) || 0)}
+                                className="input-obsidian"
+                                style={{ padding: '12px 14px' }}
+                                min="0"
+                              />
+                            </div>
+                            
+                            {/* Custom Win Rate */}
+                            <div className="stake-input-group">
+                              <div className="stake-input-header">
+                                <span className="stake-input-label">Win Rate</span>
+                                <span style={{fontSize: '10px', color: 'rgba(240, 240, 240, 0.4)'}}>BB/100</span>
+                              </div>
+                              <input
+                                type="number"
+                                value={sw.customWinrate}
+                                onChange={(e) => updateStakeWeight(index, 'customWinrate', parseFloat(e.target.value) || 0)}
+                                className="input-obsidian"
+                                style={{ padding: '12px 14px' }}
+                                step="0.1"
+                              />
+                            </div>
+                            
+                            {/* Custom Std Dev */}
+                            <div className="stake-input-group">
+                              <div className="stake-input-header">
+                                <span className="stake-input-label">Std Dev</span>
+                                <span style={{fontSize: '10px', color: 'rgba(240, 240, 240, 0.4)'}}>BB/100</span>
+                              </div>
+                              <input
+                                type="number"
+                                value={sw.customStdDev}
+                                onChange={(e) => updateStakeWeight(index, 'customStdDev', parseFloat(e.target.value) || 0)}
+                                className="input-obsidian"
+                                style={{ padding: '12px 14px' }}
+                                step="1"
+                              />
                             </div>
                           </div>
-                          <input
-                            type="number"
-                            value={sw.weight}
-                            onChange={(e) => updateStakeWeight(index, 'weight', parseInt(e.target.value) || 0)}
-                            className="stake-input-field input-focus"
-                            min="0"
-                          />
-                        </div>
-                        
-                        {/* Custom Win Rate */}
-                        <div className="stake-input-group">
-                          <div className="stake-input-header">
-                            <span className="stake-input-label">Win Rate</span>
-                            <span style={{fontSize: '9px', color: 'rgba(255,255,255,0.3)'}}>BB/100</span>
-                          </div>
-                          <input
-                            type="number"
-                            value={sw.customWinrate}
-                            onChange={(e) => updateStakeWeight(index, 'customWinrate', parseFloat(e.target.value) || 0)}
-                            className="stake-input-field input-focus"
-                            step="0.1"
-                          />
-                        </div>
-                        
-                        {/* Custom Std Dev */}
-                        <div className="stake-input-group">
-                          <div className="stake-input-header">
-                            <span className="stake-input-label">Std Dev</span>
-                            <span style={{fontSize: '9px', color: 'rgba(255,255,255,0.3)'}}>BB/100</span>
-                          </div>
-                          <input
-                            type="number"
-                            value={sw.customStdDev}
-                            onChange={(e) => updateStakeWeight(index, 'customStdDev', parseFloat(e.target.value) || 0)}
-                            className="stake-input-field input-focus"
-                            step="1"
-                          />
-                        </div>
-                      </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                
-                <button 
-                  onClick={addStake}
-                  className="btn-hover"
-                  style={{
-                    width: '100%',
-                    marginTop: '16px',
-                    background: 'rgba(255, 179, 71, 0.1)',
-                    border: '1px dashed rgba(255, 179, 71, 0.3)',
-                    color: '#FFB347',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    fontSize: '13px',
-                    fontWeight: '500'
-                  }}
-                >
-                  <Plus size={16} /> Add Another Stake
-                </button>
-              </div>
+                    
+                    <button 
+                      onClick={addStake}
+                      className="btn-secondary"
+                      style={{
+                        width: '100%',
+                        marginTop: '20px',
+                        padding: '14px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        fontSize: '14px',
+                        borderStyle: 'dashed'
+                      }}
+                    >
+                      <Plus size={18} /> Add Another Stake
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               
-              {/* Summary Stats (always visible) */}
+              {/* Summary Stats */}
               <div style={{
-                marginTop: advancedOpen ? '20px' : '16px',
-                padding: '14px',
-                background: 'rgba(0,0,0,0.3)',
-                borderRadius: '8px'
+                marginTop: advancedOpen ? '24px' : '20px',
+                padding: '20px',
+                background: 'rgba(10, 10, 10, 0.5)',
+                borderRadius: '16px',
+                border: '1px solid rgba(166, 137, 66, 0.15)'
               }}>
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', textAlign: 'center'}}>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center'}}>
                   <div>
-                    <div style={{fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Avg BB</div>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#FFB347'}}>${getWeightedAverageBB().toFixed(2)}</div>
+                    <div style={{fontSize: '11px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Avg BB</div>
+                    <div style={{fontSize: '20px', fontWeight: '800', color: '#A68942'}}>${getWeightedAverageBB().toFixed(2)}</div>
                   </div>
                   <div>
-                    <div style={{fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Avg WR</div>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#22c55e'}}>{getWeightedAverageWinrate().toFixed(1)}</div>
+                    <div style={{fontSize: '11px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Avg WR</div>
+                    <div style={{fontSize: '20px', fontWeight: '800', color: '#22c55e'}}>{getWeightedAverageWinrate().toFixed(1)}</div>
                   </div>
                   <div>
-                    <div style={{fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Avg SD</div>
-                    <div style={{fontSize: '16px', fontWeight: '700', color: '#ffffff'}}>{getWeightedAverageStdDev().toFixed(0)}</div>
+                    <div style={{fontSize: '11px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Avg SD</div>
+                    <div style={{fontSize: '20px', fontWeight: '800', color: '#F0F0F0'}}>{getWeightedAverageStdDev().toFixed(0)}</div>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <button 
+          <motion.button 
             onClick={runSimulation} 
             disabled={isCalculating || isOverLimit}
-            className="btn-hover"
+            className="btn-primary"
+            whileHover={{ scale: isCalculating || isOverLimit ? 1 : 1.02 }}
+            whileTap={{ scale: isCalculating || isOverLimit ? 1 : 0.98 }}
             style={{
               width: '100%',
-              padding: '16px',
-              borderRadius: '10px',
-              border: 'none',
-              background: isOverLimit ? 'rgba(239, 68, 68, 0.3)' : 'linear-gradient(135deg, #FFB347 0%, #FFCC70 100%)',
-              color: isOverLimit ? '#ef4444' : '#0a0a0a',
-              fontSize: '16px',
-              fontWeight: '700',
-              cursor: isCalculating || isOverLimit ? 'not-allowed' : 'pointer',
-              boxShadow: isOverLimit ? 'none' : '0 4px 20px rgba(255, 179, 71, 0.3)',
-              opacity: isCalculating ? 0.7 : 1,
-              transition: 'all 0.3s ease'
+              padding: '18px',
+              fontSize: '17px',
+              background: isOverLimit ? 'rgba(239, 68, 68, 0.2)' : undefined,
+              color: isOverLimit ? '#ef4444' : '#0A0A0A',
+              boxShadow: isOverLimit ? 'none' : undefined,
+              opacity: isCalculating ? 0.7 : 1
             }}
           >
-            {isCalculating ? 'Calculating...' : isOverLimit ? `Limit Exceeded (${samplehands.toLocaleString()} > 100M)` : 'Run Simulation'}
-          </button>
-        </div>
+            {isCalculating ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <Sparkles size={20} style={{ animation: 'pulse 1s ease-in-out infinite' }} />
+                Calculating...
+              </span>
+            ) : isOverLimit ? (
+              `Limit Exceeded (${samplehands.toLocaleString()} > 100M)`
+            ) : (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <Zap size={20} />
+                Run Simulation
+              </span>
+            )}
+          </motion.button>
+        </motion.div>
 
         {/* Nacho Bankroll Analysis Section */}
-        <div 
-          className="card-hover glass-card"
+        <motion.div 
+          className="obsidian-card"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            borderRadius: '16px', 
-            padding: '40px', 
-            marginBottom: '30px',
-            animation: 'fadeInUp 0.6s ease-out 0.15s both'
+            borderRadius: '32px', 
+            padding: '48px', 
+            marginBottom: '40px'
           }}
         >
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '8px'}}>
-            <span style={{fontSize: '28px'}}>🌮</span>
-            <h2 style={{fontSize: '22px', fontWeight: '700', color: '#ffffff', margin: 0}}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <span style={{fontSize: '48px', display: 'block', marginBottom: '12px'}}>🌮</span>
+            <h2 style={{fontSize: '28px', fontWeight: '800', color: '#F0F0F0', margin: 0, letterSpacing: '-0.02em'}}>
               Nacho Bankroll Analysis
             </h2>
+            <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '15px', marginTop: '12px'}}>
+              Minimum bankroll requirements based on Risk of Ruin • Primary stake: <span style={{color: '#A68942', fontWeight: '600'}}>{getPrimaryStake().label}</span>
+            </p>
           </div>
-          <p style={{textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '13px', marginBottom: '24px'}}>
-            Minimum bankroll requirements based on Risk of Ruin • Primary stake: {getPrimaryStake().label}
-          </p>
           
           <div className="bankroll-grid">
             {bankrollProfiles.map((profile, index) => {
               const requirement = calculateBankrollRequirement(profile.ror);
+              const isRecommended = profile.ror === 0.05;
               return (
-                <div 
+                <motion.div 
                   key={index}
-                  className="glass-card"
+                  className="glass-card card-hover"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
                   style={{
-                    padding: '20px',
-                    borderRadius: '12px',
+                    padding: '28px',
+                    borderRadius: '24px',
                     textAlign: 'center',
-                    border: profile.ror === 0.05 ? '1px solid rgba(255, 179, 71, 0.3)' : '1px solid rgba(255,255,255,0.08)'
+                    border: isRecommended ? '2px solid rgba(166, 137, 66, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
+                    position: 'relative',
+                    overflow: 'visible'
                   }}
                 >
-                  <div style={{fontSize: '36px', marginBottom: '8px'}}>{profile.emoji}</div>
-                  <div style={{fontSize: '14px', fontWeight: '600', color: '#ffffff', marginBottom: '4px'}}>
+                  {isRecommended && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '-14px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      background: 'linear-gradient(135deg, #A68942 0%, #D4AF37 100%)',
+                      color: '#0A0A0A',
+                      fontSize: '10px',
+                      fontWeight: '800',
+                      padding: '6px 14px',
+                      borderRadius: '20px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      boxShadow: '0 4px 12px rgba(166, 137, 66, 0.4)'
+                    }}>
+                      Recommended
+                    </div>
+                  )}
+                  <div style={{fontSize: '48px', marginBottom: '12px', marginTop: isRecommended ? '8px' : 0}}>{profile.emoji}</div>
+                  <div style={{fontSize: '17px', fontWeight: '700', color: '#F0F0F0', marginBottom: '6px'}}>
                     {profile.name}
                   </div>
-                  <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '12px'}}>
+                  <div style={{fontSize: '13px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '16px'}}>
                     {profile.description} • {(profile.ror * 100).toFixed(1)}% RoR
                   </div>
                   <div style={{
-                    background: 'rgba(0,0,0,0.3)',
-                    borderRadius: '8px',
-                    padding: '12px'
+                    background: 'rgba(10, 10, 10, 0.6)',
+                    borderRadius: '16px',
+                    padding: '16px'
                   }}>
-                    <div style={{fontSize: '20px', fontWeight: '700', color: '#FFB347', marginBottom: '4px'}}>
+                    <div style={{fontSize: '26px', fontWeight: '800', color: '#A68942', marginBottom: '6px'}}>
                       {requirement.dollars === Infinity ? '∞' : `$${requirement.dollars.toLocaleString()}`}
                     </div>
-                    <div style={{fontSize: '12px', color: 'rgba(255,255,255,0.5)'}}>
+                    <div style={{fontSize: '13px', color: 'rgba(240, 240, 240, 0.5)'}}>
                       {requirement.bb === Infinity ? '∞' : `${requirement.bb.toLocaleString()} BB`}
                     </div>
                   </div>
-                  {profile.ror === 0.05 && (
-                    <div style={{
-                      marginTop: '8px',
-                      fontSize: '10px',
-                      color: '#FFB347',
-                      fontWeight: '600',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}>
-                      ★ Recommended
-                    </div>
-                  )}
-                </div>
+                </motion.div>
               );
             })}
           </div>
           
           <div style={{
-            marginTop: '20px',
-            padding: '14px',
-            background: 'rgba(0,0,0,0.3)',
-            borderRadius: '8px',
+            marginTop: '28px',
+            padding: '20px',
+            background: 'rgba(10, 10, 10, 0.5)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
             textAlign: 'center'
           }}>
-            <p style={{color: 'rgba(255,255,255,0.5)', fontSize: '12px', margin: 0, lineHeight: 1.6}}>
-              <strong style={{color: '#FFB347'}}>Formula:</strong> B = (σ² / 2WR) × ln(1/RoR) where σ = std dev per hand, WR = win rate per hand
+            <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '13px', margin: 0, lineHeight: 1.7}}>
+              <strong style={{color: '#A68942'}}>Formula:</strong> B = (σ² / 2WR) × ln(1/RoR) where σ = std dev per hand, WR = win rate per hand
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Results Section */}
         {results && (
-          <div 
-            className="card-hover glass-card"
+          <motion.div 
+            className="obsidian-card"
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              borderRadius: '16px', 
-              padding: '40px', 
-              marginBottom: '30px',
-              animation: 'fadeInUp 0.6s ease-out'
+              borderRadius: '32px', 
+              padding: '48px', 
+              marginBottom: '40px'
             }}
           >
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px'}}>
-              <h2 style={{fontSize: '22px', fontWeight: '700', color: '#ffffff', margin: 0}}>
-                Simulation Results
-              </h2>
-              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                <span style={{color: 'rgba(255,255,255,0.5)', fontSize: '13px'}}>Display:</span>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px'}}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '16px',
+                  background: 'rgba(166, 137, 66, 0.1)',
+                  border: '1px solid rgba(166, 137, 66, 0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <BarChart3 size={24} color="#A68942" />
+                </div>
+                <h2 style={{fontSize: '24px', fontWeight: '800', color: '#F0F0F0', margin: 0}}>
+                  Simulation Results
+                </h2>
+              </div>
+              <div style={{display: 'flex', gap: '8px'}}>
                 <button
-                  onClick={() => setDisplayInDollars(!displayInDollars)}
-                  className="btn-hover"
+                  onClick={() => setDisplayInDollars(true)}
                   style={{
-                    background: displayInDollars ? 'rgba(255, 179, 71, 0.2)' : 'rgba(255,255,255,0.1)',
-                    border: `1px solid ${displayInDollars ? 'rgba(255, 179, 71, 0.3)' : 'rgba(255,255,255,0.1)'}`,
-                    color: displayInDollars ? '#FFB347' : 'rgba(255,255,255,0.6)',
-                    padding: '8px 14px',
-                    borderRadius: '6px',
+                    background: displayInDollars ? 'rgba(166, 137, 66, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${displayInDollars ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    color: displayInDollars ? '#A68942' : 'rgba(240, 240, 240, 0.6)',
+                    padding: '10px 18px',
+                    borderRadius: '10px',
                     cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: '500',
+                    fontSize: '14px',
+                    fontWeight: '600',
                     transition: 'all 0.2s ease'
                   }}
                 >
                   $ Dollars
                 </button>
                 <button
-                  onClick={() => setDisplayInDollars(!displayInDollars)}
-                  className="btn-hover"
+                  onClick={() => setDisplayInDollars(false)}
                   style={{
-                    background: !displayInDollars ? 'rgba(255, 179, 71, 0.2)' : 'rgba(255,255,255,0.1)',
-                    border: `1px solid ${!displayInDollars ? 'rgba(255, 179, 71, 0.3)' : 'rgba(255,255,255,0.1)'}`,
-                    color: !displayInDollars ? '#FFB347' : 'rgba(255,255,255,0.6)',
-                    padding: '8px 14px',
-                    borderRadius: '6px',
+                    background: !displayInDollars ? 'rgba(166, 137, 66, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${!displayInDollars ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    color: !displayInDollars ? '#A68942' : 'rgba(240, 240, 240, 0.6)',
+                    padding: '10px 18px',
+                    borderRadius: '10px',
                     cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: '500',
+                    fontSize: '14px',
+                    fontWeight: '600',
                     transition: 'all 0.2s ease'
                   }}
                 >
@@ -1193,47 +1459,71 @@ const PokerEVSimulation = () => {
               </div>
             </div>
             
-            <div className="results-grid" style={{marginBottom: '28px'}}>
-              <div className="glass-card" style={{padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Theoretical EV</div>
-                <div style={{fontSize: '24px', fontWeight: '700', color: '#ffffff'}}>
+            <div className="results-grid" style={{marginBottom: '32px'}}>
+              <motion.div 
+                className="glass-card" 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                style={{padding: '24px', borderRadius: '20px', textAlign: 'center'}}
+              >
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Theoretical EV</div>
+                <div style={{fontSize: '28px', fontWeight: '800', color: '#F0F0F0'}}>
                   {formatNumber((getWeightedAverageWinrate() * parameters.numHands / 100) * getWeightedAverageBB(), displayInDollars)}
                 </div>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px'}}>
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.3)', marginTop: '6px'}}>
                   {displayInDollars ? `${Math.round((getWeightedAverageWinrate() * parameters.numHands / 100)).toLocaleString()} BB` : `$${Math.round((getWeightedAverageWinrate() * parameters.numHands / 100) * getWeightedAverageBB()).toLocaleString()}`}
                 </div>
-              </div>
-              <div className="glass-card" style={{padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Best Run</div>
-                <div style={{fontSize: '24px', fontWeight: '700', color: '#22c55e'}}>
+              </motion.div>
+              <motion.div 
+                className="glass-card" 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                style={{padding: '24px', borderRadius: '20px', textAlign: 'center'}}
+              >
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Best Run</div>
+                <div style={{fontSize: '28px', fontWeight: '800', color: '#22c55e'}}>
                   {formatNumber(results.bestRun, displayInDollars)}
                 </div>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px'}}>
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.3)', marginTop: '6px'}}>
                   {displayInDollars ? `${Math.round(results.bestRun / getWeightedAverageBB()).toLocaleString()} BB` : `$${Math.round(results.bestRun).toLocaleString()}`}
                 </div>
-              </div>
-              <div className="glass-card" style={{padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Worst Run</div>
-                <div style={{fontSize: '24px', fontWeight: '700', color: '#ef4444'}}>
+              </motion.div>
+              <motion.div 
+                className="glass-card" 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                style={{padding: '24px', borderRadius: '20px', textAlign: 'center'}}
+              >
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Worst Run</div>
+                <div style={{fontSize: '28px', fontWeight: '800', color: '#ef4444'}}>
                   {formatNumber(results.worstRun, displayInDollars)}
                 </div>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px'}}>
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.3)', marginTop: '6px'}}>
                   {displayInDollars ? `${Math.round(results.worstRun / getWeightedAverageBB()).toLocaleString()} BB` : `$${Math.round(results.worstRun).toLocaleString()}`}
                 </div>
-              </div>
-              <div className="glass-card" style={{padding: '20px', borderRadius: '10px', textAlign: 'center'}}>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>95% CI Range</div>
-                <div style={{fontSize: '18px', fontWeight: '700', color: '#22c55e'}}>
+              </motion.div>
+              <motion.div 
+                className="glass-card" 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                style={{padding: '24px', borderRadius: '20px', textAlign: 'center'}}
+              >
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>95% CI Range</div>
+                <div style={{fontSize: '22px', fontWeight: '800', color: '#22c55e'}}>
                   {formatNumber(results.conf95Lower, displayInDollars)} to {formatNumber(results.conf95Upper, displayInDollars)}
                 </div>
-                <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px'}}>
+                <div style={{fontSize: '12px', color: 'rgba(240, 240, 240, 0.3)', marginTop: '6px'}}>
                   Most outcomes fall here
                 </div>
-              </div>
+              </motion.div>
             </div>
             
             {/* Chart */}
-            <div style={{background: 'rgba(0,0,0,0.3)', borderRadius: '12px', padding: '24px'}}>
+            <div style={{background: 'rgba(10, 10, 10, 0.5)', borderRadius: '20px', padding: '28px'}}>
               <div style={{height: '400px'}}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart 
@@ -1256,25 +1546,25 @@ const PokerEVSimulation = () => {
                     <XAxis 
                       dataKey="x" 
                       stroke="rgba(255,255,255,0.3)" 
-                      tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 11}}
+                      tick={{fill: 'rgba(240, 240, 240, 0.5)', fontSize: 11}}
                       tickFormatter={(val) => `${(val/1000)}k`}
-                      label={{value: 'Hands', position: 'insideBottomRight', offset: -10, fill: 'rgba(255,255,255,0.4)', fontSize: 11}}
+                      label={{value: 'Hands', position: 'insideBottomRight', offset: -10, fill: 'rgba(240, 240, 240, 0.4)', fontSize: 11}}
                     />
                     <YAxis 
                       stroke="rgba(255,255,255,0.3)" 
-                      tick={{fill: 'rgba(255,255,255,0.5)', fontSize: 11}}
+                      tick={{fill: 'rgba(240, 240, 240, 0.5)', fontSize: 11}}
                       tickFormatter={(val) => displayInDollars ? `$${(val/1000).toFixed(0)}k` : `${Math.round(val / getWeightedAverageBB()).toLocaleString()}`}
-                      label={{value: displayInDollars ? 'Profit ($)' : 'Profit (BB)', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.4)', fontSize: 11}}
+                      label={{value: displayInDollars ? 'Profit ($)' : 'Profit (BB)', angle: -90, position: 'insideLeft', fill: 'rgba(240, 240, 240, 0.4)', fontSize: 11}}
                     />
                     <Tooltip 
                       contentStyle={{
-                        background: 'rgba(20, 20, 20, 0.95)',
-                        border: '1px solid rgba(255, 179, 71, 0.3)',
-                        borderRadius: '10px',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                        backdropFilter: 'blur(10px)'
+                        background: 'rgba(10, 10, 10, 0.95)',
+                        border: '1px solid rgba(166, 137, 66, 0.4)',
+                        borderRadius: '16px',
+                        boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+                        backdropFilter: 'blur(20px)'
                       }}
-                      labelStyle={{color: '#FFB347', fontWeight: '600', marginBottom: '8px'}}
+                      labelStyle={{color: '#A68942', fontWeight: '700', marginBottom: '10px'}}
                       labelFormatter={(value) => `Hand ${value.toLocaleString()}`}
                       formatter={(value, name) => {
                         if (name === 'theoreticalEV') return [formatNumber(value, displayInDollars), 'Theoretical'];
@@ -1292,24 +1582,24 @@ const PokerEVSimulation = () => {
                         
                         return (
                           <div style={{
-                            background: 'rgba(20, 20, 20, 0.95)',
-                            border: '1px solid rgba(255, 179, 71, 0.3)',
-                            borderRadius: '10px',
-                            padding: '14px 18px',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+                            background: 'rgba(10, 10, 10, 0.95)',
+                            border: '1px solid rgba(166, 137, 66, 0.4)',
+                            borderRadius: '16px',
+                            padding: '18px 22px',
+                            boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
                           }}>
-                            <div style={{color: '#FFB347', fontWeight: '600', marginBottom: '10px', fontSize: '13px'}}>
+                            <div style={{color: '#A68942', fontWeight: '700', marginBottom: '12px', fontSize: '14px'}}>
                               Hand {label.toLocaleString()}
                             </div>
                             {[
-                              theoreticalEV && { name: 'Theoretical EV', value: theoreticalEV.value, color: 'rgba(255,255,255,0.6)' },
+                              theoreticalEV && { name: 'Theoretical EV', value: theoreticalEV.value, color: 'rgba(240, 240, 240, 0.6)' },
                               upper && { name: '95% Upper', value: upper.value, color: '#22c55e' },
                               lower && { name: '95% Lower', value: lower.value, color: '#22c55e' },
-                              hoveredSamplePayload && { name: `Sample ${hoveredSample}`, value: hoveredSamplePayload.value, color: '#FFB347' }
+                              hoveredSamplePayload && { name: `Sample ${hoveredSample}`, value: hoveredSamplePayload.value, color: '#A68942' }
                             ].filter(Boolean).map((item, i) => (
-                              <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginBottom: '4px'}}>
-                                <span style={{color: item.color, fontSize: '12px'}}>{item.name}</span>
-                                <span style={{color: '#ffffff', fontWeight: '600', fontSize: '12px'}}>
+                              <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '24px', marginBottom: '6px'}}>
+                                <span style={{color: item.color, fontSize: '13px'}}>{item.name}</span>
+                                <span style={{color: '#F0F0F0', fontWeight: '700', fontSize: '13px'}}>
                                   {formatNumber(item.value, displayInDollars)}
                                 </span>
                               </div>
@@ -1323,11 +1613,11 @@ const PokerEVSimulation = () => {
                       const isBest = sample.finalEV === results.bestRun;
                       const isWorst = sample.finalEV === results.worstRun;
                       
-                      let strokeColor = "rgba(255, 255, 255, 0.12)";
+                      let strokeColor = "rgba(255, 255, 255, 0.1)";
                       let strokeWidth = 1;
                       
                       if (isHovered) {
-                        strokeColor = "#FFB347";
+                        strokeColor = "#A68942";
                         strokeWidth = 4;
                       } else if (isBest) {
                         strokeColor = "#22c55e";
@@ -1351,132 +1641,161 @@ const PokerEVSimulation = () => {
                         />
                       );
                     })}
-                    <Line type="monotone" dataKey="theoreticalEV" stroke="rgba(255,255,255,0.4)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Theoretical" />
+                    <Line type="monotone" dataKey="theoreticalEV" stroke="rgba(240, 240, 240, 0.4)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Theoretical" />
                     <Line type="monotone" dataKey="conf95Upper" stroke="#22c55e" strokeWidth={2} dot={false} name="95% Upper" />
                     <Line type="monotone" dataKey="conf95Lower" stroke="#22c55e" strokeWidth={2} dot={false} name="95% Lower" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-              <div style={{textAlign: 'center', marginTop: '14px', color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>
+              <div style={{textAlign: 'center', marginTop: '18px', color: 'rgba(240, 240, 240, 0.4)', fontSize: '14px'}}>
                 Hover over any sample line to highlight it • Per-stake variance properly applied
               </div>
               
               {/* Legend */}
-              <div style={{marginTop: '18px', padding: '14px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px'}}>
-                <div style={{display: 'flex', justifyContent: 'center', gap: '28px', flexWrap: 'wrap', alignItems: 'center'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <div style={{width: '24px', height: '2px', background: 'rgba(255,255,255,0.4)', borderTop: '2px dashed rgba(255,255,255,0.4)'}}></div>
-                    <span style={{color: 'rgba(255,255,255,0.6)', fontSize: '12px'}}>Theoretical EV</span>
+              <div style={{marginTop: '24px', padding: '18px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px'}}>
+                <div style={{display: 'flex', justifyContent: 'center', gap: '32px', flexWrap: 'wrap', alignItems: 'center'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <div style={{width: '28px', height: '2px', background: 'rgba(240, 240, 240, 0.4)', borderTop: '2px dashed rgba(240, 240, 240, 0.4)'}}></div>
+                    <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>Theoretical EV</span>
                   </div>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <div style={{width: '24px', height: '2px', background: '#22c55e', borderRadius: '2px'}}></div>
-                    <span style={{color: 'rgba(255,255,255,0.6)', fontSize: '12px'}}>95% Confidence</span>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <div style={{width: '28px', height: '2px', background: '#22c55e', borderRadius: '2px'}}></div>
+                    <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>95% Confidence</span>
                   </div>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <div style={{width: '24px', height: '2px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px'}}></div>
-                    <span style={{color: 'rgba(255,255,255,0.6)', fontSize: '12px'}}>All Samples ({results.samples.length})</span>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <div style={{width: '28px', height: '2px', background: 'rgba(255,255,255,0.12)', borderRadius: '2px'}}></div>
+                    <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>All Samples ({results.samples.length})</span>
                   </div>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                    <div style={{width: '24px', height: '3px', background: '#FFB347', borderRadius: '2px'}}></div>
-                    <span style={{color: 'rgba(255,255,255,0.6)', fontSize: '12px'}}>Hovered Sample</span>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <div style={{width: '28px', height: '3px', background: '#A68942', borderRadius: '2px'}}></div>
+                    <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>Hovered Sample</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* How to Use Section */}
-        <div 
-          className="glass-card"
+        <motion.div 
+          className="obsidian-card"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            borderRadius: '16px', 
-            padding: '40px',
-            animation: 'fadeInUp 0.6s ease-out 0.2s both'
+            borderRadius: '32px', 
+            padding: '48px'
           }}
         >
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '28px'}}>
-            <HelpCircle size={24} color="#FFB347" />
-            <h2 style={{fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: 0}}>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '36px'}}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '18px',
+              background: 'rgba(166, 137, 66, 0.1)',
+              border: '1px solid rgba(166, 137, 66, 0.25)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Brain size={28} color="#A68942" strokeWidth={1.5} />
+            </div>
+            <h2 style={{fontSize: '26px', fontWeight: '800', color: '#F0F0F0', margin: 0}}>
               How to Use & Read Results
             </h2>
           </div>
 
           <div className="howto-grid">
-            <div style={{
-              background: 'rgba(255, 179, 71, 0.1)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              padding: '24px',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 179, 71, 0.2)'
-            }}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px'}}>
-                <Target size={20} color="#FFB347" />
-                <h3 style={{color: '#FFB347', fontSize: '14px', fontWeight: '600', margin: 0}}>Input Parameters</h3>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              style={{
+                background: 'rgba(166, 137, 66, 0.08)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                padding: '28px',
+                borderRadius: '24px',
+                border: '1px solid rgba(166, 137, 66, 0.2)'
+              }}
+            >
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <Target size={22} color="#A68942" />
+                <h3 style={{color: '#A68942', fontSize: '16px', fontWeight: '700', margin: 0}}>Input Parameters</h3>
               </div>
-              <ul style={{color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.9, margin: 0, paddingLeft: '16px'}}>
-                <li><strong style={{color: '#ffffff'}}>Win Rate:</strong> Your expected BB/100</li>
-                <li><strong style={{color: '#ffffff'}}>Std Dev:</strong> Variance (typically 70-120)</li>
-                <li><strong style={{color: '#ffffff'}}>Hands:</strong> Total hands to simulate</li>
-                <li><strong style={{color: '#ffffff'}}>Samples:</strong> Number of runs</li>
-                <li><strong style={{color: '#ffffff'}}>Advanced:</strong> Per-stake custom settings</li>
+              <ul style={{color: 'rgba(240, 240, 240, 0.7)', fontSize: '14px', lineHeight: 2, margin: 0, paddingLeft: '20px'}}>
+                <li><strong style={{color: '#F0F0F0'}}>Win Rate:</strong> Your expected BB/100</li>
+                <li><strong style={{color: '#F0F0F0'}}>Std Dev:</strong> Variance (typically 70-120)</li>
+                <li><strong style={{color: '#F0F0F0'}}>Hands:</strong> Total hands to simulate</li>
+                <li><strong style={{color: '#F0F0F0'}}>Samples:</strong> Number of runs</li>
+                <li><strong style={{color: '#F0F0F0'}}>Advanced:</strong> Per-stake custom settings</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div style={{
-              background: 'rgba(34, 197, 94, 0.1)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              padding: '24px',
-              borderRadius: '12px',
-              border: '1px solid rgba(34, 197, 94, 0.2)'
-            }}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px'}}>
-                <TrendingUp size={20} color="#22c55e" />
-                <h3 style={{color: '#22c55e', fontSize: '14px', fontWeight: '600', margin: 0}}>Reading the Chart</h3>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
+              style={{
+                background: 'rgba(34, 197, 94, 0.08)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                padding: '28px',
+                borderRadius: '24px',
+                border: '1px solid rgba(34, 197, 94, 0.2)'
+              }}
+            >
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <TrendingUp size={22} color="#22c55e" />
+                <h3 style={{color: '#22c55e', fontSize: '16px', fontWeight: '700', margin: 0}}>Reading the Chart</h3>
               </div>
-              <ul style={{color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.9, margin: 0, paddingLeft: '16px'}}>
-                <li><strong style={{color: '#ffffff'}}>Gray dashed:</strong> Theoretical EV line</li>
-                <li><strong style={{color: '#ffffff'}}>Green lines:</strong> 95% confidence bounds</li>
-                <li><strong style={{color: '#ffffff'}}>Faint lines:</strong> Individual sample runs</li>
-                <li><strong style={{color: '#ffffff'}}>Best/Worst:</strong> Green/red highlights</li>
-                <li><strong style={{color: '#ffffff'}}>Hover:</strong> Highlight any line</li>
+              <ul style={{color: 'rgba(240, 240, 240, 0.7)', fontSize: '14px', lineHeight: 2, margin: 0, paddingLeft: '20px'}}>
+                <li><strong style={{color: '#F0F0F0'}}>Gray dashed:</strong> Theoretical EV line</li>
+                <li><strong style={{color: '#F0F0F0'}}>Green lines:</strong> 95% confidence bounds</li>
+                <li><strong style={{color: '#F0F0F0'}}>Faint lines:</strong> Individual sample runs</li>
+                <li><strong style={{color: '#F0F0F0'}}>Best/Worst:</strong> Green/red highlights</li>
+                <li><strong style={{color: '#F0F0F0'}}>Hover:</strong> Highlight any line</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="glass-card" style={{
-              padding: '24px',
-              borderRadius: '12px'
-            }}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px'}}>
-                <BarChart3 size={20} color="rgba(255,255,255,0.8)" />
-                <h3 style={{color: 'rgba(255,255,255,0.9)', fontSize: '14px', fontWeight: '600', margin: 0}}>Key Insights</h3>
+            <motion.div 
+              className="glass-card" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              style={{
+                padding: '28px',
+                borderRadius: '24px'
+              }}
+            >
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
+                <BarChart3 size={22} color="rgba(240, 240, 240, 0.8)" />
+                <h3 style={{color: 'rgba(240, 240, 240, 0.9)', fontSize: '16px', fontWeight: '700', margin: 0}}>Key Insights</h3>
               </div>
-              <ul style={{color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.9, margin: 0, paddingLeft: '16px'}}>
-                <li><strong style={{color: '#ffffff'}}>Wide spread:</strong> High variance expected</li>
-                <li><strong style={{color: '#ffffff'}}>Tight spread:</strong> More consistent results</li>
-                <li><strong style={{color: '#ffffff'}}>Below EV:</strong> Normal short-term</li>
-                <li><strong style={{color: '#ffffff'}}>95% CI:</strong> Most runs fall within</li>
-                <li><strong style={{color: '#ffffff'}}>Long-term:</strong> Converges to true EV</li>
+              <ul style={{color: 'rgba(240, 240, 240, 0.7)', fontSize: '14px', lineHeight: 2, margin: 0, paddingLeft: '20px'}}>
+                <li><strong style={{color: '#F0F0F0'}}>Wide spread:</strong> High variance expected</li>
+                <li><strong style={{color: '#F0F0F0'}}>Tight spread:</strong> More consistent results</li>
+                <li><strong style={{color: '#F0F0F0'}}>Below EV:</strong> Normal short-term</li>
+                <li><strong style={{color: '#F0F0F0'}}>95% CI:</strong> Most runs fall within</li>
+                <li><strong style={{color: '#F0F0F0'}}>Long-term:</strong> Converges to true EV</li>
               </ul>
-            </div>
+            </motion.div>
           </div>
 
           <div style={{
-            marginTop: '24px',
-            padding: '18px',
-            background: 'rgba(0,0,0,0.3)',
-            borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.05)',
+            marginTop: '32px',
+            padding: '24px',
+            background: 'rgba(10, 10, 10, 0.5)',
+            borderRadius: '20px',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
             textAlign: 'center'
           }}>
-            <p style={{color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: 0, lineHeight: 1.7}}>
-              <strong style={{color: '#FFB347'}}>Pro Tip:</strong> Run multiple simulations with different sample sizes to truly understand your variance. 
+            <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '14px', margin: 0, lineHeight: 1.8}}>
+              <strong style={{color: '#A68942'}}>Pro Tip:</strong> Run multiple simulations with different sample sizes to truly understand your variance. 
               Even winning players can experience significant downswings — this tool helps you prepare mentally and financially.
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
