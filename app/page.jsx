@@ -286,17 +286,17 @@ The 3-month program consists of:
   };
 
   useEffect(() => {
-    const newNachos = Array.from({ length: 54 }, (_, i) => ({
+    const newNachos = Array.from({ length: 18 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 12 + Math.random() * 28,
-      duration: 40 + Math.random() * 20,
-      delay: Math.random() * 20,
+      size: 14 + Math.random() * 24,
+      duration: 45 + Math.random() * 25,
+      delay: Math.random() * 25,
       rotation: Math.random() * 360,
-      opacity: 0.4 + Math.random() * 0.5,
-      moveX: Math.random() * 200 - 100,
-      moveY: Math.random() * 200 - 100
+      opacity: 0.15 + Math.random() * 0.2,
+      moveX: Math.random() * 150 - 75,
+      moveY: Math.random() * 150 - 75
     }));
     setNachos(newNachos);
   }, []);
@@ -1572,6 +1572,26 @@ The 3-month program consists of:
               <polygon points="50,5 95,95 5,95" fill="#FF9900" />
             </svg>
           </div>
+        </div>
+
+        {/* === DYNAMIC FLOATING NACHOS (z-8) - Sparse Ambient Layer === */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 8, overflow: 'hidden', pointerEvents: 'none' }}>
+          {nachos.map(nacho => (
+            <div
+              key={nacho.id}
+              style={{
+                position: 'absolute',
+                left: `${nacho.x}%`,
+                top: `${nacho.y}%`,
+                animation: `floatNacho ${nacho.duration}s ease-in-out infinite`,
+                animationDelay: `${nacho.delay}s`,
+                '--moveX': `${nacho.moveX}px`,
+                '--moveY': `${nacho.moveY}px`
+              }}
+            >
+              <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
+            </div>
+          ))}
         </div>
 
         {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
