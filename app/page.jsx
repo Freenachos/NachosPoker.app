@@ -1,5 +1,7 @@
 "use client";
 
+import NachosPokerNavBar from '@/components/NachosPokerNavBar';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Play, ChevronLeft, ChevronRight, Calculator, Target, TrendingUp, BookOpen, User, Youtube, ArrowRight, Sparkles, BarChart3, Percent, DollarSign, Trophy, Activity, Check, X, ChevronDown, GraduationCap, Users, CheckCircle, Video, MessageCircle, Calendar, Star, Award, Database, Headphones, Crosshair, Swords, Brain, Lock, Zap } from 'lucide-react';
 
@@ -357,237 +359,6 @@ The 3-month program consists of:
       <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8"/>
     </svg>
   );
-
-  // ============================================
-  // NAVBAR COMPONENT - Floating Overlay Style
-  // ============================================
-  
-  const NachosPokerNavBar = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    
-    const navLinks = [
-      { label: 'Mentorship', href: '#mentorship' },
-      { label: 'Results', href: '#testimonials' },
-      { label: 'Tools', href: '#tools' },
-      { label: 'Videos', href: '#videos' },
-    ];
-
-    return (
-      <nav 
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          zIndex: 50,
-          padding: '20px 0'
-        }}
-      >
-        {/* Inner container - aligned with hero max-w-7xl (1280px) */}
-        <div 
-          style={{
-            maxWidth: '1280px',
-            width: '100%',
-            margin: '0 auto',
-            padding: '0 48px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          {/* Logo */}
-          <a 
-            href="/" 
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              textDecoration: 'none'
-            }}
-          >
-            {/* Nacho Icon */}
-            <svg width="36" height="36" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3))' }}>
-              <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#D4AF37" stroke="#B8941F" strokeWidth="2"/>
-              <ellipse cx="50" cy="50" rx="18" ry="14" fill="#D4AF37" />
-              <ellipse cx="42" cy="48" rx="6" ry="7" fill="white" />
-              <ellipse cx="58" cy="48" rx="6" ry="7" fill="white" />
-              <circle cx="42" cy="49" r="3" fill="#0A0A0A"/>
-              <circle cx="58" cy="49" r="3" fill="#0A0A0A"/>
-              <path d="M42 60 Q50 68 58 60" fill="none" stroke="#0A0A0A" strokeWidth="2.5" strokeLinecap="round"/>
-            </svg>
-            
-            <span style={{
-              fontSize: '22px',
-              fontWeight: '700',
-              color: '#D4AF37',
-              letterSpacing: '-0.02em',
-              fontFamily: 'Manrope, Inter, sans-serif'
-            }}>
-              Freenachos
-            </span>
-          </a>
-
-          {/* Desktop Navigation Links */}
-          <div 
-            className="nav-links-desktop"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            {navLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                style={{
-                  color: '#A1A1AA',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  textDecoration: 'none',
-                  padding: '10px 18px',
-                  borderRadius: '8px',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = '#FFFFFF';
-                  e.target.style.background = 'rgba(212, 175, 55, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = '#A1A1AA';
-                  e.target.style.background = 'transparent';
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
-            
-            {/* CTA Button */}
-            <a
-              href="https://calendly.com/freenachos/intro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-hover"
-              style={{
-                background: 'transparent',
-                border: '1.5px solid #D4AF37',
-                color: '#D4AF37',
-                fontSize: '14px',
-                fontWeight: '600',
-                padding: '10px 22px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                marginLeft: '12px',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = '#D4AF37';
-                e.target.style.color = '#0A0A0A';
-                e.target.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'transparent';
-                e.target.style.color = '#D4AF37';
-                e.target.style.boxShadow = 'none';
-              }}
-            >
-              Book Call
-            </a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="nav-mobile-btn"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{
-              display: 'none',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px'
-            }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2">
-              {mobileMenuOpen ? (
-                <path d="M6 6L18 18M6 18L18 6" strokeLinecap="round"/>
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round"/>
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        {mobileMenuOpen && (
-          <div 
-            className="nav-mobile-menu"
-            style={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              right: 0,
-              background: 'rgba(10, 10, 10, 0.98)',
-              backdropFilter: 'blur(20px)',
-              borderTop: '1px solid rgba(212, 175, 55, 0.2)',
-              padding: '20px 48px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}
-          >
-            {navLinks.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  color: '#A1A1AA',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  textDecoration: 'none',
-                  padding: '14px 0',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)'
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
-            <a
-              href="https://calendly.com/freenachos/intro"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{
-                background: '#D4AF37',
-                color: '#0A0A0A',
-                fontSize: '15px',
-                fontWeight: '600',
-                padding: '14px 24px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                textAlign: 'center',
-                marginTop: '12px'
-              }}
-            >
-              Book Call
-            </a>
-          </div>
-        )}
-
-        {/* Responsive Styles */}
-        <style>{`
-          @media (max-width: 768px) {
-            .nav-links-desktop {
-              display: none !important;
-            }
-            .nav-mobile-btn {
-              display: block !important;
-            }
-          }
-        `}</style>
-      </nav>
-    );
-  };
 
   // Graph image component for testimonials
   const TestimonialGraph = ({ src }) => (
@@ -1630,10 +1401,10 @@ The 3-month program consists of:
           }
         }
 
-        /* Ghost Fade Mask - Aggressive Vanishing Effect */
+        /* Ghost Fade Mask - Solid Torso, Quick Bottom Fade */
         .hero-image-mask {
-          mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
-          -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+          mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
       `}</style>
 
@@ -1647,7 +1418,20 @@ The 3-month program consists of:
         }}
       >
         {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
-        <NachosPokerNavBar />
+        <div 
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 50,
+            padding: '20px 24px'
+          }}
+        >
+          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+            <NachosPokerNavBar />
+          </div>
+        </div>
 
         {/* === LAYER A: Atmospheric Shapes (z-0) - Deep Background === */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
@@ -1747,7 +1531,7 @@ The 3-month program consists of:
           pointerEvents: 'none'
         }} />
 
-        {/* === COACH IMAGE: Anchored Bottom-Right (z-5) === */}
+        {/* === COACH IMAGE: Anchored Bottom-Right (z-10) === */}
         <div 
           className="hero-image-mask"
           style={{
@@ -1756,7 +1540,7 @@ The 3-month program consists of:
             right: 0,
             height: '88vh',
             maxHeight: '920px',
-            zIndex: 5,
+            zIndex: 10,
             animation: 'imageReveal 1.2s ease-out 0.5s both',
             pointerEvents: 'none'
           }}
@@ -1773,12 +1557,12 @@ The 3-month program consists of:
           />
         </div>
 
-        {/* === CINEMATIC VIGNETTE: Readability Overlay (z-10) === */}
+        {/* === CINEMATIC VIGNETTE: Readability Overlay (z-15) === */}
         <div 
           style={{
             position: 'absolute',
             inset: 0,
-            zIndex: 10,
+            zIndex: 15,
             background: 'linear-gradient(to right, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 35%, rgba(10, 10, 10, 0.3) 55%, transparent 75%)',
             pointerEvents: 'none'
           }}
@@ -1932,7 +1716,7 @@ The 3-month program consists of:
       {/* ==================== MUSEUM SPACER: Pure Atmosphere ==================== */}
       <div 
         style={{
-          height: '280px',
+          height: '500px',
           position: 'relative',
           zIndex: 1
         }}
