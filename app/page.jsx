@@ -32,7 +32,9 @@ const PokerToolboxHome = () => {
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('right');
   const [expandedFAQ, setExpandedFAQ] = useState(0);
+  const [showStickyCta, setShowStickyCta] = useState(false);
   const nachoRef = useRef(null);
+  const aboutSectionRef = useRef(null);
 
   // ============================================
   // DATA
@@ -299,6 +301,27 @@ The 3-month program consists of:
       moveY: Math.random() * 150 - 75
     }));
     setNachos(newNachos);
+  }, []);
+
+  // Show sticky CTA only after scrolling to About section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowStickyCta(true);
+        }
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (aboutSectionRef.current) {
+      observer.observe(aboutSectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const eyeOffset = getEyeOffset();
@@ -947,18 +970,20 @@ The 3-month program consists of:
         }}
       />
 
-      {/* Sticky CTA Button */}
-      <div className="sticky-cta">
-        <a 
-          href="https://calendly.com/freenachos/intro" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="sticky-cta-btn"
-        >
-          <Calendar size={18} />
-          Apply Now
-        </a>
-      </div>
+      {/* Sticky CTA Button - Only visible after scrolling to About section */}
+      {showStickyCta && (
+        <div className="sticky-cta">
+          <a 
+            href="https://calendly.com/freenachos/intro" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="sticky-cta-btn"
+          >
+            <Calendar size={18} />
+            Apply Now
+          </a>
+        </div>
+      )}
       
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
@@ -1819,6 +1844,7 @@ The 3-month program consists of:
 
         {/* About Section - First Card with Extra Dramatic Entrance */}
         <div 
+          ref={aboutSectionRef}
           className="glass-card reveal-first"
           style={{
             borderRadius: '24px',
