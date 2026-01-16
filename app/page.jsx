@@ -1494,9 +1494,9 @@ The 3-month program consists of:
           zIndex: 2
         }}
       >
-        {/* === LAYER 10: FLOATING NACHOS (z-10) - Inside Hero === */}
+        {/* === LAYER 16: FLOATING NACHOS (z-16) - Inside Hero, ABOVE Vignette === */}
         {/* Sparse at top (distant stars), denser toward bottom */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 10, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 16, overflow: 'hidden', pointerEvents: 'none' }}>
           
           {/* === TOP-LEFT CORNER: Distant Star === */}
           {/* Nacho - Tucked into top-left corner */}
@@ -1506,8 +1506,8 @@ The 3-month program consists of:
             left: '2%',
             width: '65px',
             height: '65px',
-            opacity: 0.035,
-            filter: 'blur(25px)',
+            opacity: 0.08,
+            filter: 'blur(20px)',
             animation: 'cinematicFloat 20s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
@@ -1523,8 +1523,8 @@ The 3-month program consists of:
             left: '1.5%',
             width: '75px',
             height: '75px',
-            opacity: 0.04,
-            filter: 'blur(28px)',
+            opacity: 0.07,
+            filter: 'blur(22px)',
             animation: 'cinematicFloat2 24s ease-in-out infinite',
             animationDelay: '-8s'
           }}>
@@ -1540,8 +1540,8 @@ The 3-month program consists of:
             left: '3%',
             width: '85px',
             height: '85px',
-            opacity: 0.045,
-            filter: 'blur(30px)',
+            opacity: 0.08,
+            filter: 'blur(24px)',
             animation: 'cinematicFloat 22s ease-in-out infinite',
             animationDelay: '-12s'
           }}>
