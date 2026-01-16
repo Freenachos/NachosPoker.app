@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Play, ChevronLeft, ChevronRight, Calculator, Target, TrendingUp, BookOpen, User, Youtube, ArrowRight, Sparkles, BarChart3, Percent, DollarSign, Trophy, Activity, Check, X, ChevronDown, GraduationCap, Users, CheckCircle, Video, MessageCircle, Calendar, Star, Award, Database, Headphones, Crosshair, Swords, Brain, Lock, Zap } from 'lucide-react';
 
@@ -126,7 +128,8 @@ const PokerToolboxHome = () => {
   const pricingPlans = [
     {
       name: '3-Month Kickstart',
-      monthlyPrice: '1,000',
+      totalPrice: '2,999',
+      paymentNote: 'Paid in full',
       featured: false,
       features: [
         '6 Private 1-on-1 Sessions',
@@ -139,7 +142,8 @@ const PokerToolboxHome = () => {
     },
     {
       name: '6-Month Accelerator',
-      monthlyPrice: '833',
+      totalPrice: '4,999',
+      paymentNote: 'Pay in full or 3 monthly installments',
       featured: true,
       badge: 'MOST POPULAR',
       savings: 'Save €1,000 vs. Quarterly',
@@ -155,7 +159,8 @@ const PokerToolboxHome = () => {
     },
     {
       name: '12-Month Mastery',
-      monthlyPrice: '750',
+      totalPrice: '8,999',
+      paymentNote: 'Pay in full or quarterly installments',
       featured: false,
       badge: 'BEST VALUE',
       savings: 'Save €3,000 vs. Quarterly',
@@ -673,37 +678,42 @@ The 3-month program consists of:
     );
   });
 
-  const PricingCard = ({ plan }) => (
+  const PricingCard = React.memo(({ plan }) => (
     <div 
       className={`pricing-card ${plan.featured ? 'featured' : ''}`}
       style={{
-        background: plan.featured ? 'linear-gradient(135deg, #D4AF37 0%, #B8972E 100%)' : 'rgba(24, 24, 24, 0.9)',
-        border: plan.featured ? 'none' : '1px solid rgba(212, 175, 55, 0.15)',
+        background: '#121212',
+        border: plan.featured ? '2px solid #D4AF37' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '20px',
         padding: '40px 32px',
         position: 'relative',
-        transition: 'all 0.3s ease',
-        transform: plan.featured ? 'scale(1.05)' : 'scale(1)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        transform: plan.featured ? 'scale(1.03)' : 'scale(1)',
         zIndex: plan.featured ? 2 : 1,
         display: 'flex',
         flexDirection: 'column',
-        height: '480px'
+        minHeight: '560px',
+        boxShadow: plan.featured 
+          ? '0 0 40px rgba(212, 175, 55, 0.2), 0 20px 50px rgba(0, 0, 0, 0.4)' 
+          : '0 10px 30px rgba(0, 0, 0, 0.3)'
       }}
     >
       {/* Badge */}
       {plan.badge && (
         <div style={{
           position: 'absolute',
-          top: '16px',
-          right: '16px',
-          background: plan.featured ? 'rgba(0,0,0,0.3)' : 'rgba(212, 175, 55, 0.2)',
-          color: plan.featured ? '#fff' : '#D4AF37',
-          fontSize: '10px',
+          top: '-12px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: plan.featured ? '#D4AF37' : 'rgba(212, 175, 55, 0.15)',
+          color: plan.featured ? '#0a0a0a' : '#D4AF37',
+          fontSize: '11px',
           fontWeight: '700',
-          padding: '5px 10px',
+          padding: '6px 16px',
           borderRadius: '20px',
           textTransform: 'uppercase',
-          letterSpacing: '0.05em'
+          letterSpacing: '0.08em',
+          whiteSpace: 'nowrap'
         }}>
           {plan.badge}
         </div>
@@ -711,66 +721,72 @@ The 3-month program consists of:
       
       {/* Plan Name */}
       <div style={{
-        color: plan.featured ? '#0a0a0a' : '#D4AF37',
-        fontSize: '14px',
+        color: '#D4AF37',
+        fontSize: '13px',
         fontWeight: '600',
-        marginBottom: '20px',
+        marginBottom: '24px',
+        marginTop: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '0.05em'
+        letterSpacing: '0.1em',
+        height: '16px'
       }}>
         {plan.name}
       </div>
       
       {/* Price */}
       <div style={{
-        display: 'flex',
-        alignItems: 'baseline',
-        gap: '2px',
-        marginBottom: '6px'
+        marginBottom: '8px'
       }}>
         <span style={{
-          color: plan.featured ? '#0a0a0a' : '#D4AF37',
-          fontSize: '44px',
+          color: '#F0F0F0',
+          fontSize: '48px',
           fontWeight: '800',
-          lineHeight: 1
+          lineHeight: 1,
+          letterSpacing: '-0.02em'
         }}>
-          €{plan.monthlyPrice}
-        </span>
-        <span style={{
-          color: plan.featured ? 'rgba(0,0,0,0.6)' : 'rgba(240, 240, 240, 0.5)',
-          fontSize: '16px',
-          fontWeight: '500'
-        }}>
-          /month
+          €{plan.totalPrice}
         </span>
       </div>
       
-      {/* Paid in full */}
+      {/* Payment Note */}
       <div style={{
-        color: plan.featured ? 'rgba(0,0,0,0.5)' : 'rgba(240, 240, 240, 0.4)',
-        fontSize: '12px',
-        marginBottom: plan.savings ? '6px' : '24px'
+        color: 'rgba(240, 240, 240, 0.5)',
+        fontSize: '13px',
+        marginBottom: '8px',
+        lineHeight: 1.4,
+        minHeight: '18px'
       }}>
-        paid in full
+        {plan.paymentNote}
       </div>
       
-      {/* Savings text */}
-      {plan.savings && (
-        <div style={{
-          color: plan.featured ? 'rgba(0,0,0,0.7)' : 'rgba(34, 197, 94, 0.9)',
-          fontSize: '12px',
-          fontWeight: '500',
-          marginBottom: '24px'
-        }}>
-          {plan.savings}
-        </div>
-      )}
+      {/* Savings text - fixed height container */}
+      <div style={{
+        height: '20px',
+        marginBottom: '20px'
+      }}>
+        {plan.savings && (
+          <span style={{
+            color: '#D4AF37',
+            fontSize: '13px',
+            fontWeight: '600'
+          }}>
+            {plan.savings}
+          </span>
+        )}
+      </div>
+      
+      {/* Divider */}
+      <div style={{
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent)',
+        marginBottom: '24px'
+      }} />
       
       {/* Features */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
+        gap: '14px',
         flex: 1,
         marginBottom: '28px'
       }}>
@@ -778,13 +794,13 @@ The 3-month program consists of:
           <div key={idx} style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '10px'
+            gap: '12px'
           }}>
-            <Check size={16} color={plan.featured ? '#0a0a0a' : '#D4AF37'} style={{ flexShrink: 0 }} />
+            <Check size={16} color="#D4AF37" style={{ flexShrink: 0 }} />
             <span style={{
-              color: plan.featured ? 'rgba(0,0,0,0.8)' : 'rgba(240, 240, 240, 0.75)',
-              fontSize: '13px',
-              lineHeight: 1.3
+              color: 'rgba(240, 240, 240, 0.8)',
+              fontSize: '14px',
+              lineHeight: 1.4
             }}>
               {feature}
             </span>
@@ -794,31 +810,34 @@ The 3-month program consists of:
       
       {/* CTA Button */}
       <a
-        href="https://calendly.com/patrickgerritsen90/30min"
+        href="https://calendly.com/freenachos/intro"
         target="_blank"
         rel="noopener noreferrer"
         className="btn-hover"
         style={{
           display: 'block',
           width: '100%',
-          padding: '16px 20px',
-          borderRadius: '10px',
-          fontWeight: '600',
-          fontSize: '14px',
+          padding: plan.featured ? '18px 20px' : '16px 20px',
+          borderRadius: '12px',
+          fontWeight: '700',
+          fontSize: plan.featured ? '15px' : '14px',
           textAlign: 'center',
           textDecoration: 'none',
           cursor: 'pointer',
-          transition: 'all 0.2s ease',
-          background: plan.featured ? '#0a0a0a' : '#FF9900',
-          color: plan.featured ? '#D4AF37' : '#0a0a0a',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          background: '#FF9900',
+          color: '#0a0a0a',
           border: 'none',
-          marginTop: 'auto'
+          marginTop: 'auto',
+          boxShadow: plan.featured 
+            ? '0 4px 20px rgba(255, 153, 0, 0.4)' 
+            : '0 2px 10px rgba(255, 153, 0, 0.2)'
         }}
       >
         {plan.buttonText}
       </a>
     </div>
-  );
+  ));
 
   const FAQItem = ({ item, index, isExpanded, onToggle }) => (
     <div 
@@ -1164,11 +1183,12 @@ The 3-month program consists of:
         }
 
         .pricing-card:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
         .pricing-card.featured:hover {
-          transform: scale(1.08);
+          transform: scale(1.05);
+          box-shadow: 0 0 50px rgba(212, 175, 55, 0.25), 0 25px 50px rgba(0, 0, 0, 0.4);
         }
 
         .faq-item:hover {
