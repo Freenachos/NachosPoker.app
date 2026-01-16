@@ -294,12 +294,12 @@ The 3-month program consists of:
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: 14 + Math.random() * 24,
-      duration: 45 + Math.random() * 25,
-      delay: Math.random() * 25,
+      duration: 50 + Math.random() * 30,
+      delay: Math.random() * 40,
       rotation: Math.random() * 360,
       opacity: 0.20 + Math.random() * 0.2,
-      moveX: Math.random() * 150 - 75,
-      moveY: Math.random() * 150 - 75
+      moveX: Math.random() * 80 - 40,
+      moveY: Math.random() * 100 - 50
     }));
     setNachos(newNachos);
   }, []);
@@ -1021,9 +1021,34 @@ The 3-month program consists of:
           transform: translateY(0);
         }
         
+        /* === CINEMATIC SPACE DRIFT ANIMATIONS === */
+        @keyframes driftSlow {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(15px, -25px) rotate(45deg); }
+          50% { transform: translate(25px, -40px) rotate(90deg); }
+          75% { transform: translate(10px, -20px) rotate(135deg); }
+          100% { transform: translate(0, 0) rotate(180deg); }
+        }
+        @keyframes driftMedium {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-20px, -30px) rotate(-60deg); }
+          50% { transform: translate(-10px, -50px) rotate(-120deg); }
+          75% { transform: translate(10px, -25px) rotate(-180deg); }
+          100% { transform: translate(0, 0) rotate(-240deg); }
+        }
+        @keyframes driftFast {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(12px, -18px) rotate(90deg); }
+          50% { transform: translate(20px, -35px) rotate(180deg); }
+          75% { transform: translate(8px, -15px) rotate(270deg); }
+          100% { transform: translate(0, 0) rotate(360deg); }
+        }
         @keyframes floatNacho {
-          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(90deg); }
           50% { transform: translate(var(--moveX), var(--moveY)) rotate(180deg); }
+          75% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(270deg); }
+          100% { transform: translate(0, 0) rotate(360deg); }
         }
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -1358,30 +1383,27 @@ The 3-month program consists of:
 
         /* Cinematic Nacho Float Animation */
         @keyframes cinematicFloat {
-          0%, 100% { 
-            transform: translateY(0) rotate(0deg) scale(1); 
-          }
-          50% { 
-            transform: translateY(-25px) rotate(3deg) scale(1.02); 
-          }
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(15px, -25px) rotate(45deg); }
+          50% { transform: translate(25px, -40px) rotate(90deg); }
+          75% { transform: translate(10px, -20px) rotate(135deg); }
+          100% { transform: translate(0, 0) rotate(180deg); }
         }
 
         @keyframes cinematicFloat2 {
-          0%, 100% { 
-            transform: translateY(0) rotate(0deg); 
-          }
-          50% { 
-            transform: translateY(-18px) rotate(-2deg); 
-          }
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-20px, -30px) rotate(-60deg); }
+          50% { transform: translate(-10px, -50px) rotate(-120deg); }
+          75% { transform: translate(10px, -25px) rotate(-180deg); }
+          100% { transform: translate(0, 0) rotate(-240deg); }
         }
 
         @keyframes atmosphereDrift {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1); 
-          }
-          50% { 
-            transform: translate(20px, -15px) scale(1.03); 
-          }
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(30px, -20px) rotate(15deg); }
+          50% { transform: translate(50px, -35px) rotate(30deg); }
+          75% { transform: translate(25px, -15px) rotate(15deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         @keyframes heroFadeIn {
@@ -1526,8 +1548,7 @@ The 3-month program consists of:
             height: '8px',
             opacity: 0.9,
             filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(15deg)',
-            animation: 'cinematicFloat 8s ease-in-out infinite'
+            animation: 'cinematicFloat 25s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1549,9 +1570,8 @@ The 3-month program consists of:
             height: '10px',
             opacity: 0.9,
             filter: 'blur(1px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(-20deg)',
-            animation: 'cinematicFloat2 7s ease-in-out infinite',
-            animationDelay: '-2s'
+            animation: 'cinematicFloat2 28s ease-in-out infinite',
+            animationDelay: '-8s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1573,9 +1593,8 @@ The 3-month program consists of:
             height: '4px',
             opacity: 0.9,
             filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 8px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(45deg)',
-            animation: 'cinematicFloat 10s ease-in-out infinite',
-            animationDelay: '-5s'
+            animation: 'cinematicFloat 22s ease-in-out infinite',
+            animationDelay: '-12s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1597,9 +1616,8 @@ The 3-month program consists of:
             height: '6px',
             opacity: 0.9,
             filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(-35deg)',
-            animation: 'cinematicFloat2 9s ease-in-out infinite',
-            animationDelay: '-3s'
+            animation: 'cinematicFloat2 26s ease-in-out infinite',
+            animationDelay: '-15s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1621,9 +1639,8 @@ The 3-month program consists of:
             height: '5px',
             opacity: 0.9,
             filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(60deg)',
-            animation: 'cinematicFloat 11s ease-in-out infinite',
-            animationDelay: '-7s'
+            animation: 'cinematicFloat 24s ease-in-out infinite',
+            animationDelay: '-18s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1650,9 +1667,8 @@ The 3-month program consists of:
             height: '5px',
             opacity: 0.9,
             filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(25deg)',
-            animation: 'cinematicFloat 6s ease-in-out infinite',
-            animationDelay: '-1s'
+            animation: 'cinematicFloat 20s ease-in-out infinite',
+            animationDelay: '-5s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1674,9 +1690,8 @@ The 3-month program consists of:
             height: '7px',
             opacity: 0.9,
             filter: 'blur(1px) drop-shadow(0 0 5px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 14px rgba(255, 153, 0, 0.4))',
-            transform: 'rotate(-10deg)',
-            animation: 'cinematicFloat2 5s ease-in-out infinite',
-            animationDelay: '-4s'
+            animation: 'cinematicFloat2 23s ease-in-out infinite',
+            animationDelay: '-10s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <defs>
@@ -1696,7 +1711,7 @@ The 3-month program consists of:
 
           {/* === HERO ACCENT NACHOS: Intentional Placement === */}
           
-          {/* Nacho - Left of "Master High-Stakes" headline */}
+          {/* Nacho - Left of "Master High-Stakes" headline (medium) */}
           <div style={{
             position: 'absolute',
             top: '38%',
@@ -1705,14 +1720,14 @@ The 3-month program consists of:
             height: '45px',
             opacity: 0.25,
             filter: 'blur(4px)',
-            animation: 'cinematicFloat 18s ease-in-out infinite'
+            animation: 'cinematicFloat 38s ease-in-out infinite'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
             </svg>
           </div>
 
-          {/* Nacho - Top Center */}
+          {/* Nacho - Top Center (large/blurry - slowest) */}
           <div style={{
             position: 'absolute',
             top: '8%',
@@ -1721,15 +1736,15 @@ The 3-month program consists of:
             height: '70px',
             opacity: 0.2,
             filter: 'blur(8px)',
-            animation: 'cinematicFloat2 22s ease-in-out infinite',
-            animationDelay: '-6s'
+            animation: 'cinematicFloat2 55s ease-in-out infinite',
+            animationDelay: '-20s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <polygon points="50,5 95,95 5,95" fill="#FF9900" />
             </svg>
           </div>
 
-          {/* Nacho - Bottom Left Corner */}
+          {/* Nacho - Bottom Left Corner (medium) */}
           <div style={{
             position: 'absolute',
             bottom: '18%',
@@ -1738,15 +1753,15 @@ The 3-month program consists of:
             height: '35px',
             opacity: 0.2,
             filter: 'blur(3px)',
-            animation: 'cinematicFloat 20s ease-in-out infinite',
-            animationDelay: '-4s'
+            animation: 'cinematicFloat 42s ease-in-out infinite',
+            animationDelay: '-15s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <polygon points="50,5 95,95 5,95" fill="#FF9900" />
             </svg>
           </div>
 
-          {/* Nacho - Mid Right (above coach shoulder) */}
+          {/* Nacho - Mid Right (above coach shoulder - medium) */}
           <div style={{
             position: 'absolute',
             top: '25%',
@@ -1755,15 +1770,15 @@ The 3-month program consists of:
             height: '30px',
             opacity: 0.15,
             filter: 'blur(3px)',
-            animation: 'cinematicFloat2 24s ease-in-out infinite',
-            animationDelay: '-10s'
+            animation: 'cinematicFloat2 40s ease-in-out infinite',
+            animationDelay: '-25s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
               <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
             </svg>
           </div>
 
-          {/* Nacho - Lower Center-Left */}
+          {/* Nacho - Lower Center-Left (medium) */}
           <div style={{
             position: 'absolute',
             bottom: '30%',
@@ -1772,7 +1787,7 @@ The 3-month program consists of:
             height: '28px',
             opacity: 0.18,
             filter: 'blur(2px)',
-            animation: 'cinematicFloat 19s ease-in-out infinite',
+            animation: 'cinematicFloat 36s ease-in-out infinite',
             animationDelay: '-8s'
           }}>
             <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
