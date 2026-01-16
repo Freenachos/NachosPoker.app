@@ -1,11 +1,25 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { GraduationCap, FileText, Calculator, LineChart, Users, DollarSign, ExternalLink } from 'lucide-react';
 
 const NachosPokerNavBar = () => {
   const pathname = usePathname();
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const maxScroll = 150;
+      const progress = Math.min(window.scrollY / maxScroll, 1);
+      setScrollProgress(progress);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { href: '/', label: 'Mentorship Program', icon: GraduationCap, special: true },
@@ -50,18 +64,21 @@ const NachosPokerNavBar = () => {
         }
 
         .nachospoker-navbar {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(10px);
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1000;
           border-radius: 12px;
           padding: 12px 16px;
-          margin-bottom: 24px;
+          margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: space-between;
           flex-wrap: wrap;
           gap: 12px;
         }
+        
         .nachospoker-navbar-brand {
           display: flex;
           align-items: center;
@@ -114,6 +131,7 @@ const NachosPokerNavBar = () => {
           white-space: nowrap;
           text-decoration: none;
         }
+        
         .nachospoker-nav-item:hover {
           color: white;
           background: rgba(255, 255, 255, 0.05);
@@ -187,9 +205,21 @@ const NachosPokerNavBar = () => {
             justify-content: center;
           }
         }
+        
+        .navbar-spacer {
+          height: 70px;
+        }
       `}</style>
       
-      <nav className="nachospoker-navbar">
+      <nav 
+        className="nachospoker-navbar"
+        style={{
+          background: `rgba(255, 255, 255, ${0.03 * scrollProgress})`,
+          border: `1px solid rgba(255, 255, 255, ${0.08 * scrollProgress})`,
+          backdropFilter: `blur(${10 * scrollProgress}px)`,
+          WebkitBackdropFilter: `blur(${10 * scrollProgress}px)`,
+        }}
+      >
         {/* Logo & Brand */}
         <div className="nachospoker-navbar-brand">
           <div className="nachospoker-navbar-logo">
@@ -234,6 +264,8 @@ const NachosPokerNavBar = () => {
           })}
         </div>
       </nav>
+      
+      <div className="navbar-spacer" />
     </>
   );
 };
