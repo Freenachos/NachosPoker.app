@@ -726,7 +726,8 @@ export default function FreeNachosArticles() {
       
       // Store cursor position before upload
       const textarea = notionTextareaRef.current;
-      const cursorPos = textarea?.selectionStart || notionContent.length;
+      const cursorPos = textarea?.selectionStart || textarea?.value.length || 0;
+      const currentValue = textarea?.value || '';
       
       setUploadingImages(true);
       
@@ -743,19 +744,18 @@ export default function FreeNachosArticles() {
         
         // Insert image URLs at cursor position
         const imageText = newUrls.map(url => `\n${url}\n`).join('');
-        const before = notionContent.slice(0, cursorPos);
-        const after = notionContent.slice(cursorPos);
+        const before = currentValue.slice(0, cursorPos);
+        const after = currentValue.slice(cursorPos);
         const newContent = before + imageText + after;
-        setNotionContent(newContent);
         
-        // Restore cursor position after the inserted text
-        setTimeout(() => {
-          if (textarea) {
-            const newCursorPos = cursorPos + imageText.length;
-            textarea.focus();
-            textarea.setSelectionRange(newCursorPos, newCursorPos);
-          }
-        }, 0);
+        // Update textarea value directly
+        if (textarea) {
+          textarea.value = newContent;
+          // Position cursor after inserted text
+          const newCursorPos = cursorPos + imageText.length;
+          textarea.focus();
+          textarea.setSelectionRange(newCursorPos, newCursorPos);
+        }
       } catch (err) {
         console.error('Error uploading image:', err);
         setError('Failed to upload image: ' + err.message);
@@ -767,9 +767,10 @@ export default function FreeNachosArticles() {
   
   // Notion paste handler
   const handleNotionPaste = () => {
-    if (!notionContent.trim()) return;
+    const content = notionTextareaRef.current?.value || '';
+    if (!content.trim()) return;
     
-    const parsedBlocks = parseNotionContent(notionContent);
+    const parsedBlocks = parseNotionContent(content);
     
     // Try to extract title from first H1
     let title = editorArticle.title;
@@ -794,6 +795,7 @@ export default function FreeNachosArticles() {
       blocks: [...editorArticle.blocks, ...finalBlocks]
     });
     
+    if (notionTextareaRef.current) notionTextareaRef.current.value = '';
     setNotionContent('');
     setUploadedImages([]);
     setShowNotionPaste(false);
@@ -1116,7 +1118,7 @@ export default function FreeNachosArticles() {
   // Notion Paste Modal
   const NotionPasteModal = () => (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-      <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '900px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
+      <div className="glass-card" style={{ borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '1100px', height: '90vh', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255, 179, 71, 0.3)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(255, 179, 71, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1127,7 +1129,12 @@ export default function FreeNachosArticles() {
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', margin: '4px 0 0' }}>Copy your Notion content and paste it here</p>
             </div>
           </div>
-          <button onClick={() => { setShowNotionPaste(false); setNotionContent(''); setUploadedImages([]); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
+          <button onClick={() => { 
+            setShowNotionPaste(false); 
+            setNotionContent(''); 
+            setUploadedImages([]); 
+            if (notionTextareaRef.current) notionTextareaRef.current.value = '';
+          }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}>
             <X size={18} color="rgba(255,255,255,0.6)" />
           </button>
         </div>
@@ -1155,21 +1162,12 @@ export default function FreeNachosArticles() {
         
         <textarea
           ref={notionTextareaRef}
-          value={notionContent}
-          onChange={(e) => {
-            const textarea = e.target;
-            const cursorPos = textarea.selectionStart;
-            setNotionContent(e.target.value);
-            // Restore cursor position after React re-render
-            requestAnimationFrame(() => {
-              textarea.setSelectionRange(cursorPos, cursorPos);
-            });
-          }}
+          defaultValue=""
           onPaste={handlePasteWithImages}
           placeholder="Paste your Notion content here (Ctrl+V / Cmd+V)... You can also paste images directly!"
           style={{
             flex: 1,
-            minHeight: '450px',
+            minHeight: '200px',
             width: '100%',
             background: 'rgba(0,0,0,0.4)',
             border: '1px solid rgba(255,255,255,0.15)',
@@ -1187,24 +1185,29 @@ export default function FreeNachosArticles() {
         
         <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
           <button 
-            onClick={() => { setShowNotionPaste(false); setNotionContent(''); setUploadedImages([]); }} 
+            onClick={() => { 
+              setShowNotionPaste(false); 
+              setNotionContent(''); 
+              setUploadedImages([]); 
+              if (notionTextareaRef.current) notionTextareaRef.current.value = '';
+            }} 
             style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', padding: '14px', color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}
           >
             Cancel
           </button>
           <button 
             onClick={handleNotionPaste} 
-            disabled={!notionContent.trim() || uploadingImages}
+            disabled={uploadingImages}
             style={{ 
               flex: 2, 
-              background: (notionContent.trim() && !uploadingImages) ? '#FFB347' : 'rgba(255, 179, 71, 0.3)', 
+              background: !uploadingImages ? '#FFB347' : 'rgba(255, 179, 71, 0.3)', 
               border: 'none', 
               borderRadius: '8px', 
               padding: '14px', 
-              color: (notionContent.trim() && !uploadingImages) ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
+              color: !uploadingImages ? '#0a0a0a' : 'rgba(255,255,255,0.4)', 
               fontSize: '14px', 
               fontWeight: '600', 
-              cursor: (notionContent.trim() && !uploadingImages) ? 'pointer' : 'not-allowed',
+              cursor: !uploadingImages ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
