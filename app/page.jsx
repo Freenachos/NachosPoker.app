@@ -1461,6 +1461,27 @@ The 3-month program consists of:
         }} />
       </div>
 
+      {/* ==================== DYNAMIC FLOATING NACHOS (Fixed, z-1) ==================== */}
+      {/* Sparse ambient layer visible across all sections */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
+        {nachos.map(nacho => (
+          <div
+            key={nacho.id}
+            style={{
+              position: 'absolute',
+              left: `${nacho.x}%`,
+              top: `${nacho.y}%`,
+              animation: `floatNacho ${nacho.duration}s ease-in-out infinite`,
+              animationDelay: `${nacho.delay}s`,
+              '--moveX': `${nacho.moveX}px`,
+              '--moveY': `${nacho.moveY}px`
+            }}
+          >
+            <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
+          </div>
+        ))}
+      </div>
+
       {/* ==================== CINEMATIC HERO SECTION ==================== */}
       <section 
         className="hero-section-fade"
@@ -1470,7 +1491,7 @@ The 3-month program consists of:
           width: '100%',
           overflow: 'hidden',
           background: '#0A0A0A',
-          zIndex: 1
+          zIndex: 2
         }}
       >
         {/* === LAYER 10: FLOATING NACHOS (z-10) - Inside Hero === */}
@@ -1597,26 +1618,6 @@ The 3-month program consists of:
               <polygon points="50,5 95,95 5,95" fill="#FF9900" />
             </svg>
           </div>
-        </div>
-
-        {/* === DYNAMIC FLOATING NACHOS (z-8) - Sparse Ambient Layer === */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 8, overflow: 'hidden', pointerEvents: 'none' }}>
-          {nachos.map(nacho => (
-            <div
-              key={nacho.id}
-              style={{
-                position: 'absolute',
-                left: `${nacho.x}%`,
-                top: `${nacho.y}%`,
-                animation: `floatNacho ${nacho.duration}s ease-in-out infinite`,
-                animationDelay: `${nacho.delay}s`,
-                '--moveX': `${nacho.moveX}px`,
-                '--moveY': `${nacho.moveY}px`
-              }}
-            >
-              <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
-            </div>
-          ))}
         </div>
 
         {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
@@ -1835,7 +1836,7 @@ The 3-month program consists of:
         style={{
           height: '300px',
           position: 'relative',
-          zIndex: 1
+          zIndex: 0
         }}
       />
 
