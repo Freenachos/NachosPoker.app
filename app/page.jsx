@@ -2027,92 +2027,79 @@ The 3-month program consists of:
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
       <div style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
-        {/* About Section - First Card with Extra Dramatic Entrance */}
+        {/* ==================== COACH SECTION - Stealth-to-Gold Architecture ==================== */}
         <div 
           ref={aboutSectionRef}
-          className="glass-card reveal-first"
+          className="reveal-first"
           style={{
-            borderRadius: '24px',
-            padding: '64px',
+            paddingTop: '120px',
+            paddingBottom: '120px',
             marginBottom: '200px'
           }}
         >
-          {/* New Headline */}
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: '32px',
-              fontWeight: '800',
-              color: '#F0F0F0',
-              marginBottom: '8px',
-              letterSpacing: '-0.01em'
-            }}>
-              The Coach Behind <span style={{ color: '#D4AF37' }}>$5M+</span> in Student Profits
-            </h2>
-          </div>
-
-          {/* Stats Row - Prominent at Top */}
-          <div style={{ 
+          {/* Two-Column Grid Layout */}
+          <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '20px',
-            marginBottom: '48px',
-            padding: '28px 32px',
-            background: 'rgba(18, 18, 18, 0.6)',
-            borderRadius: '16px',
-            border: '1px solid rgba(212, 175, 55, 0.2)'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#D4AF37', marginBottom: '6px' }}>$5M+</div>
-              <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Student Profits</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#D4AF37', marginBottom: '6px' }}>200+</div>
-              <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Players Coached</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#D4AF37', marginBottom: '6px' }}>6.2bb/100</div>
-              <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Win Rate at 1KNL+</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#D4AF37', marginBottom: '6px' }}>10M+</div>
-              <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Hands Played</div>
-            </div>
-          </div>
-          
-          <div style={{ display: 'flex', gap: '48px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-            {/* Bio Text - Rewritten for Authority (max-width 650px) */}
-            <div style={{ flex: 1, minWidth: '300px', maxWidth: '650px' }}>
+            gridTemplateColumns: '1fr 1fr',
+            gap: '80px',
+            alignItems: 'center'
+          }} className="coach-grid">
+            
+            {/* LEFT COLUMN: Naked Narrative */}
+            <div style={{ maxWidth: '560px' }}>
+              {/* Headline with Liquid Gold */}
+              <h2 
+                className="coach-headline"
+                style={{
+                  fontSize: 'clamp(32px, 4vw, 48px)',
+                  fontWeight: '800',
+                  lineHeight: 1.1,
+                  marginBottom: '32px',
+                  letterSpacing: '-0.025em',
+                  fontFamily: 'Manrope, Inter, sans-serif'
+                }}
+              >
+                <span style={{ color: '#FFFFFF' }}>The Coach Behind</span>
+                <br />
+                <span style={{ 
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #FF9900 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>$5M+ in Student Profits</span>
+              </h2>
+              
               {/* Paragraph 1: The Authority */}
               <p style={{
                 color: 'rgba(240, 240, 240, 0.9)',
-                fontSize: '16px',
-                lineHeight: 1.9,
-                marginBottom: '20px'
+                fontSize: '17px',
+                lineHeight: 1.85,
+                marginBottom: '24px'
               }}>
                 My students have generated over <strong style={{ color: '#D4AF37' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#D4AF37' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This isn't theory. It's a system that produces results.
               </p>
               
               {/* Paragraph 2: The Method */}
               <p style={{
-                color: 'rgba(240, 240, 240, 0.8)',
-                fontSize: '16px',
-                lineHeight: 1.9,
-                marginBottom: '20px'
+                color: 'rgba(240, 240, 240, 0.75)',
+                fontSize: '17px',
+                lineHeight: 1.85,
+                marginBottom: '24px'
               }}>
-                I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D4AF37' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way. GTO is the diagnostic tool. Exploitation is the profit engine.
+                I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D4AF37' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
               </p>
               
               {/* Paragraph 3: The Journey */}
               <p style={{
-                color: 'rgba(240, 240, 240, 0.7)',
-                fontSize: '16px',
-                lineHeight: 1.9,
-                marginBottom: '32px'
+                color: 'rgba(240, 240, 240, 0.6)',
+                fontSize: '17px',
+                lineHeight: 1.85,
+                marginBottom: '40px'
               }}>
-                I wasn't born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed wasn't more study. It was a better system. That same system is now the foundation of my mentorship, and it's responsible for the results you see above.
+                I wasn't born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed wasn't more study—it was a better system.
               </p>
 
-              {/* Secondary CTA after bio */}
+              {/* CTA Button */}
               <a 
                 href="https://calendly.com/freenachos/intro" 
                 target="_blank" 
@@ -2121,10 +2108,10 @@ The 3-month program consists of:
                 style={{
                   background: 'transparent',
                   color: '#D4AF37',
-                  padding: '16px 32px',
-                  borderRadius: '12px',
+                  padding: '18px 36px',
+                  borderRadius: '14px',
                   fontWeight: '600',
-                  fontSize: '15px',
+                  fontSize: '16px',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -2137,39 +2124,186 @@ The 3-month program consists of:
               </a>
             </div>
             
-            {/* Results Graph - Visual Proof */}
-            <div style={{
-              flex: '0 0 360px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '14px'
-            }}>
-              <div style={{
-                borderRadius: '20px',
-                overflow: 'hidden',
-                border: '2px solid rgba(212, 175, 55, 0.35)',
-                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)'
-              }}>
-                <img 
-                  src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
-                  alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block'
-                  }}
-                />
-              </div>
-              <div style={{ 
-                textAlign: 'center',
-                fontSize: '13px',
-                color: 'rgba(240, 240, 240, 0.45)',
-                fontStyle: 'italic'
-              }}>
-                Verified results at 1KNL+
+            {/* RIGHT COLUMN: Glass Evidence Dashboard */}
+            <div 
+              className="evidence-dashboard"
+              style={{
+                position: 'relative'
+              }}
+            >
+              {/* Gold Bloom Glow Layer (behind card) */}
+              <div 
+                className="dashboard-bloom"
+                style={{
+                  position: 'absolute',
+                  inset: '-40px',
+                  background: 'radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.2) 0%, transparent 70%)',
+                  opacity: 0,
+                  filter: 'blur(40px)',
+                  transition: 'opacity 0.6s ease',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }}
+              />
+              
+              {/* Glass Pedestal Container */}
+              <div 
+                className="glass-pedestal"
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  background: 'rgba(18, 18, 18, 0.4)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  overflow: 'hidden',
+                  transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)'
+                }}
+              >
+                {/* Graph Container */}
+                <div style={{ position: 'relative', padding: '24px 24px 0 24px' }}>
+                  {/* Stealth Graph Image */}
+                  <div 
+                    className="stealth-graph-container"
+                    style={{
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      position: 'relative'
+                    }}
+                  >
+                    <img 
+                      className="stealth-graph"
+                      src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
+                      alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        filter: 'brightness(0.4) grayscale(0.8) contrast(1.1)',
+                        transition: 'filter 0.6s ease'
+                      }}
+                    />
+                    
+                    {/* Hover Indicator */}
+                    <div 
+                      className="graph-hover-indicator"
+                      style={{
+                        position: 'absolute',
+                        bottom: '16px',
+                        right: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: 'rgba(0, 0, 0, 0.6)',
+                        backdropFilter: 'blur(8px)',
+                        padding: '10px 16px',
+                        borderRadius: '30px',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        opacity: 0,
+                        transform: 'translateY(10px)',
+                        transition: 'all 0.4s ease'
+                      }}
+                    >
+                      <div style={{
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        background: 'rgba(212, 175, 55, 0.2)',
+                        border: '2px solid #D4AF37',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <span style={{ color: '#D4AF37', fontSize: '14px', fontWeight: '700' }}>+</span>
+                      </div>
+                      <span style={{ color: '#D4AF37', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
+                    </div>
+                  </div>
+                  
+                  {/* Caption */}
+                  <div style={{ 
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: 'rgba(240, 240, 240, 0.4)',
+                    fontStyle: 'italic',
+                    marginTop: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    Verified results at 1KNL+
+                  </div>
+                </div>
+                
+                {/* Stats Bar - Integrated at Bottom */}
+                <div style={{
+                  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                  padding: '24px',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
+                  gap: '16px'
+                }}>
+                  {[
+                    { value: '$5M+', label: 'Student Profits' },
+                    { value: '200+', label: 'Players Coached' },
+                    { value: '6.2bb', label: 'Win Rate' },
+                    { value: '10M+', label: 'Hands Played' }
+                  ].map((stat, idx) => (
+                    <div key={idx} style={{ textAlign: 'center' }}>
+                      <div style={{ 
+                        fontSize: '22px', 
+                        fontWeight: '800', 
+                        color: '#D4AF37', 
+                        marginBottom: '4px',
+                        letterSpacing: '-0.02em'
+                      }}>
+                        {stat.value}
+                      </div>
+                      <div style={{ 
+                        fontSize: '10px', 
+                        color: 'rgba(255, 255, 255, 0.5)', 
+                        textTransform: 'uppercase', 
+                        letterSpacing: '0.1em' 
+                      }}>
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Coach Section Styles */}
+          <style>{`
+            .evidence-dashboard:hover .dashboard-bloom {
+              opacity: 1 !important;
+            }
+            
+            .evidence-dashboard:hover .glass-pedestal {
+              border-color: rgba(212, 175, 55, 0.3) !important;
+              box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 153, 0, 0.15);
+              transform: translateY(-4px);
+            }
+            
+            .evidence-dashboard:hover .stealth-graph {
+              filter: brightness(1.1) grayscale(0) contrast(1) !important;
+            }
+            
+            .evidence-dashboard:hover .graph-hover-indicator {
+              opacity: 1 !important;
+              transform: translateY(0) !important;
+            }
+            
+            @media (max-width: 1024px) {
+              .coach-grid {
+                grid-template-columns: 1fr !important;
+                gap: 48px !important;
+              }
+              .coach-grid > div:first-child {
+                max-width: 100% !important;
+              }
+            }
+          `}</style>
         </div>
 
         {/* What You Get in the Mentorship Program Section */}
