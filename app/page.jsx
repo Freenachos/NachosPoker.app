@@ -947,26 +947,6 @@ The 3-month program consists of:
         }}
       />
 
-      {/* Floating Nachos Background */}
-      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1}}>
-        {nachos.map(nacho => (
-          <div
-            key={nacho.id}
-            style={{
-              position: 'absolute',
-              left: `${nacho.x}%`,
-              top: `${nacho.y}%`,
-              animation: `floatNacho ${nacho.duration}s ease-in-out infinite`,
-              animationDelay: `${nacho.delay}s`,
-              '--moveX': `${nacho.moveX}px`,
-              '--moveY': `${nacho.moveY}px`
-            }}
-          >
-            <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
-          </div>
-        ))}
-      </div>
-
       {/* Sticky CTA Button */}
       <div className="sticky-cta">
         <a 
@@ -1406,12 +1386,17 @@ The 3-month program consists of:
           mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
+
+        /* Hero Section Mask - Organic Bottom Dissolve */
+        .hero-section-fade {
+          mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+        }
       `}</style>
 
-      {/* ==================== GLOBAL ATMOSPHERIC LAYER (Fixed, z--2) ==================== */}
-      {/* These shapes stay fixed so they show through the Hero section fade */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -2, overflow: 'hidden' }}>
-        {/* Massive Atmospheric Shape - Top Right Corner */}
+      {/* ==================== LAYER 0: BACKGROUND GLOWS (Fixed, z-0) ==================== */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        {/* Massive Bokeh - Top Right */}
         <div style={{
           position: 'absolute',
           top: '-10%',
@@ -1424,7 +1409,7 @@ The 3-month program consists of:
           opacity: 0.6
         }} />
         
-        {/* Massive Atmospheric Shape - Bottom Left Corner */}
+        {/* Massive Bokeh - Bottom Left */}
         <div style={{
           position: 'absolute',
           bottom: '-15%',
@@ -1437,67 +1422,158 @@ The 3-month program consists of:
           opacity: 0.5
         }} />
 
-        {/* Cinematic Nacho 1 - Upper Right */}
+        {/* Ambient Bokeh - Center Right */}
         <div style={{
           position: 'absolute',
-          top: '12%',
-          right: '10%',
-          width: '200px',
-          height: '200px',
-          opacity: 0.07,
-          filter: 'blur(25px)',
-          animation: 'cinematicFloat 16s ease-in-out infinite'
-        }}>
-          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-            <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
-          </svg>
-        </div>
-        
-        {/* Cinematic Nacho 2 - Mid Left */}
-        <div style={{
-          position: 'absolute',
-          top: '45%',
-          left: '5%',
-          width: '160px',
-          height: '160px',
-          opacity: 0.05,
-          filter: 'blur(30px)',
-          animation: 'cinematicFloat2 20s ease-in-out infinite',
-          animationDelay: '-6s'
-        }}>
-          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-            <polygon points="50,5 95,95 5,95" fill="#FF9900" />
-          </svg>
-        </div>
-        
-        {/* Cinematic Nacho 3 - Lower Right */}
-        <div style={{
-          position: 'absolute',
-          bottom: '20%',
-          right: '15%',
-          width: '180px',
-          height: '180px',
-          opacity: 0.06,
-          filter: 'blur(35px)',
-          animation: 'cinematicFloat 22s ease-in-out infinite',
-          animationDelay: '-10s'
-        }}>
-          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-            <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
-          </svg>
-        </div>
+          top: '40%',
+          right: '5%',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 50%)',
+          filter: 'blur(60px)',
+          opacity: 0.4
+        }} />
       </div>
 
       {/* ==================== CINEMATIC HERO SECTION ==================== */}
       <section 
+        className="hero-section-fade"
         style={{
           position: 'relative',
           minHeight: '100vh',
           width: '100%',
           overflow: 'hidden',
-          background: '#0A0A0A'
+          background: '#0A0A0A',
+          zIndex: 1
         }}
       >
+        {/* === LAYER 10: FLOATING NACHOS (z-10) - Inside Hero === */}
+        {/* Sparse at top (distant stars), denser toward bottom */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 10, overflow: 'hidden', pointerEvents: 'none' }}>
+          
+          {/* === TOP ZONE: Very Sparse - "Distant Stars" === */}
+          {/* Nacho - Far Top Left (away from headline) */}
+          <div style={{
+            position: 'absolute',
+            top: '5%',
+            left: '3%',
+            width: '80px',
+            height: '80px',
+            opacity: 0.04,
+            filter: 'blur(20px)',
+            animation: 'cinematicFloat 18s ease-in-out infinite'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+            </svg>
+          </div>
+
+          {/* Nacho - Top Right Corner (away from coach face) */}
+          <div style={{
+            position: 'absolute',
+            top: '8%',
+            right: '3%',
+            width: '60px',
+            height: '60px',
+            opacity: 0.03,
+            filter: 'blur(25px)',
+            animation: 'cinematicFloat2 22s ease-in-out infinite',
+            animationDelay: '-5s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+            </svg>
+          </div>
+
+          {/* === MIDDLE ZONE: Medium Density === */}
+          {/* Nacho - Mid Left */}
+          <div style={{
+            position: 'absolute',
+            top: '40%',
+            left: '8%',
+            width: '120px',
+            height: '120px',
+            opacity: 0.05,
+            filter: 'blur(25px)',
+            animation: 'cinematicFloat 20s ease-in-out infinite',
+            animationDelay: '-8s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+            </svg>
+          </div>
+
+          {/* === BOTTOM ZONE: Higher Density === */}
+          {/* Nacho - Bottom Left */}
+          <div style={{
+            position: 'absolute',
+            bottom: '25%',
+            left: '5%',
+            width: '150px',
+            height: '150px',
+            opacity: 0.06,
+            filter: 'blur(20px)',
+            animation: 'cinematicFloat 16s ease-in-out infinite',
+            animationDelay: '-4s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+            </svg>
+          </div>
+
+          {/* Nacho - Bottom Center-Left */}
+          <div style={{
+            position: 'absolute',
+            bottom: '15%',
+            left: '20%',
+            width: '130px',
+            height: '130px',
+            opacity: 0.05,
+            filter: 'blur(25px)',
+            animation: 'cinematicFloat2 19s ease-in-out infinite',
+            animationDelay: '-7s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+            </svg>
+          </div>
+
+          {/* Nacho - Bottom Right (edge, behind coach) */}
+          <div style={{
+            position: 'absolute',
+            bottom: '10%',
+            right: '2%',
+            width: '140px',
+            height: '140px',
+            opacity: 0.05,
+            filter: 'blur(22px)',
+            animation: 'cinematicFloat 21s ease-in-out infinite',
+            animationDelay: '-10s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#D4AF37" />
+            </svg>
+          </div>
+
+          {/* Nacho - Very Bottom Left */}
+          <div style={{
+            position: 'absolute',
+            bottom: '5%',
+            left: '35%',
+            width: '100px',
+            height: '100px',
+            opacity: 0.04,
+            filter: 'blur(28px)',
+            animation: 'cinematicFloat2 25s ease-in-out infinite',
+            animationDelay: '-15s'
+          }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+              <polygon points="50,5 95,95 5,95" fill="#FF9900" />
+            </svg>
+          </div>
+        </div>
+
         {/* === FLOATING NAVBAR OVERLAY (z-50) === */}
         <div 
           style={{
