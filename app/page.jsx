@@ -2027,280 +2027,396 @@ The 3-month program consists of:
       {/* ==================== MAIN CONTENT CONTAINER ==================== */}
       <div style={{position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px'}}>
 
-        {/* ==================== COACH SECTION - Stealth-to-Gold Architecture ==================== */}
+        {/* ==================== COACH SECTION - €50K Bespoke Agency Standards ==================== */}
         <div 
           ref={aboutSectionRef}
-          className="reveal-first"
+          className="coach-section-wrapper reveal-first"
           style={{
-            paddingTop: '120px',
-            paddingBottom: '120px',
-            marginBottom: '200px'
+            paddingTop: '140px',
+            paddingBottom: '140px',
+            marginBottom: '200px',
+            position: 'relative',
+            /* Atmospheric Edge Mask - Soft fade into void */
+            maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 100%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 100%)'
           }}
         >
           {/* Two-Column Grid Layout */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '80px',
+            gap: '100px',
             alignItems: 'center'
           }} className="coach-grid">
             
-            {/* LEFT COLUMN: Naked Narrative */}
-            <div style={{ maxWidth: '560px' }}>
-              {/* Headline with Liquid Gold */}
+            {/* LEFT COLUMN: Naked Narrative with Liquid Gold Typography */}
+            <div style={{ maxWidth: '540px' }}>
+              {/* Headline with Architectural Tracking + Liquid Gold Wipe */}
               <h2 
-                className="coach-headline"
+                className="coach-headline liquid-gold-headline"
                 style={{
-                  fontSize: 'clamp(32px, 4vw, 48px)',
+                  fontSize: 'clamp(34px, 4.2vw, 52px)',
                   fontWeight: '800',
-                  lineHeight: 1.1,
-                  marginBottom: '32px',
-                  letterSpacing: '-0.025em',
+                  lineHeight: 1.05,
+                  marginBottom: '40px',
+                  letterSpacing: '-0.01em',
                   fontFamily: 'Manrope, Inter, sans-serif'
                 }}
               >
-                <span style={{ color: '#FFFFFF' }}>The Coach Behind</span>
-                <br />
-                <span style={{ 
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #FF9900 100%)',
+                <span className="headline-white" style={{ 
+                  color: '#FFFFFF',
+                  display: 'block',
+                  marginBottom: '8px'
+                }}>The Coach Behind</span>
+                <span className="headline-gold-wipe" style={{ 
+                  display: 'block',
+                  background: 'linear-gradient(90deg, #D4AF37 0%, #FFD700 50%, #FF9900 100%)',
+                  backgroundSize: '200% 100%',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
+                  backgroundClip: 'text',
+                  animation: 'goldWipe 3s ease-in-out infinite alternate'
                 }}>$5M+ in Student Profits</span>
               </h2>
               
               {/* Paragraph 1: The Authority */}
               <p style={{
-                color: 'rgba(240, 240, 240, 0.9)',
+                color: 'rgba(240, 240, 240, 0.92)',
                 fontSize: '17px',
-                lineHeight: 1.85,
-                marginBottom: '24px'
+                lineHeight: 1.9,
+                marginBottom: '28px',
+                letterSpacing: '0.01em'
               }}>
                 My students have generated over <strong style={{ color: '#D4AF37' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#D4AF37' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This isn't theory. It's a system that produces results.
               </p>
               
               {/* Paragraph 2: The Method */}
               <p style={{
-                color: 'rgba(240, 240, 240, 0.75)',
+                color: 'rgba(240, 240, 240, 0.72)',
                 fontSize: '17px',
-                lineHeight: 1.85,
-                marginBottom: '24px'
+                lineHeight: 1.9,
+                marginBottom: '28px',
+                letterSpacing: '0.01em'
               }}>
                 I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D4AF37' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way.
               </p>
               
               {/* Paragraph 3: The Journey */}
               <p style={{
-                color: 'rgba(240, 240, 240, 0.6)',
+                color: 'rgba(240, 240, 240, 0.55)',
                 fontSize: '17px',
-                lineHeight: 1.85,
-                marginBottom: '40px'
+                lineHeight: 1.9,
+                marginBottom: '48px',
+                letterSpacing: '0.01em'
               }}>
                 I wasn't born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed wasn't more study—it was a better system.
               </p>
 
-              {/* CTA Button */}
+              {/* CTA Button with Luminance Hover */}
               <a 
                 href="https://calendly.com/freenachos/intro" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="btn-hover"
+                className="coach-cta-btn"
                 style={{
                   background: 'transparent',
                   color: '#D4AF37',
-                  padding: '18px 36px',
-                  borderRadius: '14px',
+                  padding: '20px 40px',
+                  borderRadius: '16px',
                   fontWeight: '600',
                   fontSize: '16px',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  border: '2px solid rgba(212, 175, 55, 0.5)',
-                  transition: 'all 0.3s ease'
+                  gap: '12px',
+                  border: '2px solid rgba(212, 175, 55, 0.4)',
+                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                Book a Free Intro Call <ArrowRight size={18} />
+                <span style={{ position: 'relative', zIndex: 1 }}>Book a Free Intro Call</span>
+                <ArrowRight size={18} style={{ position: 'relative', zIndex: 1 }} />
               </a>
             </div>
             
-            {/* RIGHT COLUMN: Glass Evidence Dashboard */}
+            {/* RIGHT COLUMN: Obsidian Glass Evidence Dashboard */}
             <div 
-              className="evidence-dashboard"
+              className="obsidian-dashboard"
               style={{
                 position: 'relative'
               }}
             >
-              {/* Gold Bloom Glow Layer (behind card) */}
+              {/* Deep Gold Bloom Layer (Z-0) */}
               <div 
-                className="dashboard-bloom"
+                className="obsidian-bloom"
                 style={{
                   position: 'absolute',
-                  inset: '-40px',
-                  background: 'radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.2) 0%, transparent 70%)',
+                  inset: '-60px',
+                  background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(212, 175, 55, 0.25) 0%, rgba(255, 153, 0, 0.1) 40%, transparent 70%)',
                   opacity: 0,
-                  filter: 'blur(40px)',
-                  transition: 'opacity 0.6s ease',
+                  filter: 'blur(50px)',
+                  transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
                   pointerEvents: 'none',
                   zIndex: 0
                 }}
               />
               
-              {/* Glass Pedestal Container */}
+              {/* Obsidian Glass Frame (Z-1) */}
               <div 
-                className="glass-pedestal"
+                className="obsidian-frame"
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  background: 'rgba(18, 18, 18, 0.4)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
+                  /* Gradient Glass - Beveled Thickness Effect */
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.01) 100%)',
+                  backdropFilter: 'blur(24px) saturate(1.2)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(1.2)',
+                  borderRadius: '28px',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
-                  overflow: 'hidden',
-                  transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)'
+                  overflow: 'visible',
+                  transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}
               >
+                {/* Inner Luminance Glow Layer (appears on hover) */}
+                <div 
+                  className="inner-luminance"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '28px',
+                    boxShadow: 'inset 0 0 60px rgba(212, 175, 55, 0)',
+                    transition: 'box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                    pointerEvents: 'none',
+                    zIndex: 10
+                  }}
+                />
+                
                 {/* Graph Container */}
-                <div style={{ position: 'relative', padding: '24px 24px 0 24px' }}>
-                  {/* Stealth Graph Image */}
+                <div style={{ position: 'relative', padding: '28px 28px 20px 28px' }}>
+                  {/* Stealth Graph Image with Obsidian Filter */}
                   <div 
-                    className="stealth-graph-container"
+                    className="obsidian-graph-container"
                     style={{
-                      borderRadius: '16px',
+                      borderRadius: '20px',
                       overflow: 'hidden',
-                      position: 'relative'
+                      position: 'relative',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
                     }}
                   >
                     <img 
-                      className="stealth-graph"
+                      className="obsidian-graph"
                       src="https://static.runitonce.com/static/img/courses/dominate-with-data/chart.bcc69818f43c.jpg"
                       alt="Freenachos Results Graph - 6.2bb/100 at High Stakes"
                       style={{
                         width: '100%',
                         height: 'auto',
                         display: 'block',
-                        filter: 'brightness(0.4) grayscale(0.8) contrast(1.1)',
-                        transition: 'filter 0.6s ease'
+                        /* Refined Stealth Filter */
+                        filter: 'brightness(0.3) saturate(0.5) contrast(1.2)',
+                        transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                        transform: 'scale(1)'
                       }}
                     />
                     
-                    {/* Hover Indicator */}
+                    {/* Hover Indicator - Luxury Gold */}
                     <div 
-                      className="graph-hover-indicator"
+                      className="obsidian-hover-indicator"
                       style={{
                         position: 'absolute',
-                        bottom: '16px',
-                        right: '16px',
+                        bottom: '20px',
+                        right: '20px',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        background: 'rgba(0, 0, 0, 0.6)',
-                        backdropFilter: 'blur(8px)',
-                        padding: '10px 16px',
-                        borderRadius: '30px',
-                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        gap: '10px',
+                        background: 'rgba(10, 10, 10, 0.8)',
+                        backdropFilter: 'blur(12px)',
+                        padding: '12px 20px',
+                        borderRadius: '40px',
+                        border: '1px solid rgba(212, 175, 55, 0.4)',
                         opacity: 0,
-                        transform: 'translateY(10px)',
-                        transition: 'all 0.4s ease'
+                        transform: 'translateY(16px) scale(0.95)',
+                        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
                       }}
                     >
                       <div style={{
-                        width: '20px',
-                        height: '20px',
+                        width: '24px',
+                        height: '24px',
                         borderRadius: '50%',
-                        background: 'rgba(212, 175, 55, 0.2)',
+                        background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(255, 153, 0, 0.2) 100%)',
                         border: '2px solid #D4AF37',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
                       }}>
-                        <span style={{ color: '#D4AF37', fontSize: '14px', fontWeight: '700' }}>+</span>
+                        <span style={{ color: '#FFD700', fontSize: '16px', fontWeight: '700' }}>+</span>
                       </div>
-                      <span style={{ color: '#D4AF37', fontSize: '12px', fontWeight: '600' }}>View Full Results</span>
+                      <span style={{ color: '#D4AF37', fontSize: '13px', fontWeight: '600', letterSpacing: '0.02em' }}>View Full Results</span>
                     </div>
                   </div>
                   
                   {/* Caption */}
                   <div style={{ 
                     textAlign: 'center',
-                    fontSize: '13px',
-                    color: 'rgba(240, 240, 240, 0.4)',
+                    fontSize: '12px',
+                    color: 'rgba(240, 240, 240, 0.35)',
                     fontStyle: 'italic',
-                    marginTop: '12px',
-                    marginBottom: '20px'
+                    marginTop: '16px',
+                    letterSpacing: '0.05em'
                   }}>
                     Verified results at 1KNL+
                   </div>
                 </div>
-                
-                {/* Stats Bar - Integrated at Bottom */}
-                <div style={{
-                  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                  padding: '24px',
+              </div>
+              
+              {/* FLOATING STATS RIBBON (Z-2) - Overlaps Graph Frame */}
+              <div 
+                className="stats-ribbon"
+                style={{
+                  position: 'absolute',
+                  bottom: '-32px',
+                  left: '24px',
+                  right: '24px',
+                  zIndex: 2,
+                  background: 'linear-gradient(135deg, rgba(18, 18, 18, 0.9) 0%, rgba(25, 25, 25, 0.85) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                  padding: '24px 20px',
                   display: 'grid',
                   gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: '16px'
-                }}>
-                  {[
-                    { value: '$5M+', label: 'Student Profits' },
-                    { value: '200+', label: 'Players Coached' },
-                    { value: '6.2bb', label: 'Win Rate' },
-                    { value: '10M+', label: 'Hands Played' }
-                  ].map((stat, idx) => (
-                    <div key={idx} style={{ textAlign: 'center' }}>
-                      <div style={{ 
-                        fontSize: '22px', 
-                        fontWeight: '800', 
-                        color: '#D4AF37', 
-                        marginBottom: '4px',
-                        letterSpacing: '-0.02em'
-                      }}>
-                        {stat.value}
-                      </div>
-                      <div style={{ 
-                        fontSize: '10px', 
-                        color: 'rgba(255, 255, 255, 0.5)', 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.1em' 
-                      }}>
-                        {stat.label}
-                      </div>
+                  gap: '12px',
+                  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.1)',
+                  transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
+                {[
+                  { value: '$5M+', label: 'Student Profits' },
+                  { value: '200+', label: 'Players Coached' },
+                  { value: '6.2bb', label: 'Win Rate' },
+                  { value: '10M+', label: 'Hands Played' }
+                ].map((stat, idx) => (
+                  <div key={idx} style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      fontSize: '24px', 
+                      fontWeight: '800', 
+                      background: 'linear-gradient(135deg, #D4AF37 0%, #FFD700 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      marginBottom: '6px',
+                      letterSpacing: '-0.02em'
+                    }}>
+                      {stat.value}
                     </div>
-                  ))}
-                </div>
+                    <div style={{ 
+                      fontSize: '9px', 
+                      color: 'rgba(255, 255, 255, 0.55)', 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.12em',
+                      fontWeight: '500'
+                    }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Coach Section Styles */}
+          {/* Coach Section Premium Styles */}
           <style>{`
-            .evidence-dashboard:hover .dashboard-bloom {
+            /* Liquid Gold Wipe Animation */
+            @keyframes goldWipe {
+              0% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            
+            /* Obsidian Dashboard Hover States */
+            .obsidian-dashboard:hover .obsidian-bloom {
               opacity: 1 !important;
             }
             
-            .evidence-dashboard:hover .glass-pedestal {
-              border-color: rgba(212, 175, 55, 0.3) !important;
-              box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 153, 0, 0.15);
+            .obsidian-dashboard:hover .obsidian-frame {
+              border-color: rgba(212, 175, 55, 0.35) !important;
+              box-shadow: 
+                0 30px 100px rgba(0, 0, 0, 0.6), 
+                0 0 80px rgba(212, 175, 55, 0.15),
+                inset 0 1px 0 rgba(255,255,255,0.08) !important;
+              transform: translateY(-6px) scale(1.01);
+            }
+            
+            .obsidian-dashboard:hover .inner-luminance {
+              box-shadow: inset 0 0 80px rgba(212, 175, 55, 0.15) !important;
+            }
+            
+            .obsidian-dashboard:hover .obsidian-graph {
+              filter: brightness(1.15) saturate(1.1) contrast(1.05) !important;
+              transform: scale(1.02) !important;
+            }
+            
+            .obsidian-dashboard:hover .obsidian-hover-indicator {
+              opacity: 1 !important;
+              transform: translateY(0) scale(1) !important;
+            }
+            
+            .obsidian-dashboard:hover .stats-ribbon {
+              border-color: rgba(212, 175, 55, 0.4) !important;
+              box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.6), 
+                0 0 40px rgba(212, 175, 55, 0.2) !important;
               transform: translateY(-4px);
             }
             
-            .evidence-dashboard:hover .stealth-graph {
-              filter: brightness(1.1) grayscale(0) contrast(1) !important;
+            /* CTA Button Luminance Hover */
+            .coach-cta-btn::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 153, 0, 0.1) 100%);
+              opacity: 0;
+              transition: opacity 0.5s ease;
+              border-radius: 14px;
             }
             
-            .evidence-dashboard:hover .graph-hover-indicator {
-              opacity: 1 !important;
-              transform: translateY(0) !important;
+            .coach-cta-btn:hover {
+              border-color: rgba(212, 175, 55, 0.7) !important;
+              box-shadow: 0 0 40px rgba(212, 175, 55, 0.25);
+              transform: translateY(-2px);
             }
             
+            .coach-cta-btn:hover::before {
+              opacity: 1;
+            }
+            
+            /* Responsive */
             @media (max-width: 1024px) {
               .coach-grid {
                 grid-template-columns: 1fr !important;
-                gap: 48px !important;
+                gap: 80px !important;
               }
               .coach-grid > div:first-child {
                 max-width: 100% !important;
+              }
+              .stats-ribbon {
+                position: relative !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                margin-top: 24px;
+              }
+              .obsidian-frame {
+                overflow: visible !important;
+              }
+            }
+            
+            @media (max-width: 640px) {
+              .stats-ribbon {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
               }
             }
           `}</style>
