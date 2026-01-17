@@ -233,7 +233,7 @@ The 3-month program consists of:
   const tools = [
     { id: 1, name: 'Variance Calculator', description: 'Simulate your expected variance and downswings over any sample size', icon: BarChart3, color: '#3b82f6', link: '/variance' },
     { id: 2, name: 'Win Rate Analyzer', description: 'Track and analyze your win rate across different stakes and formats', icon: TrendingUp, color: '#22c55e', link: '/winrate' },
-    { id: 3, name: 'Seat Selection EV', description: 'Visualize how fish position impacts your win rate at 6-max tables', icon: Target, color: '#FFB347', link: '/seat' },
+    { id: 3, name: 'Seat Selection EV', description: 'Visualize how fish position impacts your win rate at 6-max tables', icon: Target, color: '#A78A43', link: '/seat' },
     { id: 4, name: 'Profits Tracker', description: 'Monitor your poker profits and track your bankroll growth over time', icon: DollarSign, color: '#14b8a6', link: '/profits' },
     { id: 5, name: 'Bad Beat Jackpot Dashboard', description: 'Track bad beat jackpot sizes and expected value across poker rooms', icon: Trophy, color: '#a855f7', link: '/bad-beat-jackpot' },
     { id: 6, name: 'Articles', description: 'Strategy guides, tips, and educational content to improve your game', icon: BookOpen, color: '#ef4444', link: '/articles' },
@@ -324,70 +324,6 @@ The 3-month program consists of:
     return () => observer.disconnect();
   }, []);
 
-  // Liquid Gold scroll animation for multiple section headlines
-  useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      
-      // Helper function to handle liquid gold transition for any headline
-      const handleLiquidGold = (headlineSelector, sectionRef) => {
-        const headline = document.querySelector(headlineSelector);
-        if (!headline || !sectionRef?.current) return;
-        
-        const rect = sectionRef.current.getBoundingClientRect();
-        const sectionTop = rect.top;
-        const triggerStart = windowHeight * 0.8;
-        const triggerEnd = windowHeight * 0.3;
-        
-        if (sectionTop < triggerStart && sectionTop > triggerEnd) {
-          const progress = 1 - ((sectionTop - triggerEnd) / (triggerStart - triggerEnd));
-          if (progress > 0.5) {
-            headline.classList.add('scrolled');
-          } else {
-            headline.classList.remove('scrolled');
-          }
-        } else if (sectionTop <= triggerEnd) {
-          headline.classList.add('scrolled');
-        } else {
-          headline.classList.remove('scrolled');
-        }
-      };
-      
-      // Coach section headline
-      handleLiquidGold('.liquid-gold-headline', aboutSectionRef);
-      
-      // What You Get section headline (uses its own section as reference)
-      const benefitsSection = document.querySelector('.what-you-get-section');
-      if (benefitsSection) {
-        const headline = document.querySelector('.liquid-gold-headline-benefits');
-        if (headline) {
-          const rect = benefitsSection.getBoundingClientRect();
-          const sectionTop = rect.top;
-          const triggerStart = windowHeight * 0.8;
-          const triggerEnd = windowHeight * 0.3;
-          
-          if (sectionTop < triggerStart && sectionTop > triggerEnd) {
-            const progress = 1 - ((sectionTop - triggerEnd) / (triggerStart - triggerEnd));
-            if (progress > 0.5) {
-              headline.classList.add('scrolled');
-            } else {
-              headline.classList.remove('scrolled');
-            }
-          } else if (sectionTop <= triggerEnd) {
-            headline.classList.add('scrolled');
-          } else {
-            headline.classList.remove('scrolled');
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Check initial state
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const eyeOffset = getEyeOffset();
 
   // ============================================
@@ -424,11 +360,11 @@ The 3-month program consists of:
 
   const CartoonNacho = ({ size = 90 }) => (
     <svg ref={nachoRef} width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(255, 179, 71, 0.4))' }}>
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#FFB347" stroke="#E09A30" strokeWidth="2"/>
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#A78A43" stroke="#8B7339" strokeWidth="2"/>
       <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#FFD54F" opacity="0.9"/>
       <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#FFD54F" opacity="0.9"/>
       <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#FFD54F" opacity="0.9"/>
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#FFB347" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#A78A43" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
       <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#1a1a1a" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }}/>
@@ -438,16 +374,16 @@ The 3-month program consists of:
       <path d="M38 62 Q50 72 62 62" fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round"/>
       <path d="M33 38 Q40 35 47 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
       <path d="M53 38 Q60 35 67 38" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="30" cy="30" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="70" cy="35" r="2.5" fill="#E09A30" opacity="0.5" />
-      <circle cx="35" cy="80" r="2" fill="#E09A30" opacity="0.5" />
-      <circle cx="65" cy="78" r="1.5" fill="#E09A30" opacity="0.5" />
+      <circle cx="30" cy="30" r="2" fill="#8B7339" opacity="0.5" />
+      <circle cx="70" cy="35" r="2.5" fill="#8B7339" opacity="0.5" />
+      <circle cx="35" cy="80" r="2" fill="#8B7339" opacity="0.5" />
+      <circle cx="65" cy="78" r="1.5" fill="#8B7339" opacity="0.5" />
     </svg>
   );
 
   const NachoTriangle = ({ size, opacity }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#FFB347" opacity="0.8"/>
+      <path d="M10 2 L18 17 L2 17 Z" fill="#A78A43" opacity="0.8"/>
     </svg>
   );
 
@@ -542,7 +478,7 @@ The 3-month program consists of:
         style={{
           position: 'absolute',
           inset: '-20px',
-          background: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(167, 138, 67, 0.25) 0%, transparent 70%)',
           opacity: 0,
           transition: 'opacity 0.5s ease',
           pointerEvents: 'none',
@@ -642,10 +578,10 @@ The 3-month program consists of:
         <span style={{
           fontSize: '11px',
           fontWeight: '600',
-          color: '#D4AF37',
+          color: '#A78A43',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
-          background: 'rgba(212, 175, 55, 0.15)',
+          background: 'rgba(167, 138, 67, 0.15)',
           padding: '4px 10px',
           borderRadius: '20px'
         }}>
@@ -680,7 +616,7 @@ The 3-month program consists of:
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        color: '#D4AF37',
+        color: '#A78A43',
         fontSize: '13px',
         fontWeight: '500'
       }}>
@@ -769,8 +705,8 @@ The 3-month program consists of:
             width: '60px',
             height: '60px',
             borderRadius: '14px',
-            background: 'rgba(212, 175, 55, 0.08)',
-            border: '1px solid rgba(212, 175, 55, 0.3)',
+            background: 'rgba(167, 138, 67, 0.08)',
+            border: '1px solid rgba(167, 138, 67, 0.3)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -778,7 +714,7 @@ The 3-month program consists of:
             pointerEvents: 'none'
           }}
         >
-          <Icon size={28} color="#D4AF37" strokeWidth={1.5} />
+          <Icon size={28} color="#A78A43" strokeWidth={1.5} />
         </div>
         
         {/* Title */}
@@ -815,7 +751,7 @@ The 3-month program consists of:
       className={`pricing-card ${plan.featured ? 'featured' : ''}`}
       style={{
         background: '#121212',
-        border: plan.featured ? '2px solid #D4AF37' : '1px solid rgba(255, 255, 255, 0.1)',
+        border: plan.featured ? '2px solid #A78A43' : '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '20px',
         padding: '40px 32px',
         position: 'relative',
@@ -826,7 +762,7 @@ The 3-month program consists of:
         flexDirection: 'column',
         minHeight: '560px',
         boxShadow: plan.featured 
-          ? '0 0 40px rgba(212, 175, 55, 0.2), 0 20px 50px rgba(0, 0, 0, 0.4)' 
+          ? '0 0 40px rgba(167, 138, 67, 0.2), 0 20px 50px rgba(0, 0, 0, 0.4)' 
           : '0 10px 30px rgba(0, 0, 0, 0.3)'
       }}
     >
@@ -837,8 +773,8 @@ The 3-month program consists of:
           top: '-12px',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: plan.featured ? '#D4AF37' : 'rgba(212, 175, 55, 0.15)',
-          color: plan.featured ? '#0a0a0a' : '#D4AF37',
+          background: plan.featured ? '#A78A43' : 'rgba(167, 138, 67, 0.15)',
+          color: plan.featured ? '#0a0a0a' : '#A78A43',
           fontSize: '11px',
           fontWeight: '700',
           padding: '6px 16px',
@@ -853,7 +789,7 @@ The 3-month program consists of:
       
       {/* Plan Name */}
       <div style={{
-        color: '#D4AF37',
+        color: '#A78A43',
         fontSize: '13px',
         fontWeight: '600',
         marginBottom: '24px',
@@ -898,7 +834,7 @@ The 3-month program consists of:
       }}>
         {plan.savings && (
           <span style={{
-            color: '#D4AF37',
+            color: '#A78A43',
             fontSize: '13px',
             fontWeight: '600'
           }}>
@@ -910,7 +846,7 @@ The 3-month program consists of:
       {/* Divider */}
       <div style={{
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent)',
+        background: 'linear-gradient(90deg, transparent, rgba(167, 138, 67, 0.3), transparent)',
         marginBottom: '24px'
       }} />
       
@@ -928,7 +864,7 @@ The 3-month program consists of:
             alignItems: 'center',
             gap: '12px'
           }}>
-            <Check size={16} color="#D4AF37" style={{ flexShrink: 0 }} />
+            <Check size={16} color="#A78A43" style={{ flexShrink: 0 }} />
             <span style={{
               color: 'rgba(240, 240, 240, 0.8)',
               fontSize: '14px',
@@ -957,13 +893,13 @@ The 3-month program consists of:
           textDecoration: 'none',
           cursor: 'pointer',
           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-          background: '#FF9900',
+          background: '#A78A43',
           color: '#0a0a0a',
           border: 'none',
           marginTop: 'auto',
           boxShadow: plan.featured 
-            ? '0 4px 20px rgba(255, 153, 0, 0.4)' 
-            : '0 2px 10px rgba(255, 153, 0, 0.2)'
+            ? '0 4px 20px rgba(167, 138, 67, 0.4)' 
+            : '0 2px 10px rgba(167, 138, 67, 0.2)'
         }}
       >
         {plan.buttonText}
@@ -976,7 +912,7 @@ The 3-month program consists of:
       className="faq-item"
       style={{
         background: 'rgba(24, 24, 24, 0.9)',
-        border: '1px solid rgba(212, 175, 55, 0.2)',
+        border: '1px solid rgba(167, 138, 67, 0.2)',
         borderRadius: '12px',
         overflow: 'hidden',
         transition: 'all 0.3s ease'
@@ -1007,7 +943,7 @@ The 3-month program consists of:
         </span>
         <ChevronDown 
           size={20} 
-          color="#D4AF37"
+          color="#A78A43"
           style={{
             transition: 'transform 0.3s ease',
             transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -1054,19 +990,19 @@ The 3-month program consists of:
         }}
       />
 
-      {/* Sticky CTA Button - Only visible after scrolling to About section */}
+      {/* Sticky CTA Button - Discord DM - Only visible after scrolling past hero */}
       {showStickyCta && (
-        <div className="sticky-cta">
-          <a 
-            href="https://calendly.com/freenachos/intro" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="sticky-cta-btn"
-          >
-            <Calendar size={18} />
-            Apply Now
-          </a>
-        </div>
+        <a 
+          href="https://discord.com/users/420357572109926411" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="sticky-discord-btn"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+          DM on Discord
+        </a>
       )}
       
       <style>{`
@@ -1172,7 +1108,7 @@ The 3-month program consists of:
           background: rgba(18, 18, 18, 0.4);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(212, 175, 55, 0.15);
+          border: 1px solid rgba(167, 138, 67, 0.15);
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         .card-hover {
@@ -1213,38 +1149,63 @@ The 3-month program consists of:
         }
         
         .cta-primary:hover {
-          box-shadow: 0 0 20px rgba(255, 153, 0, 0.4), 0 10px 40px rgba(255, 153, 0, 0.3);
+          box-shadow: 0 0 20px rgba(167, 138, 67, 0.4), 0 10px 40px rgba(167, 138, 67, 0.3);
           background: #FFa31a;
         }
 
-        .sticky-cta {
+        /* Discord DM Floating Button */
+        .sticky-discord-btn {
           position: fixed;
           bottom: 24px;
           right: 24px;
           z-index: 1000;
-          animation: fadeInUp 0.4s ease-out 1s both;
-        }
-
-        .sticky-cta-btn {
-          background: #FF9900;
-          color: #0a0a0a;
-          padding: 16px 28px;
-          border-radius: 50px;
-          font-weight: 700;
+          background: #5865F2;
+          color: #FFFFFF;
+          padding: 14px 24px;
+          border-radius: 10px;
+          font-weight: 600;
           font-size: 15px;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          box-shadow: 0 8px 32px rgba(255, 153, 0, 0.5), 0 0 0 4px rgba(255, 153, 0, 0.15);
+          box-shadow: 0 4px 14px rgba(88, 101, 242, 0.4);
           border: none;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+          animation: discordBtnEnter 0.4s ease-out, discordShake 0.5s ease-in-out 0.4s;
         }
 
-        .sticky-cta-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 12px 40px rgba(255, 153, 0, 0.6), 0 0 0 6px rgba(255, 153, 0, 0.2);
+        .sticky-discord-btn:hover {
+          background: #4752C4;
+          box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
+          transform: translateY(-2px);
+        }
+
+        .sticky-discord-btn:active {
+          transform: translateY(0);
+          background: #3C45A5;
+        }
+
+        @keyframes discordBtnEnter {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes discordShake {
+          0%, 100% { transform: translateX(0); }
+          15% { transform: translateX(-6px) rotate(-2deg); }
+          30% { transform: translateX(5px) rotate(2deg); }
+          45% { transform: translateX(-4px) rotate(-1deg); }
+          60% { transform: translateX(3px) rotate(1deg); }
+          75% { transform: translateX(-2px); }
+          90% { transform: translateX(1px); }
         }
         
         .spark-border {
@@ -1260,7 +1221,7 @@ The 3-month program consists of:
           inset: 0;
           border-radius: inherit;
           padding: 2px;
-          background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.1));
+          background: linear-gradient(135deg, rgba(167, 138, 67, 0.4), rgba(167, 138, 67, 0.1));
           -webkit-mask: 
             linear-gradient(#fff 0 0) content-box, 
             linear-gradient(#fff 0 0);
@@ -1277,8 +1238,8 @@ The 3-month program consists of:
           left: 0;
           width: 100px;
           height: 2px;
-          background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, #D4AF37 100%);
-          box-shadow: 0 0 15px 2px rgba(212, 175, 55, 0.7);
+          background: linear-gradient(90deg, transparent 0%, #A78A43 50%, #A78A43 100%);
+          box-shadow: 0 0 15px 2px rgba(167, 138, 67, 0.7);
           offset-path: rect(0 100% 100% 0 round 20px);
           animation: traceBorder 5s linear infinite;
           offset-rotate: auto;
@@ -1288,7 +1249,7 @@ The 3-month program consists of:
         }
 
         .hero-gradient {
-          background: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 50%);
+          background: radial-gradient(ellipse at 50% 0%, rgba(167, 138, 67, 0.12) 0%, transparent 50%);
         }
 
         .section-title {
@@ -1306,15 +1267,15 @@ The 3-month program consists of:
         .section-title .line {
           flex: 1;
           height: 1px;
-          background: linear-gradient(90deg, rgba(212, 175, 55, 0.4), transparent);
+          background: linear-gradient(90deg, rgba(167, 138, 67, 0.4), transparent);
         }
 
         .carousel-btn {
           width: 44px;
           height: 44px;
           border-radius: 50%;
-          background: rgba(212, 175, 55, 0.15);
-          border: 1px solid rgba(212, 175, 55, 0.3);
+          background: rgba(167, 138, 67, 0.15);
+          border: 1px solid rgba(167, 138, 67, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1322,9 +1283,9 @@ The 3-month program consists of:
           transition: all 0.2s ease;
         }
         .carousel-btn:hover {
-          background: rgba(212, 175, 55, 0.25);
-          border-color: #D4AF37;
-          box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+          background: rgba(167, 138, 67, 0.25);
+          border-color: #A78A43;
+          box-shadow: 0 0 20px rgba(167, 138, 67, 0.3);
         }
 
         .video-card {
@@ -1332,15 +1293,15 @@ The 3-month program consists of:
         }
         .video-card:hover {
           transform: translateY(-8px) scale(1.05);
-          box-shadow: 0 30px 60px rgba(212, 175, 55, 0.25), 0 0 40px rgba(212, 175, 55, 0.15);
-          border-color: rgba(212, 175, 55, 0.5);
+          box-shadow: 0 30px 60px rgba(167, 138, 67, 0.25), 0 0 40px rgba(167, 138, 67, 0.15);
+          border-color: rgba(167, 138, 67, 0.5);
         }
         .video-card:hover .video-thumbnail {
           transform: scale(1.05);
         }
         .video-card:hover .play-button {
           transform: scale(1.15);
-          box-shadow: 0 8px 40px rgba(212, 175, 55, 0.7);
+          box-shadow: 0 8px 40px rgba(167, 138, 67, 0.7);
         }
         .video-card:hover .video-gold-bloom {
           opacity: 1 !important;
@@ -1348,7 +1309,7 @@ The 3-month program consists of:
 
         .benefit-card {
           background: #1A1A1A;
-          border: 1px solid rgba(212, 175, 55, 0.2);
+          border: 1px solid rgba(167, 138, 67, 0.2);
           border-radius: 16px;
           padding: 32px;
           position: relative;
@@ -1371,7 +1332,7 @@ The 3-month program consists of:
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+          background: linear-gradient(90deg, transparent, #A78A43, transparent);
           opacity: 0;
           transition: opacity 0.4s ease;
         }
@@ -1381,7 +1342,7 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover {
-          border-color: rgba(212, 175, 55, 0.4);
+          border-color: rgba(167, 138, 67, 0.4);
         }
 
         .benefit-card .benefit-icon {
@@ -1389,9 +1350,9 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-icon {
-          background: rgba(212, 175, 55, 0.15);
-          border-color: rgba(212, 175, 55, 0.6);
-          box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+          background: rgba(167, 138, 67, 0.15);
+          border-color: rgba(167, 138, 67, 0.6);
+          box-shadow: 0 0 20px rgba(167, 138, 67, 0.25);
         }
 
         .benefit-card .benefit-title {
@@ -1399,7 +1360,7 @@ The 3-month program consists of:
         }
 
         .benefit-card:hover .benefit-title {
-          color: #D4AF37;
+          color: #A78A43;
         }
 
         .pricing-card:hover {
@@ -1408,11 +1369,11 @@ The 3-month program consists of:
         }
         .pricing-card.featured:hover {
           transform: scale(1.05);
-          box-shadow: 0 0 50px rgba(212, 175, 55, 0.25), 0 25px 50px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 50px rgba(167, 138, 67, 0.25), 0 25px 50px rgba(0, 0, 0, 0.4);
         }
 
         .faq-item:hover {
-          border-color: rgba(212, 175, 55, 0.4);
+          border-color: rgba(167, 138, 67, 0.4);
         }
 
         .script-title {
@@ -1539,7 +1500,7 @@ The 3-month program consists of:
           width: '900px',
           height: '900px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%)',
+          background: 'radial-gradient(circle, rgba(167, 138, 67, 0.08) 0%, transparent 60%)',
           filter: 'blur(80px)',
           opacity: 0.6
         }} />
@@ -1552,7 +1513,7 @@ The 3-month program consists of:
           width: '1000px',
           height: '1000px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255, 153, 0, 0.06) 0%, transparent 55%)',
+          background: 'radial-gradient(circle, rgba(167, 138, 67, 0.06) 0%, transparent 55%)',
           filter: 'blur(100px)',
           opacity: 0.5
         }} />
@@ -1565,7 +1526,7 @@ The 3-month program consists of:
           width: '600px',
           height: '600px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 50%)',
+          background: 'radial-gradient(circle, rgba(167, 138, 67, 0.05) 0%, transparent 50%)',
           filter: 'blur(60px)',
           opacity: 0.4
         }} />
@@ -1590,6 +1551,146 @@ The 3-month program consists of:
             <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
           </div>
         ))}
+      </div>
+
+      {/* ==================== BOKEH NACHOS LAYER (Fixed, z-1) ==================== */}
+      {/* Cinematic blurred nachos visible across entire page */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
+        
+        {/* Nacho - Top Left Area (medium) */}
+        <div style={{
+          position: 'absolute',
+          top: '15%',
+          left: '6%',
+          width: '45px',
+          height: '45px',
+          opacity: 0.25,
+          filter: 'blur(4px)',
+          animation: 'cinematicFloat 38s ease-in-out infinite'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Top Center (large/blurry - slowest) */}
+        <div style={{
+          position: 'absolute',
+          top: '8%',
+          left: '45%',
+          width: '70px',
+          height: '70px',
+          opacity: 0.2,
+          filter: 'blur(8px)',
+          animation: 'cinematicFloat2 55s ease-in-out infinite',
+          animationDelay: '-20s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Left Side Mid (medium) */}
+        <div style={{
+          position: 'absolute',
+          top: '40%',
+          left: '4%',
+          width: '35px',
+          height: '35px',
+          opacity: 0.2,
+          filter: 'blur(3px)',
+          animation: 'cinematicFloat 42s ease-in-out infinite',
+          animationDelay: '-15s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Right Side Upper (medium) */}
+        <div style={{
+          position: 'absolute',
+          top: '25%',
+          right: '12%',
+          width: '30px',
+          height: '30px',
+          opacity: 0.15,
+          filter: 'blur(3px)',
+          animation: 'cinematicFloat2 40s ease-in-out infinite',
+          animationDelay: '-25s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Center Left Lower (medium) */}
+        <div style={{
+          position: 'absolute',
+          top: '55%',
+          left: '18%',
+          width: '28px',
+          height: '28px',
+          opacity: 0.18,
+          filter: 'blur(2px)',
+          animation: 'cinematicFloat 36s ease-in-out infinite',
+          animationDelay: '-8s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Bottom Right (large/very blurry) */}
+        <div style={{
+          position: 'absolute',
+          bottom: '20%',
+          right: '8%',
+          width: '55px',
+          height: '55px',
+          opacity: 0.15,
+          filter: 'blur(6px)',
+          animation: 'cinematicFloat2 48s ease-in-out infinite',
+          animationDelay: '-30s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Bottom Left (medium) */}
+        <div style={{
+          position: 'absolute',
+          bottom: '15%',
+          left: '10%',
+          width: '32px',
+          height: '32px',
+          opacity: 0.2,
+          filter: 'blur(4px)',
+          animation: 'cinematicFloat 44s ease-in-out infinite',
+          animationDelay: '-12s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Nacho - Center Right (small) */}
+        <div style={{
+          position: 'absolute',
+          top: '65%',
+          right: '20%',
+          width: '22px',
+          height: '22px',
+          opacity: 0.12,
+          filter: 'blur(2px)',
+          animation: 'cinematicFloat2 34s ease-in-out infinite',
+          animationDelay: '-18s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
       </div>
 
       {/* ==================== FIXED NAVBAR (z-9999) ==================== */}
@@ -1789,97 +1890,6 @@ The 3-month program consists of:
                 </radialGradient>
               </defs>
               <polygon points="50,5 95,95 5,95" fill="url(#emberGlowFront2)" />
-            </svg>
-          </div>
-        </div>
-
-        {/* === LAYER 16: FLOATING NACHOS (z-16) - Inside Hero, ABOVE Vignette === */}
-        {/* Sparse at top (distant stars), denser toward bottom */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 16, overflow: 'hidden', pointerEvents: 'none' }}>
-
-          {/* === HERO ACCENT NACHOS: Intentional Placement === */}
-          
-          {/* Nacho - Left of "Master High-Stakes" headline (medium) */}
-          <div style={{
-            position: 'absolute',
-            top: '38%',
-            left: '6%',
-            width: '45px',
-            height: '45px',
-            opacity: 0.25,
-            filter: 'blur(4px)',
-            animation: 'cinematicFloat 38s ease-in-out infinite'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
-            </svg>
-          </div>
-
-          {/* Nacho - Top Center (large/blurry - slowest) */}
-          <div style={{
-            position: 'absolute',
-            top: '8%',
-            left: '45%',
-            width: '70px',
-            height: '70px',
-            opacity: 0.2,
-            filter: 'blur(8px)',
-            animation: 'cinematicFloat2 55s ease-in-out infinite',
-            animationDelay: '-20s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
-            </svg>
-          </div>
-
-          {/* Nacho - Bottom Left Corner (medium) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '18%',
-            left: '4%',
-            width: '35px',
-            height: '35px',
-            opacity: 0.2,
-            filter: 'blur(3px)',
-            animation: 'cinematicFloat 42s ease-in-out infinite',
-            animationDelay: '-15s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
-            </svg>
-          </div>
-
-          {/* Nacho - Mid Right (above coach shoulder - medium) */}
-          <div style={{
-            position: 'absolute',
-            top: '25%',
-            right: '22%',
-            width: '30px',
-            height: '30px',
-            opacity: 0.15,
-            filter: 'blur(3px)',
-            animation: 'cinematicFloat2 40s ease-in-out infinite',
-            animationDelay: '-25s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
-            </svg>
-          </div>
-
-          {/* Nacho - Lower Center-Left (medium) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '30%',
-            left: '28%',
-            width: '28px',
-            height: '28px',
-            opacity: 0.18,
-            filter: 'blur(2px)',
-            animation: 'cinematicFloat 36s ease-in-out infinite',
-            animationDelay: '-8s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <polygon points="50,5 95,95 5,95" fill="#A78A43" />
             </svg>
           </div>
         </div>
@@ -2112,7 +2122,7 @@ The 3-month program consists of:
             marginBottom: '80px'
           }}>
             <h2 
-              className="liquid-gold-headline"
+              
               style={{
                 fontSize: 'clamp(36px, 4.5vw, 56px)',
                 fontWeight: '800',
@@ -2124,9 +2134,9 @@ The 3-month program consists of:
                 transition: 'color 0.3s ease'
               }}
             >
-              The Coach Behind <span className="liquid-gold-accent" style={{ 
-                color: '#D4AF37',
-                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)',
+              The Coach Behind <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)',
                 transition: 'all 0.3s ease'
               }}>$5M+</span> in Student Profits
             </h2>
@@ -2139,10 +2149,10 @@ The 3-month program consists of:
               textAlign: 'center'
             }}>
               <p style={{ marginBottom: '20px' }}>
-                My students have generated over <strong style={{ color: '#D4AF37' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#D4AF37' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This isn't theory. It's a system that produces results.
+                My students have generated over <strong style={{ color: '#A78A43' }}>$5,000,000</strong> in combined profits. I maintain a <strong style={{ color: '#A78A43' }}>6.2bb/100 win rate at 1KNL and above</strong>, with over 10 million hands of high-stakes experience. This isn't theory. It's a system that produces results.
               </p>
               <p style={{ marginBottom: '20px', color: 'rgba(240, 240, 240, 0.65)' }}>
-                I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#D4AF37' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way. GTO is the diagnostic tool. Exploitation is the profit engine.
+                I don't teach you to memorize solver outputs. I teach you to <strong style={{ color: '#A78A43' }}>weaponize data</strong>. By identifying where real opponents deviate from equilibrium, we build strategies that exploit population tendencies in a controlled, repeatable way. GTO is the diagnostic tool. Exploitation is the profit engine.
               </p>
               <p style={{ color: 'rgba(240, 240, 240, 0.55)' }}>
                 I wasn't born winning. My early graph was filled with breakeven stretches and frustrating downswings. What changed wasn't more study. It was a better system. That same system is now the foundation of my mentorship, and it's responsible for the results you see above.
@@ -2169,14 +2179,14 @@ The 3-month program consists of:
                 key={idx}
                 style={{ 
                   padding: '20px 28px',
-                  background: 'rgba(212, 175, 55, 0.08)',
-                  border: '1px solid rgba(212, 175, 55, 0.25)',
+                  background: 'rgba(167, 138, 67, 0.08)',
+                  border: '1px solid rgba(167, 138, 67, 0.25)',
                   borderRadius: '16px',
                   transition: 'all 0.3s ease'
                 }}
                 className="stat-pill"
               >
-                <div style={{ fontSize: '28px', fontWeight: '800', color: '#D4AF37', marginBottom: '4px' }}>{stat.value}</div>
+                <div style={{ fontSize: '28px', fontWeight: '800', color: '#A78A43', marginBottom: '4px' }}>{stat.value}</div>
                 <div style={{ fontSize: '12px', color: 'rgba(240, 240, 240, 0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
               </div>
             ))}
@@ -2199,7 +2209,7 @@ The 3-month program consists of:
               transform: 'translate(-50%, -50%)',
               width: '120%',
               height: '120%',
-              background: 'radial-gradient(ellipse at center, rgba(255, 153, 0, 0.20) 0%, rgba(212, 175, 55, 0.08) 40%, transparent 70%)',
+              background: 'radial-gradient(ellipse at center, rgba(167, 138, 67, 0.20) 0%, rgba(167, 138, 67, 0.08) 40%, transparent 70%)',
               filter: 'blur(60px)',
               pointerEvents: 'none',
               zIndex: 0
@@ -2255,7 +2265,7 @@ The 3-month program consists of:
             style={{
               marginTop: '64px',
               background: 'transparent',
-              color: '#D4AF37',
+              color: '#A78A43',
               padding: '18px 36px',
               borderRadius: '14px',
               fontWeight: '600',
@@ -2264,7 +2274,7 @@ The 3-month program consists of:
               display: 'inline-flex',
               alignItems: 'center',
               gap: '10px',
-              border: '2px solid rgba(212, 175, 55, 0.5)',
+              border: '2px solid rgba(167, 138, 67, 0.5)',
               transition: 'all 0.3s ease'
             }}
           >
@@ -2274,19 +2284,9 @@ The 3-month program consists of:
           {/* Liquid Gold Scroll Animation & Stat Pill Styles */}
           <style>{`
             .stat-pill:hover {
-              background: rgba(212, 175, 55, 0.15) !important;
-              border-color: rgba(212, 175, 55, 0.4) !important;
+              background: rgba(167, 138, 67, 0.15) !important;
+              border-color: rgba(167, 138, 67, 0.4) !important;
               transform: translateY(-2px);
-            }
-            
-            .liquid-gold-headline.scrolled {
-              color: #FF9900 !important;
-              text-shadow: 0 0 80px rgba(255, 153, 0, 0.5);
-            }
-            
-            .liquid-gold-headline.scrolled .liquid-gold-accent {
-              color: #FFB347 !important;
-              text-shadow: 0 0 100px rgba(255, 153, 0, 0.7);
             }
             
             @media (max-width: 768px) {
@@ -2321,19 +2321,19 @@ The 3-month program consists of:
               display: 'inline-flex',
               alignItems: 'center',
               gap: '10px',
-              background: 'rgba(212, 175, 55, 0.08)',
-              border: '1px solid rgba(212, 175, 55, 0.2)',
+              background: 'rgba(167, 138, 67, 0.08)',
+              border: '1px solid rgba(167, 138, 67, 0.2)',
               borderRadius: '30px',
               padding: '8px 20px',
               marginBottom: '28px'
             }}>
-              <Sparkles size={16} color="#D4AF37" />
-              <span style={{ fontSize: '13px', color: '#D4AF37', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              <Sparkles size={16} color="#A78A43" />
+              <span style={{ fontSize: '13px', color: '#A78A43', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Exclusive Access
               </span>
             </div>
             <h2 
-              className="liquid-gold-headline-benefits"
+              
               style={{
                 fontSize: 'clamp(38px, 5vw, 56px)',
                 fontWeight: '800',
@@ -2345,9 +2345,9 @@ The 3-month program consists of:
                 transition: 'all 0.4s ease'
               }}
             >
-              What You <span className="liquid-gold-accent-benefits" style={{ 
-                color: '#D4AF37',
-                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)',
+              What You <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)',
                 transition: 'all 0.4s ease'
               }}>Get</span>
             </h2>
@@ -2411,7 +2411,7 @@ The 3-month program consists of:
                       style={{
                         position: 'absolute',
                         inset: '-20px',
-                        background: 'radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(167, 138, 67, 0.35) 0%, transparent 70%)',
                         filter: 'blur(20px)',
                         opacity: 0,
                         transition: 'opacity 0.5s ease',
@@ -2423,8 +2423,8 @@ The 3-month program consists of:
                       size={36} 
                       strokeWidth={1.5}
                       style={{
-                        color: '#D4AF37',
-                        filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))',
+                        color: '#A78A43',
+                        filter: 'drop-shadow(0 0 8px rgba(167, 138, 67, 0.3))',
                         transition: 'all 0.4s ease'
                       }}
                       className="ghost-icon"
@@ -2482,18 +2482,7 @@ The 3-month program consists of:
             /* Icon brightens on hover */
             .ghost-benefit-item:hover .ghost-icon {
               color: #FFFFFF !important;
-              filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.6)) !important;
-            }
-            
-            /* Liquid Gold scroll animation for this section */
-            .liquid-gold-headline-benefits.scrolled {
-              color: #FF9900 !important;
-              text-shadow: 0 0 80px rgba(255, 153, 0, 0.5);
-            }
-            
-            .liquid-gold-headline-benefits.scrolled .liquid-gold-accent-benefits {
-              color: #FFB347 !important;
-              text-shadow: 0 0 100px rgba(255, 153, 0, 0.7);
+              filter: drop-shadow(0 0 16px rgba(167, 138, 67, 0.6)) !important;
             }
             
             /* Responsive Grid */
@@ -2536,7 +2525,7 @@ The 3-month program consists of:
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
@@ -2625,10 +2614,10 @@ The 3-month program consists of:
                 background: 'rgba(18, 18, 18, 0.5)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(212, 175, 55, 0.2)',
+                border: '1px solid rgba(167, 138, 67, 0.2)',
                 borderRadius: '24px',
                 padding: '40px',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.1)',
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(167, 138, 67, 0.1)',
                 animation: slideDirection === 'right' ? 'slideInRight 0.4s ease-out' : 'slideInLeft 0.4s ease-out'
               }}
             >
@@ -2650,7 +2639,7 @@ The 3-month program consists of:
                   borderRadius: '12px',
                   overflow: 'hidden',
                   marginBottom: '24px',
-                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                  border: '1px solid rgba(167, 138, 67, 0.2)',
                   maxHeight: '200px'
                 }}>
                   <img 
@@ -2667,7 +2656,7 @@ The 3-month program consists of:
                   width: '48px',
                   height: '48px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #D4AF37, #FF9900)',
+                  background: 'linear-gradient(135deg, #A78A43, #A78A43)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -2681,7 +2670,7 @@ The 3-month program consists of:
                   <div style={{ color: '#fff', fontWeight: '600', fontSize: '15px' }}>
                     {testimonials[currentTestimonialIndex].name}
                   </div>
-                  <div style={{ color: 'rgba(212, 175, 55, 0.8)', fontSize: '13px' }}>
+                  <div style={{ color: 'rgba(167, 138, 67, 0.8)', fontSize: '13px' }}>
                     {testimonials[currentTestimonialIndex].result}
                   </div>
                 </div>
@@ -2757,8 +2746,8 @@ The 3-month program consists of:
                 width: '52px',
                 height: '52px',
                 borderRadius: '50%',
-                background: 'rgba(212, 175, 55, 0.1)',
-                border: '1px solid rgba(212, 175, 55, 0.3)',
+                background: 'rgba(167, 138, 67, 0.1)',
+                border: '1px solid rgba(167, 138, 67, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -2766,7 +2755,7 @@ The 3-month program consists of:
                 transition: 'all 0.3s ease'
               }}
             >
-              <ChevronLeft size={22} color="#D4AF37" />
+              <ChevronLeft size={22} color="#A78A43" />
             </button>
             
             {/* Counter */}
@@ -2787,8 +2776,8 @@ The 3-month program consists of:
                 width: '52px',
                 height: '52px',
                 borderRadius: '50%',
-                background: 'rgba(212, 175, 55, 0.1)',
-                border: '1px solid rgba(212, 175, 55, 0.3)',
+                background: 'rgba(167, 138, 67, 0.1)',
+                border: '1px solid rgba(167, 138, 67, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -2796,7 +2785,7 @@ The 3-month program consists of:
                 transition: 'all 0.3s ease'
               }}
             >
-              <ChevronRight size={22} color="#D4AF37" />
+              <ChevronRight size={22} color="#A78A43" />
             </button>
           </div>
 
@@ -2805,7 +2794,7 @@ The 3-month program consists of:
             .testimonial-preview-card:hover {
               opacity: 0.8 !important;
               transform: scale(0.95) !important;
-              border-color: rgba(212, 175, 55, 0.2) !important;
+              border-color: rgba(167, 138, 67, 0.2) !important;
             }
             @media (max-width: 1024px) {
               .testimonial-preview-card {
@@ -2848,12 +2837,12 @@ The 3-month program consists of:
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 50%, #FF9900 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 50%, #A78A43 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
               textShadow: 'none',
-              filter: 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))'
+              filter: 'drop-shadow(0 0 40px rgba(167, 138, 67, 0.3))'
             }}>
               Proof in the Process.
             </h2>
@@ -2928,7 +2917,7 @@ The 3-month program consists of:
                     style={{
                       position: 'absolute',
                       inset: '-30px',
-                      background: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.4) 0%, rgba(255, 153, 0, 0.2) 40%, transparent 70%)',
+                      background: 'radial-gradient(circle at 50% 50%, rgba(167, 138, 67, 0.4) 0%, rgba(167, 138, 67, 0.2) 40%, transparent 70%)',
                       opacity: 0,
                       filter: 'blur(30px)',
                       zIndex: 0,
@@ -2986,7 +2975,7 @@ The 3-month program consists of:
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          border: '2px solid rgba(212, 175, 55, 0.4)',
+                          border: '2px solid rgba(167, 138, 67, 0.4)',
                           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)'
                         }}
                       >
@@ -3003,8 +2992,8 @@ The 3-month program consists of:
                         >
                           <polygon 
                             points="5,3 19,12 5,21" 
-                            fill="rgba(212, 175, 55, 0.6)"
-                            stroke="rgba(212, 175, 55, 0.8)"
+                            fill="rgba(167, 138, 67, 0.6)"
+                            stroke="rgba(167, 138, 67, 0.8)"
                             strokeWidth="1.5"
                             strokeLinejoin="round"
                           />
@@ -3039,7 +3028,7 @@ The 3-month program consists of:
                       color: '#6B6B6B',
                       fontSize: '13px'
                     }}>
-                      <Youtube size={14} color="#D4AF37" />
+                      <Youtube size={14} color="#A78A43" />
                       <span>Nachos Poker</span>
                     </div>
                   </div>
@@ -3061,8 +3050,8 @@ The 3-month program consists of:
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
-                  background: 'rgba(212, 175, 55, 0.1)',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  background: 'rgba(167, 138, 67, 0.1)',
+                  border: '1px solid rgba(167, 138, 67, 0.3)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -3070,7 +3059,7 @@ The 3-month program consists of:
                   transition: 'all 0.3s ease'
                 }}
               >
-                <ChevronLeft size={24} color="#D4AF37" />
+                <ChevronLeft size={24} color="#A78A43" />
               </button>
               <button 
                 className="cinema-nav-btn"
@@ -3079,8 +3068,8 @@ The 3-month program consists of:
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
-                  background: 'rgba(212, 175, 55, 0.1)',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  background: 'rgba(167, 138, 67, 0.1)',
+                  border: '1px solid rgba(167, 138, 67, 0.3)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -3088,7 +3077,7 @@ The 3-month program consists of:
                   transition: 'all 0.3s ease'
                 }}
               >
-                <ChevronRight size={24} color="#D4AF37" />
+                <ChevronRight size={24} color="#A78A43" />
               </button>
             </div>
 
@@ -3099,7 +3088,7 @@ The 3-month program consists of:
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{
-                  color: '#D4AF37',
+                  color: '#A78A43',
                   fontSize: '14px',
                   fontWeight: '500',
                   textDecoration: 'none',
@@ -3135,8 +3124,8 @@ The 3-month program consists of:
             
             .cinema-video-card:hover .cinema-thumbnail-wrap {
               transform: scale(1.05);
-              border-color: rgba(212, 175, 55, 0.5);
-              box-shadow: 0 0 50px rgba(212, 175, 55, 0.35);
+              border-color: rgba(167, 138, 67, 0.5);
+              box-shadow: 0 0 50px rgba(167, 138, 67, 0.35);
             }
             
             .cinema-video-card:hover .cinema-thumbnail {
@@ -3145,14 +3134,14 @@ The 3-month program consists of:
             }
             
             .cinema-video-card:hover .play-button-inner {
-              background: rgba(212, 175, 55, 0.2) !important;
+              background: rgba(167, 138, 67, 0.2) !important;
               border-color: rgba(255, 215, 0, 0.8) !important;
               transform: scale(1.1);
-              box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+              box-shadow: 0 0 30px rgba(167, 138, 67, 0.5);
             }
             
             .cinema-video-card:hover .play-triangle polygon {
-              fill: #FFD700 !important;
+              fill: #A78A43 !important;
               stroke: #FFFFFF !important;
             }
             
@@ -3161,8 +3150,8 @@ The 3-month program consists of:
             }
             
             .cinema-nav-btn:hover {
-              background: rgba(212, 175, 55, 0.2) !important;
-              border-color: rgba(212, 175, 55, 0.5) !important;
+              background: rgba(167, 138, 67, 0.2) !important;
+              border-color: rgba(167, 138, 67, 0.5) !important;
               transform: scale(1.05);
             }
             
@@ -3195,7 +3184,7 @@ The 3-month program consists of:
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
@@ -3248,8 +3237,8 @@ The 3-month program consists of:
               fontFamily: 'Manrope, Inter, sans-serif'
             }}>
               Is This Right <span style={{ 
-                color: '#D4AF37',
-                textShadow: '0 0 60px rgba(212, 175, 55, 0.4)'
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
               }}>For You</span>?
             </h2>
           </div>
@@ -3286,14 +3275,14 @@ The 3-month program consists of:
                       width: '24px',
                       height: '24px',
                       borderRadius: '50%',
-                      background: 'rgba(212, 175, 55, 0.2)',
+                      background: 'rgba(167, 138, 67, 0.2)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                       marginTop: '2px'
                     }}>
-                      <Check size={14} color="#D4AF37" />
+                      <Check size={14} color="#A78A43" />
                     </div>
                     <span style={{
                       color: 'rgba(240, 240, 240, 0.8)',
@@ -3365,7 +3354,7 @@ The 3-month program consists of:
               rel="noopener noreferrer"
               className="btn-hover cta-primary"
               style={{
-                background: '#FF9900',
+                background: '#A78A43',
                 color: '#0a0a0a',
                 padding: '20px 44px',
                 borderRadius: '14px',
@@ -3375,7 +3364,7 @@ The 3-month program consists of:
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                boxShadow: '0 6px 30px rgba(255, 153, 0, 0.45)'
+                boxShadow: '0 6px 30px rgba(167, 138, 67, 0.45)'
               }}
             >
               Book Free Intro Call <ArrowRight size={18} />
@@ -3401,7 +3390,7 @@ The 3-month program consists of:
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
@@ -3450,10 +3439,10 @@ The 3-month program consists of:
             <h2 style={{
               fontSize: '42px',
               fontWeight: '800',
-              color: '#D4AF37',
+              color: '#A78A43',
               marginBottom: '16px',
               letterSpacing: '-0.02em',
-              textShadow: '0 0 60px rgba(212, 175, 55, 0.3)'
+              textShadow: '0 0 60px rgba(167, 138, 67, 0.3)'
             }}>
               Still looking for the edge?
             </h2>
@@ -3484,7 +3473,7 @@ The 3-month program consists of:
                 background: 'rgba(18, 18, 18, 0.4)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(212, 175, 55, 0.15)',
+                border: '1px solid rgba(167, 138, 67, 0.15)',
                 borderRadius: '28px',
                 padding: '56px 48px',
                 textDecoration: 'none',
@@ -3499,7 +3488,7 @@ The 3-month program consists of:
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%)',
+                background: 'radial-gradient(circle at 50% 0%, rgba(167, 138, 67, 0.08) 0%, transparent 60%)',
                 opacity: 0,
                 transition: 'opacity 0.5s ease',
                 pointerEvents: 'none'
@@ -3541,7 +3530,7 @@ The 3-month program consists of:
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                color: '#D4AF37',
+                color: '#A78A43',
                 fontSize: '15px',
                 fontWeight: '600'
               }}>
@@ -3558,7 +3547,7 @@ The 3-month program consists of:
                 background: 'rgba(18, 18, 18, 0.4)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(212, 175, 55, 0.15)',
+                border: '1px solid rgba(167, 138, 67, 0.15)',
                 borderRadius: '28px',
                 padding: '56px 48px',
                 textDecoration: 'none',
@@ -3573,7 +3562,7 @@ The 3-month program consists of:
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: 'radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%)',
+                background: 'radial-gradient(circle at 50% 0%, rgba(167, 138, 67, 0.08) 0%, transparent 60%)',
                 opacity: 0,
                 transition: 'opacity 0.5s ease',
                 pointerEvents: 'none'
@@ -3583,13 +3572,13 @@ The 3-month program consists of:
                 width: '64px',
                 height: '64px',
                 borderRadius: '16px',
-                background: 'rgba(212, 175, 55, 0.15)',
+                background: 'rgba(167, 138, 67, 0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '28px'
               }}>
-                <Calculator size={32} color="#D4AF37" />
+                <Calculator size={32} color="#A78A43" />
               </div>
               
               <h3 style={{
@@ -3615,7 +3604,7 @@ The 3-month program consists of:
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                color: '#D4AF37',
+                color: '#A78A43',
                 fontSize: '15px',
                 fontWeight: '600'
               }}>
@@ -3628,8 +3617,8 @@ The 3-month program consists of:
         <style>{`
           .authority-vault-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.35);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.1);
+            border-color: rgba(167, 138, 67, 0.35);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(167, 138, 67, 0.1);
           }
           .authority-vault-card:hover .vault-card-glow {
             opacity: 1 !important;
@@ -3646,7 +3635,7 @@ The 3-month program consists of:
           textAlign: 'center',
           padding: '40px 0',
           marginTop: '24px',
-          borderTop: '1px solid rgba(212, 175, 55, 0.1)'
+          borderTop: '1px solid rgba(167, 138, 67, 0.1)'
         }}>
           <p style={{
             fontSize: '13px',
