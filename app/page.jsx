@@ -985,9 +985,10 @@ The 3-month program consists of:
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
         
-        /* Smooth Scroll Behavior */
-        html {
+        /* Smooth Scroll Behavior & Prevent Horizontal Scroll from Peripheral Bokeh */
+        html, body {
           scroll-behavior: smooth;
+          overflow-x: hidden;
         }
 
         /* Noise Texture Overlay */
@@ -1434,6 +1435,27 @@ The 3-month program consists of:
 
         /* === DEPTH-OF-FIELD BOKEH ANIMATIONS === */
         
+        /* PERIPHERAL: Ultra-Large, Extreme Slow Wobble - Lens Edge Effect */
+        @keyframes peripheralWobble1 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          15% { transform: translate(3px, -5px) rotate(2deg) scale(1.01); }
+          30% { transform: translate(6px, -3px) rotate(4deg) scale(0.99); }
+          45% { transform: translate(4px, -8px) rotate(6deg) scale(1.02); }
+          60% { transform: translate(2px, -4px) rotate(3deg) scale(0.98); }
+          75% { transform: translate(5px, -6px) rotate(5deg) scale(1.01); }
+          90% { transform: translate(1px, -2px) rotate(1deg) scale(1); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        
+        @keyframes peripheralWobble2 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          20% { transform: translate(-4px, -6px) rotate(-3deg) scale(1.02); }
+          40% { transform: translate(-2px, -10px) rotate(-5deg) scale(0.98); }
+          60% { transform: translate(-6px, -4px) rotate(-2deg) scale(1.01); }
+          80% { transform: translate(-3px, -7px) rotate(-4deg) scale(0.99); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        
         /* FOREGROUND: Large, Heavy, Slow - Pressurized Float */
         @keyframes foregroundDrift1 {
           0% { transform: translate(0, 0) rotate(0deg) scale(1); }
@@ -1596,6 +1618,112 @@ The 3-month program consists of:
       {/* ==================== GLOBAL BOKEH BACKGROUND SYSTEM ==================== */}
       {/* Unified depth-of-field nacho field - persists across entire page */}
       {/* Depth Logic: Large=Blurry/Slow (foreground), Small=Sharp/Fast (background focal point) */}
+      
+      {/* === LAYER 0: PERIPHERAL BOKEH - Ultra-Large, Extreme Blur, Edge Framing === */}
+      {/* Simulates objects very close to the camera lens in peripheral vision */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        
+        {/* Peripheral Left - Top */}
+        <div style={{
+          position: 'absolute',
+          top: '5%',
+          left: '-8%',
+          width: '180px',
+          height: '180px',
+          opacity: 0.06,
+          filter: 'blur(18px)',
+          animation: 'peripheralWobble1 120s ease-in-out infinite'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Peripheral Left - Middle */}
+        <div style={{
+          position: 'absolute',
+          top: '40%',
+          left: '-12%',
+          width: '220px',
+          height: '220px',
+          opacity: 0.05,
+          filter: 'blur(22px)',
+          animation: 'peripheralWobble2 140s ease-in-out infinite',
+          animationDelay: '-40s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Peripheral Left - Bottom */}
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          left: '-6%',
+          width: '160px',
+          height: '160px',
+          opacity: 0.07,
+          filter: 'blur(16px)',
+          animation: 'peripheralWobble1 100s ease-in-out infinite',
+          animationDelay: '-70s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Peripheral Right - Top */}
+        <div style={{
+          position: 'absolute',
+          top: '8%',
+          right: '-10%',
+          width: '200px',
+          height: '200px',
+          opacity: 0.05,
+          filter: 'blur(20px)',
+          animation: 'peripheralWobble2 130s ease-in-out infinite',
+          animationDelay: '-20s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Peripheral Right - Middle */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          right: '-14%',
+          width: '240px',
+          height: '240px',
+          opacity: 0.04,
+          filter: 'blur(24px)',
+          animation: 'peripheralWobble1 150s ease-in-out infinite',
+          animationDelay: '-60s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+
+        {/* Peripheral Right - Bottom */}
+        <div style={{
+          position: 'absolute',
+          bottom: '15%',
+          right: '-8%',
+          width: '170px',
+          height: '170px',
+          opacity: 0.06,
+          filter: 'blur(17px)',
+          animation: 'peripheralWobble2 110s ease-in-out infinite',
+          animationDelay: '-90s'
+        }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+            <polygon points="50,5 95,95 5,95" fill="#A78A43" />
+          </svg>
+        </div>
+      </div>
       
       {/* === LAYER 1: FOREGROUND - Large, Very Blurry, Slow Heavy Drift === */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
@@ -1977,176 +2105,6 @@ The 3-month program consists of:
           zIndex: 10
         }}
       >
-        {/* === LAYER 15: CINEMATIC EMBERS - BEHIND COACH (z-15) === */}
-        {/* 5 organic glowing embers behind the coach for depth */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 15, overflow: 'hidden', pointerEvents: 'none' }}>
-          
-          {/* Ember - Near top-left headline */}
-          <div style={{
-            position: 'absolute',
-            top: '30%',
-            left: '10%',
-            width: '8px',
-            height: '8px',
-            opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat 25s ease-in-out infinite'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlow1" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlow1)" />
-            </svg>
-          </div>
-
-          {/* Ember - Lower-left void (larger) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '25%',
-            left: '6%',
-            width: '10px',
-            height: '10px',
-            opacity: 0.9,
-            filter: 'blur(1px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat2 28s ease-in-out infinite',
-            animationDelay: '-8s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlow2" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlow2)" />
-            </svg>
-          </div>
-
-          {/* Ember - Lower-left void (tiny) */}
-          <div style={{
-            position: 'absolute',
-            bottom: '32%',
-            left: '18%',
-            width: '4px',
-            height: '4px',
-            opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 8px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat 22s ease-in-out infinite',
-            animationDelay: '-12s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlow3" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlow3)" />
-            </svg>
-          </div>
-
-          {/* Ember - Mid-left */}
-          <div style={{
-            position: 'absolute',
-            top: '55%',
-            left: '4%',
-            width: '6px',
-            height: '6px',
-            opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 10px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat2 26s ease-in-out infinite',
-            animationDelay: '-15s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlow4" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlow4)" />
-            </svg>
-          </div>
-
-          {/* Ember - Near CTA area */}
-          <div style={{
-            position: 'absolute',
-            top: '70%',
-            left: '25%',
-            width: '5px',
-            height: '5px',
-            opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 3px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 10px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat 24s ease-in-out infinite',
-            animationDelay: '-18s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlow5" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlow5)" />
-            </svg>
-          </div>
-        </div>
-
-        {/* === LAYER 25: CINEMATIC EMBERS - IN FRONT OF COACH (z-25) === */}
-        {/* 2 embers in front of coach for "sandwich" depth effect */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 25, overflow: 'hidden', pointerEvents: 'none' }}>
-          
-          {/* Ember - Floating near coach shoulder (foreground) */}
-          <div style={{
-            position: 'absolute',
-            top: '38%',
-            right: '32%',
-            width: '5px',
-            height: '5px',
-            opacity: 0.9,
-            filter: 'blur(0.5px) drop-shadow(0 0 4px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 12px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat 20s ease-in-out infinite',
-            animationDelay: '-5s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlowFront1" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlowFront1)" />
-            </svg>
-          </div>
-
-          {/* Ember - Lower foreground accent */}
-          <div style={{
-            position: 'absolute',
-            bottom: '20%',
-            left: '12%',
-            width: '7px',
-            height: '7px',
-            opacity: 0.9,
-            filter: 'blur(1px) drop-shadow(0 0 5px rgba(167, 138, 67, 0.9)) drop-shadow(0 0 14px rgba(167, 138, 67, 0.4))',
-            animation: 'cinematicFloat2 23s ease-in-out infinite',
-            animationDelay: '-10s'
-          }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-              <defs>
-                <radialGradient id="emberGlowFront2" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#A78A43" />
-                </radialGradient>
-              </defs>
-              <polygon points="50,5 95,95 5,95" fill="url(#emberGlowFront2)" />
-            </svg>
-          </div>
-        </div>
-
         {/* === HALO LIGHTING: Key Light Behind Coach (z-5) === */}
         <div style={{
           position: 'absolute',
@@ -2774,16 +2732,16 @@ The 3-month program consists of:
             <h2 style={{
               fontSize: 'clamp(38px, 5vw, 56px)',
               fontWeight: '800',
+              color: '#FFFFFF',
               marginBottom: '16px',
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              What Players Say
+              What Players <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
+              }}>Say</span>
             </h2>
             <p style={{
               fontSize: '17px',
@@ -3086,18 +3044,16 @@ The 3-month program consists of:
             <h2 style={{
               fontSize: 'clamp(38px, 5vw, 60px)',
               fontWeight: '800',
+              color: '#FFFFFF',
               marginBottom: '24px',
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 50%, #A78A43 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: 'none',
-              filter: 'drop-shadow(0 0 40px rgba(167, 138, 67, 0.3))'
+              fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              Proof in the Process.
+              Proof in the <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
+              }}>Process.</span>
             </h2>
             <p style={{
               fontSize: '18px',
@@ -3433,16 +3389,16 @@ The 3-month program consists of:
             <h2 style={{
               fontSize: 'clamp(38px, 5vw, 56px)',
               fontWeight: '800',
+              color: '#FFFFFF',
               marginBottom: '16px',
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              Investment
+              <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
+              }}>Investment</span>
             </h2>
             <p style={{
               color: '#8A8A8A',
@@ -3639,16 +3595,16 @@ The 3-month program consists of:
             <h2 style={{
               fontSize: 'clamp(36px, 4.5vw, 52px)',
               fontWeight: '800',
+              color: '#FFFFFF',
               marginBottom: '16px',
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
-              fontFamily: 'Manrope, Inter, sans-serif',
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #A78A43 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              Questions & Answers
+              Questions & <span style={{ 
+                color: '#A78A43',
+                textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
+              }}>Answers</span>
             </h2>
             <p style={{
               color: '#8A8A8A',
