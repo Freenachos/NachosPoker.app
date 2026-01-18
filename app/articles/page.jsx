@@ -1823,7 +1823,7 @@ Supported formats:
               {view === 'editor' ? (isEditing ? 'Edit Article' : 'New Article') : (<>Knowledge <span style={{ color: '#a88b46' }}>Hub</span></>)}
             </h2>
             <p style={{fontSize: '15px', color: 'rgba(255,255,255,0.55)', marginBottom: '0', lineHeight: 1.6}}>
-              {view === 'editor' ? 'Construct data driven articles with precision.' : 'Technical deep dives into poker strategy, solver analysis, and population exploits.'}
+              {view === 'editor' ? 'Construct data driven articles with precision.' : 'Technical deep dives into poker strategy, solver analysis, and population exploits. Ready for structured guidance? Explore the Mentorship Program.'}
             </p>
           </div>
           <div style={{display: 'flex', gap: '12px', flexShrink: 0, flexWrap: 'wrap'}}>
