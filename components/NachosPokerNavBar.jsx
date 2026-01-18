@@ -551,11 +551,6 @@ const NachosPokerNavBar = () => {
               <Link
                 href="/tools"
                 className={`np-tools-btn ${isToolActive ? 'active' : ''} ${toolsOpen ? 'open' : ''}`}
-                onClick={(e) => {
-                  // Allow navigation but also toggle dropdown
-                  e.preventDefault();
-                  setToolsOpen(!toolsOpen);
-                }}
                 onMouseEnter={() => setToolsOpen(true)}
               >
                 <IconWrench size={15} />
@@ -567,16 +562,6 @@ const NachosPokerNavBar = () => {
                 className="np-tools-menu"
                 onMouseLeave={() => setToolsOpen(false)}
               >
-                {/* Link to main Tools page */}
-                <Link
-                  href="/tools"
-                  className={`np-tools-menu-item ${pathname === '/tools' ? 'active' : ''}`}
-                  onClick={() => setToolsOpen(false)}
-                >
-                  <IconWrench size={17} />
-                  <span>All Tools</span>
-                </Link>
-                
                 {/* Individual tool links */}
                 {toolItems.map((tool) => {
                   const Icon = tool.icon;
