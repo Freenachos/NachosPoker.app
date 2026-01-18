@@ -126,7 +126,7 @@ const BBJ_CONSTANTS: BBJConstants = {
   feesPerBBJ_bb: 1679,
   poolDivisor: 325.87,
   breakevenPayout_bb: 1679,
-  breakevenPool_usd: 2363000,
+  breakevenPool_usd: 2276000,
   evDivisor: 325.87,
   winnerSharePercent: 10,
   loserSharePercent: 3,
@@ -332,7 +332,7 @@ const BBJDashboard: React.FC = () => {
   // STATE
   // ============================================
   
-  const [poolSize, setPoolSize] = useState<number>(2363000);
+  const [poolSize, setPoolSize] = useState<number>(2276000);
   const [selectedStake, setSelectedStake] = useState<string>('0.50/1');
   const [simulationHands, setSimulationHands] = useState<number>(1000000);
   const [numTrials, setNumTrials] = useState<number>(100);
@@ -639,7 +639,7 @@ const BBJDashboard: React.FC = () => {
   const currentEV = useMemo(() => calculateEV(poolSize, selectedStake), [poolSize, selectedStake]);
   
   const evTableData = useMemo(() => {
-    const poolSizes = [1800000, 2000000, 2200000, 2363000, 2600000, 2800000];
+    const poolSizes = [1800000, 2000000, 2200000, 2276000, 2400000, 2600000];
     return poolSizes.map(pool => ({
       pool,
       ...calculateEV(pool, selectedStake)
@@ -1301,7 +1301,7 @@ const BBJDashboard: React.FC = () => {
                 </div>
                 <div className="bg-[#a88b46]/10 border border-[#a88b46]/20 rounded-2xl p-4 text-center">
                   <div className="text-[11px] text-zinc-500 mb-1.5 uppercase tracking-wide">Break-Even Pool</div>
-                  <div className="text-2xl md:text-3xl text-[#a88b46] font-bold">~$2.36M</div>
+                  <div className="text-2xl md:text-3xl text-[#a88b46] font-bold">~$2.28M</div>
                 </div>
               </div>
 
@@ -1345,7 +1345,7 @@ const BBJDashboard: React.FC = () => {
             <h2 className="text-xl md:text-2xl font-bold text-white">Variance Simulator</h2>
           </div>
           <p className="text-center text-zinc-500 text-sm mb-8 max-w-3xl mx-auto">
-            See how the -1.83bb/100 jackpot fee impacts your bankroll over thousands of trials. At a pool size of roughly $2,363,000, the mathematical frequency of hitting the BBJ should offset the fee and brings your theoretical EV back to zero.
+            See how the -1.83bb/100 jackpot fee impacts your bankroll over thousands of trials. At a pool size of roughly $2,276,000, the mathematical frequency of hitting the BBJ should offset the fee and brings your theoretical EV back to zero.
           </p>
 
           {/* Simulator Controls */}
@@ -1459,9 +1459,9 @@ const BBJDashboard: React.FC = () => {
                   </button>
                 ))}
                 <button
-                  onClick={() => setPoolSize(2363000)}
+                  onClick={() => setPoolSize(2276000)}
                   className={`py-1 px-2 rounded-md text-[9px] font-bold transition-all duration-200 ${
-                    poolSize === 2363000 
+                    poolSize === 2276000 
                       ? 'bg-[#a88b46] text-zinc-950' 
                       : 'bg-[#a88b46]/20 text-[#a88b46] hover:bg-[#a88b46]/30 border border-[#a88b46]/30'
                   }`}
@@ -1834,7 +1834,7 @@ const BBJDashboard: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2 flex-wrap mb-4">
-              {[1800000, 2000000, 2363000, 2600000, 2800000].map(preset => (
+              {[1800000, 2000000, 2276000, 2400000, 2600000].map(preset => (
                 <button
                   key={preset}
                   onClick={() => setPoolSize(preset)}
