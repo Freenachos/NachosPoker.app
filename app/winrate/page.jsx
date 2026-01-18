@@ -3037,7 +3037,7 @@ const PLAYER_DATA = POKER_DATA_COMPRESSED.map(d => ({
 const GGPokerLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
     <rect width="40" height="40" rx="8" fill="#18181b"/>
-    <text x="20" y="27" textAnchor="middle" fill="#eab308" fontSize="18" fontWeight="bold" fontFamily="Arial Black, sans-serif">GG</text>
+    <text x="20" y="27" textAnchor="middle" fill="#a88b46" fontSize="18" fontWeight="bold" fontFamily="Arial Black, sans-serif">GG</text>
   </svg>
 );
 
@@ -3045,7 +3045,7 @@ const PokerStarsLogo = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
     <rect width="40" height="40" rx="8" fill="#18181b"/>
     <path d="M20 6 L23 16 L34 16 L25 22 L28 33 L20 26 L12 33 L15 22 L6 16 L17 16 Z" fill="#C41200"/>
-    <path d="M20 12 L21.5 17 L27 17 L22.5 20.5 L24 26 L20 22.5 L16 26 L17.5 20.5 L13 17 L18.5 17 Z" fill="#eab308"/>
+    <path d="M20 12 L21.5 17 L27 17 L22.5 20.5 L24 26 L20 22.5 L16 26 L17.5 20.5 L13 17 L18.5 17 Z" fill="#a88b46"/>
   </svg>
 );
 
@@ -3081,7 +3081,7 @@ const WPNLogo = ({ size = 24 }) => (
 // ============================================================
 
 const SITE_CONFIG = {
-  GGPoker: { color: '#eab308', Logo: GGPokerLogo, name: 'GGPoker' },
+  GGPoker: { color: '#a88b46', Logo: GGPokerLogo, name: 'GGPoker' },
   PokerStars: { color: '#C41200', Logo: PokerStarsLogo, name: 'PokerStars' },
   iPoker: { color: '#3B82F6', Logo: IPokerLogo, name: 'iPoker' },
   Winamax: { color: '#C41200', Logo: WinamaxLogo, name: 'Winamax' },
@@ -3413,12 +3413,12 @@ const NachoStatsDashboard = () => {
   // ============================================================
 
   const CartoonNacho = () => (
-    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" className="drop-shadow-[0_4px_12px_rgba(234,179,8,0.4)]">
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#eab308" stroke="#ca8a04" strokeWidth="2" />
+    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" className="drop-shadow-[0_4px_12px_rgba(168,139,70,0.4)]">
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#a88b46" stroke="#8b7339" strokeWidth="2" />
       <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#facc15" opacity="0.9" />
       <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#facc15" opacity="0.9" />
       <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#facc15" opacity="0.9" />
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#eab308" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#a88b46" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
       <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#09090b" />
@@ -3433,7 +3433,7 @@ const NachoStatsDashboard = () => {
 
   const NachoTriangle = ({ size, opacity }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#eab308" opacity="0.8" />
+      <path d="M10 2 L18 17 L2 17 Z" fill="#a88b46" opacity="0.8" />
     </svg>
   );
 
@@ -3463,7 +3463,7 @@ const NachoStatsDashboard = () => {
         initial="hidden"
         animate="visible"
         variants={scaleIn}
-        className="bg-zinc-900/60 backdrop-blur-xl border border-yellow-500/20 rounded-2xl p-6"
+        className="bg-zinc-900/60 backdrop-blur-xl border border-[rgba(168,139,70,0.2)] rounded-2xl p-6"
       >
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="flex items-center gap-3">
@@ -3474,8 +3474,8 @@ const NachoStatsDashboard = () => {
             </div>
           </div>
           
-          <div className="p-3 bg-yellow-500/20 rounded-full">
-            <Swords size={28} className="text-yellow-500" />
+          <div className="p-3 bg-[rgba(168,139,70,0.2)] rounded-full">
+            <Swords size={28} className="text-[#a88b46]" />
           </div>
           
           <div className="flex items-center gap-3">
@@ -3542,7 +3542,7 @@ const NachoStatsDashboard = () => {
     const player = payload[0].payload;
     
     return (
-      <div className="bg-zinc-900/95 backdrop-blur-xl border border-yellow-500/30 rounded-xl p-4 min-w-[220px] shadow-2xl">
+      <div className="bg-zinc-900/95 backdrop-blur-xl border border-[rgba(168,139,70,0.3)] rounded-xl p-4 min-w-[220px] shadow-2xl">
         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-zinc-700">
           <div className="w-2.5 h-2.5 rounded-full" style={{ background: getPlayerColor(player), boxShadow: `0 0 8px ${getPlayerGlow(player)}` }} />
           <span className="text-white font-semibold text-sm">{player.name}</span>
@@ -3609,78 +3609,209 @@ const NachoStatsDashboard = () => {
   // ============================================================
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white font-sans relative overflow-hidden">
-      {/* Floating Nachos Background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        {nachos.map(nacho => (
-          <motion.div
-            key={nacho.id}
-            initial={{ x: `${nacho.x}vw`, y: `${nacho.y}vh`, rotate: 0 }}
-            animate={{ 
-              x: [`${nacho.x}vw`, `${nacho.x + nacho.moveX / 10}vw`, `${nacho.x}vw`],
-              y: [`${nacho.y}vh`, `${nacho.y + nacho.moveY / 10}vh`, `${nacho.y}vh`],
-              rotate: [0, 180, 360]
-            }}
-            transition={{ 
-              duration: nacho.duration, 
-              repeat: Infinity, 
-              ease: "linear",
-              delay: nacho.delay 
-            }}
-            className="absolute"
-          >
-            <NachoTriangle size={nacho.size} opacity={nacho.opacity * 0.3} />
-          </motion.div>
-        ))}
+    <div className="min-h-screen bg-[#0A0A0A] text-white font-sans relative overflow-hidden">
+      {/* Noise/Grain Texture Overlay */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-[9999] opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+        }}
+      />
+
+      {/* Background Glows */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-[10%] -right-[8%] w-[900px] h-[900px] rounded-full opacity-60" 
+             style={{ background: 'radial-gradient(circle, rgba(168, 139, 70, 0.08) 0%, transparent 60%)', filter: 'blur(80px)' }} />
+        <div className="absolute -bottom-[15%] -left-[12%] w-[1000px] h-[1000px] rounded-full opacity-50"
+             style={{ background: 'radial-gradient(circle, rgba(168, 139, 70, 0.06) 0%, transparent 55%)', filter: 'blur(100px)' }} />
+        <div className="absolute top-[40%] right-[5%] w-[600px] h-[600px] rounded-full opacity-40"
+             style={{ background: 'radial-gradient(circle, rgba(168, 139, 70, 0.05) 0%, transparent 50%)', filter: 'blur(60px)' }} />
       </div>
+
+      {/* Peripheral Bokeh Nachos */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <motion.div animate={{ x: [0, 3, 6, 4, 2, 5, 1, 0], y: [0, -5, -3, -8, -4, -6, -2, 0], rotate: [0, 2, 4, 6, 3, 5, 1, 0] }} transition={{ duration: 120, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[5%] -left-[8%] w-[180px] h-[180px] opacity-[0.06]" style={{ filter: 'blur(18px)' }}>
+          <NachoTriangle size={180} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -4, -2, -6, -4, -3, 0], y: [0, -6, -10, -4, -7, 0] }} transition={{ duration: 140, repeat: Infinity, ease: "easeInOut", delay: 40 }}
+          className="absolute top-[40%] -left-[12%] w-[220px] h-[220px] opacity-[0.05]" style={{ filter: 'blur(22px)' }}>
+          <NachoTriangle size={220} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 3, 6, 4, 2, 5, 1, 0], y: [0, -5, -3, -8, -4, -6, -2, 0] }} transition={{ duration: 100, repeat: Infinity, ease: "easeInOut", delay: 70 }}
+          className="absolute bottom-[10%] -left-[6%] w-[160px] h-[160px] opacity-[0.07]" style={{ filter: 'blur(16px)' }}>
+          <NachoTriangle size={160} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -4, -2, -6, -4, -3, 0], y: [0, -6, -10, -4, -7, 0] }} transition={{ duration: 130, repeat: Infinity, ease: "easeInOut", delay: 20 }}
+          className="absolute top-[8%] -right-[10%] w-[200px] h-[200px] opacity-[0.05]" style={{ filter: 'blur(20px)' }}>
+          <NachoTriangle size={200} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 3, 6, 4, 2, 5, 1, 0], y: [0, -5, -3, -8, -4, -6, -2, 0] }} transition={{ duration: 150, repeat: Infinity, ease: "easeInOut", delay: 60 }}
+          className="absolute top-[50%] -right-[14%] w-[240px] h-[240px] opacity-[0.04]" style={{ filter: 'blur(24px)' }}>
+          <NachoTriangle size={240} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -4, -2, -6, -4, -3, 0], y: [0, -6, -10, -4, -7, 0] }} transition={{ duration: 110, repeat: Infinity, ease: "easeInOut", delay: 90 }}
+          className="absolute bottom-[15%] -right-[8%] w-[170px] h-[170px] opacity-[0.06]" style={{ filter: 'blur(17px)' }}>
+          <NachoTriangle size={170} opacity={1} />
+        </motion.div>
+      </div>
+
+      {/* Foreground Bokeh Nachos */}
+      <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden">
+        <motion.div animate={{ x: [0, 8, 15, 10, 5, 0], y: [0, -12, -8, -18, -5, 0], rotate: [0, 8, 15, 22, 12, 0] }} transition={{ duration: 80, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[5%] left-[3%] w-[90px] h-[90px] opacity-[0.12]" style={{ filter: 'blur(12px)' }}>
+          <NachoTriangle size={90} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -10, -5, -12, 0], y: [0, -15, -25, -10, 0], rotate: [0, -12, -20, -8, 0] }} transition={{ duration: 90, repeat: Infinity, ease: "easeInOut", delay: 30 }}
+          className="absolute bottom-[10%] right-[5%] w-[110px] h-[110px] opacity-[0.10]" style={{ filter: 'blur(14px)' }}>
+          <NachoTriangle size={110} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 12, 6, 0], y: [0, -20, -10, 0], rotate: [0, 18, 10, 0] }} transition={{ duration: 70, repeat: Infinity, ease: "easeInOut", delay: 45 }}
+          className="absolute top-[45%] -left-[2%] w-[80px] h-[80px] opacity-[0.08]" style={{ filter: 'blur(10px)' }}>
+          <NachoTriangle size={80} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 8, 15, 10, 5, 0], y: [0, -12, -8, -18, -5, 0], rotate: [0, 8, 15, 22, 12, 0] }} transition={{ duration: 85, repeat: Infinity, ease: "easeInOut", delay: 60 }}
+          className="absolute top-[15%] right-[8%] w-[70px] h-[70px] opacity-[0.09]" style={{ filter: 'blur(11px)' }}>
+          <NachoTriangle size={70} opacity={1} />
+        </motion.div>
+      </div>
+
+      {/* Midground Bokeh Nachos */}
+      <div className="fixed inset-0 pointer-events-none z-[2] overflow-hidden">
+        <motion.div animate={{ x: [0, 20, 35, 25, 10, 0], y: [0, -30, -20, -40, -15, 0], rotate: [0, 25, 50, 75, 55, 0] }} transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[20%] left-[15%] w-[40px] h-[40px] opacity-[0.18]" style={{ filter: 'blur(4px)' }}>
+          <NachoTriangle size={40} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -25, -15, -30, 0], y: [0, -35, -50, -25, 0], rotate: [0, -40, -80, -50, 0] }} transition={{ duration: 50, repeat: Infinity, ease: "easeInOut", delay: 15 }}
+          className="absolute top-[60%] right-[20%] w-[35px] h-[35px] opacity-[0.16]" style={{ filter: 'blur(5px)' }}>
+          <NachoTriangle size={35} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 30, 15, 0], y: [0, -25, -45, 0], rotate: [0, 60, 120, 0] }} transition={{ duration: 55, repeat: Infinity, ease: "easeInOut", delay: 25 }}
+          className="absolute bottom-[30%] left-[8%] w-[45px] h-[45px] opacity-[0.15]" style={{ filter: 'blur(4px)' }}>
+          <NachoTriangle size={45} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 20, 35, 25, 10, 0], y: [0, -30, -20, -40, -15, 0], rotate: [0, 25, 50, 75, 55, 0] }} transition={{ duration: 48, repeat: Infinity, ease: "easeInOut", delay: 35 }}
+          className="absolute top-[35%] right-[12%] w-[38px] h-[38px] opacity-[0.14]" style={{ filter: 'blur(3px)' }}>
+          <NachoTriangle size={38} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -25, -15, -30, 0], y: [0, -35, -50, -25, 0], rotate: [0, -40, -80, -50, 0] }} transition={{ duration: 42, repeat: Infinity, ease: "easeInOut", delay: 40 }}
+          className="absolute top-[75%] left-[25%] w-[32px] h-[32px] opacity-[0.17]" style={{ filter: 'blur(4px)' }}>
+          <NachoTriangle size={32} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 30, 15, 0], y: [0, -25, -45, 0], rotate: [0, 60, 120, 0] }} transition={{ duration: 52, repeat: Infinity, ease: "easeInOut", delay: 50 }}
+          className="absolute top-[10%] left-[55%] w-[42px] h-[42px] opacity-[0.13]" style={{ filter: 'blur(4px)' }}>
+          <NachoTriangle size={42} opacity={1} />
+        </motion.div>
+      </div>
+
+      {/* Background (Focal) Bokeh Nachos */}
+      <div className="fixed inset-0 pointer-events-none z-[3] overflow-hidden">
+        <motion.div animate={{ x: [0, 25, 50, 35, 60, 40, 20, 0], y: [0, -40, -25, -60, -35, -55, -30, 0], rotate: [0, 45, 90, 150, 200, 270, 320, 360] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[25%] left-[20%] w-[18px] h-[18px] opacity-[0.35]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={18} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -35, -20, -50, -30, -15, 0], y: [0, -50, -30, -45, -60, -25, 0], rotate: [0, -60, -120, -180, -250, -310, -360] }} transition={{ duration: 28, repeat: Infinity, ease: "linear", delay: 8 }}
+          className="absolute top-[55%] right-[25%] w-[15px] h-[15px] opacity-[0.30]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={15} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 25, 50, 35, 60, 40, 20, 0], y: [0, -40, -25, -60, -35, -55, -30, 0], rotate: [0, 45, 90, 150, 200, 270, 320, 360] }} transition={{ duration: 22, repeat: Infinity, ease: "linear", delay: 12 }}
+          className="absolute bottom-[35%] left-[35%] w-[20px] h-[20px] opacity-[0.28]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={20} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -35, -20, -50, -30, -15, 0], y: [0, -50, -30, -45, -60, -25, 0], rotate: [0, -60, -120, -180, -250, -310, -360] }} transition={{ duration: 30, repeat: Infinity, ease: "linear", delay: 18 }}
+          className="absolute top-[40%] right-[35%] w-[16px] h-[16px] opacity-[0.32]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={16} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, 25, 50, 35, 60, 40, 20, 0], y: [0, -40, -25, -60, -35, -55, -30, 0], rotate: [0, 45, 90, 150, 200, 270, 320, 360] }} transition={{ duration: 26, repeat: Infinity, ease: "linear", delay: 5 }}
+          className="absolute top-[15%] left-[45%] w-[14px] h-[14px] opacity-[0.25]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={14} opacity={1} />
+        </motion.div>
+        <motion.div animate={{ x: [0, -35, -20, -50, -30, -15, 0], y: [0, -50, -30, -45, -60, -25, 0], rotate: [0, -60, -120, -180, -250, -310, -360] }} transition={{ duration: 24, repeat: Infinity, ease: "linear", delay: 15 }}
+          className="absolute bottom-[20%] right-[40%] w-[17px] h-[17px] opacity-[0.27]" style={{ filter: 'blur(0.5px)' }}>
+          <NachoTriangle size={17} opacity={1} />
+        </motion.div>
+      </div>
+
+      <style>{`
+        @keyframes traceBorder {
+          0% { offset-distance: 0%; }
+          100% { offset-distance: 100%; }
+        }
+        .spark-border-gold { 
+          position: relative; 
+          overflow: hidden; 
+          border-radius: 24px; 
+          background: rgba(18, 18, 18, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        .spark-border-gold::before { 
+          content: ""; 
+          position: absolute; 
+          inset: 0; 
+          border-radius: inherit; 
+          padding: 1px; 
+          background: linear-gradient(135deg, rgba(168, 139, 70, 0.5), rgba(168, 139, 70, 0.15)); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); 
+          -webkit-mask-composite: xor; 
+          mask-composite: exclude; 
+          z-index: 1; 
+          pointer-events: none; 
+        }
+        .spark-border-gold::after { 
+          content: ""; 
+          position: absolute; 
+          top: 0; 
+          left: 0; 
+          width: 80px; 
+          height: 2px; 
+          background: linear-gradient(90deg, transparent 0%, #a88b46 50%, #a88b46 100%); 
+          box-shadow: 0 0 15px 2px rgba(168, 139, 70, 0.6); 
+          offset-path: rect(0 100% 100% 0 round 24px); 
+          animation: traceBorder 6s linear infinite; 
+          z-index: 2; 
+          pointer-events: none; 
+        }
+      `}</style>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <NachosPokerNavBar />
         
-        {/* CTA Banner */}
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          className="relative mb-6 overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-transparent to-yellow-500/10 rounded-2xl" />
-          <div className="relative bg-zinc-900/60 backdrop-blur-xl border border-yellow-500/30 rounded-2xl p-7 flex items-center gap-6 flex-wrap
-                          before:absolute before:inset-0 before:rounded-2xl before:p-[1px] before:bg-gradient-to-r before:from-yellow-500/30 before:to-yellow-500/10 before:-z-10">
-            <motion.div 
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="flex-shrink-0"
-            >
-              <CartoonNacho />
-            </motion.div>
+        {/* CTA Banner with Sparkborder */}
+        <div className="spark-border-gold mb-6 p-7">
+          <div className="flex items-center gap-6 flex-wrap">
             <div className="flex-1 min-w-[280px]">
-              <div className="text-xs text-yellow-500 font-semibold mb-1.5 tracking-widest uppercase">Crafted by FreeNachos</div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Ready to increase your win rate?</h2>
-              <p className="text-sm text-zinc-400 leading-relaxed">Level up your game with elite coaching or join the fastest-growing CFP in poker.</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2" style={{ fontFamily: 'Manrope, Inter, sans-serif' }}>
+                Win Rate <span style={{ color: '#a88b46' }}>Dashboard</span>
+              </h2>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Compare win rates across 3,000 players and 5 poker sites. Ready for structured guidance? Explore the Mentorship Program.
+              </p>
             </div>
             <div className="flex gap-3 flex-wrap">
               <a 
                 href="https://www.nachospoker.com/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950 px-5 py-3 rounded-lg font-semibold text-sm
-                           transition-all duration-300 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg font-semibold text-sm text-zinc-950
+                           transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,139,70,0.3)] hover:-translate-y-0.5"
+                style={{ background: '#a88b46' }}
               >
                 Join Our CFP <ExternalLink size={14} />
               </a>
               <a 
-                href="https://www.freenachoscoaching.com/" 
+                href="https://calendly.com/patrickgerritsen90/30min" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="inline-flex items-center gap-2 bg-transparent border border-yellow-500/50 text-yellow-500 px-5 py-3 rounded-lg font-semibold text-sm
-                           transition-all duration-300 hover:bg-yellow-500/10 hover:border-yellow-500 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 bg-transparent px-5 py-3 rounded-lg font-semibold text-sm
+                           transition-all duration-300 hover:-translate-y-0.5"
+                style={{ border: '1.5px solid #a88b46', color: '#a88b46' }}
               >
                 Private Coaching <ExternalLink size={14} />
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Main Dashboard */}
         <motion.div 
@@ -3703,7 +3834,7 @@ const NachoStatsDashboard = () => {
           <div className="bg-zinc-950/50 rounded-xl p-5 mb-6 border border-zinc-800/50">
             <div className="flex justify-between items-center mb-4 flex-wrap gap-3">
               <span className="text-zinc-400 text-sm">
-                Click a stake to select • <span className="text-yellow-500 font-medium">{selectedDatasets.length}/{MAX_SELECTIONS}</span> selected
+                Click a stake to select • <span className="text-[#a88b46] font-medium">{selectedDatasets.length}/{MAX_SELECTIONS}</span> selected
               </span>
               {selectedDatasets.length > 0 && (
                 <motion.button 
@@ -3804,7 +3935,7 @@ const NachoStatsDashboard = () => {
                 onChange={(e) => setSearchTerm(e.target.value)} 
                 className="w-full py-2.5 pl-11 pr-4 bg-zinc-950/70 border border-zinc-800 rounded-lg text-white text-sm
                            placeholder-zinc-500 transition-all duration-200
-                           focus:outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
+                           focus:outline-none focus:border-[rgba(168,139,70,0.5)] focus:ring-2 focus:ring-[rgba(168,139,70,0.2)]"
               />
             </div>
 
@@ -3815,7 +3946,7 @@ const NachoStatsDashboard = () => {
                 whileTap={{ scale: 0.98 }}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200
                            ${displayMode === 'winRate' 
-                             ? 'bg-gradient-to-r from-yellow-500/30 to-yellow-600/20 text-yellow-500 shadow-lg' 
+                             ? 'bg-gradient-to-r from-[rgba(168,139,70,0.3)] to-[rgba(168,139,70,0.2)] text-[#a88b46] shadow-lg' 
                              : 'text-zinc-400 hover:text-zinc-200'}`}
                 onClick={() => setDisplayMode('winRate')}
               >
@@ -3826,7 +3957,7 @@ const NachoStatsDashboard = () => {
                 whileTap={{ scale: 0.98 }}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200
                            ${displayMode === 'profit' 
-                             ? 'bg-gradient-to-r from-yellow-500/30 to-yellow-600/20 text-yellow-500 shadow-lg' 
+                             ? 'bg-gradient-to-r from-[rgba(168,139,70,0.3)] to-[rgba(168,139,70,0.2)] text-[#a88b46] shadow-lg' 
                              : 'text-zinc-400 hover:text-zinc-200'}`}
                 onClick={() => setDisplayMode('profit')}
               >
@@ -3843,7 +3974,7 @@ const NachoStatsDashboard = () => {
               className="bg-zinc-900/40 backdrop-blur border border-zinc-800/50 rounded-xl p-5"
             >
               <div className="flex justify-between items-center mb-4 flex-wrap gap-3">
-                <h3 className="text-yellow-500 text-base font-semibold">
+                <h3 className="text-[#a88b46] text-base font-semibold">
                   {chartView === 'scatter' ? 'Player Distribution' : chartView === 'bar' ? 'Top 50 Rankings' : 'Win Rate Distribution'}
                 </h3>
                 <div className="flex bg-zinc-950/60 rounded-lg p-1 border border-zinc-800">
@@ -3856,7 +3987,7 @@ const NachoStatsDashboard = () => {
                       key={view.id}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all
                                  ${chartView === view.id 
-                                   ? 'bg-yellow-500/20 text-yellow-500' 
+                                   ? 'bg-[rgba(168,139,70,0.2)] text-[#a88b46]' 
                                    : 'text-zinc-500 hover:text-zinc-300'}`}
                       onClick={() => setChartView(view.id)}
                     >
@@ -3914,8 +4045,8 @@ const NachoStatsDashboard = () => {
                           if (!active || !payload || !payload.length) return null;
                           const d = payload[0].payload;
                           return (
-                            <div className="bg-zinc-900/95 backdrop-blur-xl border border-yellow-500/30 rounded-xl p-4 min-w-[180px]">
-                              <div className="text-yellow-500 font-semibold mb-2">{d.value} to {d.value + 1} bb/100</div>
+                            <div className="bg-zinc-900/95 backdrop-blur-xl border border-[rgba(168,139,70,0.3)] rounded-xl p-4 min-w-[180px]">
+                              <div className="text-[#a88b46] font-semibold mb-2">{d.value} to {d.value + 1} bb/100</div>
                               {selectedDatasets.length >= 1 && (
                                 <div className="flex justify-between mb-1">
                                   <span className="text-cyan-400 text-xs">{selectedDatasets[0]?.site} {selectedDatasets[0]?.stake}</span>
@@ -3981,8 +4112,8 @@ const NachoStatsDashboard = () => {
             >
               <div className="p-5 pb-3 border-b border-zinc-800/50">
                 <div className="flex items-center gap-2.5 mb-2">
-                  <Trophy size={20} className="text-yellow-500" />
-                  <h3 className="text-yellow-500 text-base font-semibold">
+                  <Trophy size={20} className="text-[#a88b46]" />
+                  <h3 className="text-[#a88b46] text-base font-semibold">
                     Top 100 by {displayMode === 'profit' ? 'Profit' : 'Win Rate'}
                   </h3>
                 </div>
@@ -4014,14 +4145,14 @@ const NachoStatsDashboard = () => {
                           animate={{ opacity: 1, x: 0 }}
                           className={`grid grid-cols-[44px_1fr_90px] items-center py-3 px-5 border-b border-zinc-800/30 cursor-pointer
                                      transition-all duration-200 hover:bg-white/5 hover:translate-x-1
-                                     ${isHighlighted ? 'bg-yellow-500/10 border-l-2 border-l-yellow-500' : ''}`}
+                                     ${isHighlighted ? 'bg-[rgba(168,139,70,0.1)] border-l-2 border-l-[#a88b46]' : ''}`}
                           onMouseEnter={() => setHighlightedPlayer(player.id)} 
                           onMouseLeave={() => setHighlightedPlayer(null)}
                         >
                           <div className="flex items-center">
                             {originalRank <= 3 ? (
                               <div className={`w-6 h-6 rounded-md flex items-center justify-center
-                                             ${originalRank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' : 
+                                             ${originalRank === 1 ? 'bg-gradient-to-br from-#a88b46 to-#a88b46' : 
                                                originalRank === 2 ? 'bg-gradient-to-br from-zinc-300 to-zinc-500' : 
                                                'bg-gradient-to-br from-amber-600 to-amber-800'}`}>
                                 {originalRank === 1 ? <Crown size={12} className="text-zinc-900" /> : <Award size={12} className="text-zinc-900" />}
@@ -4075,7 +4206,7 @@ const NachoStatsDashboard = () => {
             >
               <div className="text-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-                  <Swords size={28} className="text-yellow-500" />
+                  <Swords size={28} className="text-[#a88b46]" />
                   Head-to-Head Comparison
                 </h2>
                 <p className="text-zinc-500 text-sm">
@@ -4097,7 +4228,7 @@ const NachoStatsDashboard = () => {
           className="bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 sm:p-8"
         >
           <div className="flex items-center justify-center gap-3 mb-6">
-            <HelpCircle size={22} className="text-yellow-500" />
+            <HelpCircle size={22} className="text-[#a88b46]" />
             <h2 className="text-lg font-semibold text-white">Calculation Formulas</h2>
           </div>
 
@@ -4132,11 +4263,11 @@ const NachoStatsDashboard = () => {
 
             <motion.div 
               variants={scaleIn}
-              className="bg-yellow-500/10 p-5 rounded-xl border border-yellow-500/20"
+              className="bg-[rgba(168,139,70,0.1)] p-5 rounded-xl border border-[rgba(168,139,70,0.2)]"
             >
               <div className="flex items-center gap-2.5 mb-3">
-                <Target size={18} className="text-yellow-500" />
-                <h3 className="text-yellow-500 text-sm font-semibold">Data Sources</h3>
+                <Target size={18} className="text-[#a88b46]" />
+                <h3 className="text-[#a88b46] text-sm font-semibold">Data Sources</h3>
               </div>
               <p className="text-zinc-400 text-xs leading-relaxed">
                 30 datasets, 3,000 players<br />
