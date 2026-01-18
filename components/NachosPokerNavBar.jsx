@@ -3,7 +3,58 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { GraduationCap, FileText, Calculator, LineChart, Users, DollarSign, ExternalLink, Wrench, ChevronDown, Target } from 'lucide-react';
+
+// Minimalist gold-line icon components (#a88b46)
+const IconGraduation = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+    <path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5" />
+  </svg>
+);
+
+const IconWrench = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+  </svg>
+);
+
+const IconCalculator = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="2" width="16" height="20" rx="2" />
+    <line x1="8" y1="6" x2="16" y2="6" />
+    <line x1="8" y1="10" x2="8" y2="10.01" />
+    <line x1="12" y1="10" x2="12" y2="10.01" />
+    <line x1="16" y1="10" x2="16" y2="10.01" />
+    <line x1="8" y1="14" x2="8" y2="14.01" />
+    <line x1="12" y1="14" x2="12" y2="14.01" />
+    <line x1="16" y1="14" x2="16" y2="14.01" />
+    <line x1="8" y1="18" x2="8" y2="18.01" />
+    <line x1="12" y1="18" x2="12" y2="18.01" />
+    <line x1="16" y1="18" x2="16" y2="18.01" />
+  </svg>
+);
+
+const IconTarget = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="6" />
+    <circle cx="12" cy="12" r="2" />
+  </svg>
+);
+
+const IconChevronDown = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6,9 12,15 18,9" />
+  </svg>
+);
+
+const IconExternalLink = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15,3 21,3 21,9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
 
 const NachosPokerNavBar = () => {
   const pathname = usePathname();
@@ -13,7 +64,7 @@ const NachosPokerNavBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const maxScroll = 150;
+      const maxScroll = 100;
       const progress = Math.min(window.scrollY / maxScroll, 1);
       setScrollProgress(progress);
     };
@@ -23,7 +74,6 @@ const NachosPokerNavBar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (toolsRef.current && !toolsRef.current.contains(event.target)) {
@@ -35,428 +85,531 @@ const NachosPokerNavBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Simplified tool items - only Variance Calculator and BBJ Dashboard
   const toolItems = [
-    { href: '/variance', label: 'Variance', icon: Calculator },
-    { href: '/winrate', label: 'Win Rate', icon: LineChart },
-    { href: '/seat', label: 'Seat Selection', icon: Users },
-    { href: '/profits', label: 'Profits', icon: DollarSign },
-    { href: '/bbj', label: 'Bad Beat', icon: Target },
+    { href: '/variance', label: 'Variance Calculator', icon: IconCalculator },
+    { href: '/bbj', label: 'BBJ Dashboard', icon: IconTarget },
   ];
 
   const isActive = (href) => {
     if (href === '/') return pathname === '/';
+    if (href === '/tools') return pathname === '/tools' || toolItems.some(t => pathname.startsWith(t.href));
     if (href.startsWith('http')) return false;
     return pathname.startsWith(href);
   };
 
-  const isToolActive = toolItems.some(tool => isActive(tool.href));
+  const isToolActive = pathname === '/tools' || toolItems.some(tool => pathname.startsWith(tool.href));
 
   return (
     <>
       <style>{`
-        @keyframes gradientShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
+        /* ============================================
+           GOLD DESIGN SYSTEM - Matching Homepage
+           Primary Gold: #a88b46
+           White: #FFFFFF
+           Dark BG: #0a0a0a
+           ============================================ */
         
-        @keyframes subtleGlow {
-          0%, 100% {
-            box-shadow: 0 0 8px rgba(167, 139, 250, 0.4),
-                        0 0 16px rgba(236, 72, 153, 0.2);
-          }
-          50% {
-            box-shadow: 0 0 12px rgba(167, 139, 250, 0.6),
-                        0 0 24px rgba(236, 72, 153, 0.4);
-          }
-        }
-
-        .nachospoker-navbar {
+        .np-navbar {
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
           z-index: 1000;
-          max-width: 1400px;
-          margin: 0 auto;
-          border-radius: 12px;
-          padding: 12px 24px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
+          padding: 0 24px;
           isolation: isolate;
         }
         
-        .nachospoker-navbar::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 12px;
-          z-index: -1;
-          background: rgba(10, 10, 10, calc(0.85 * var(--scroll-progress, 0)));
-          border: 1px solid rgba(255, 255, 255, calc(0.08 * var(--scroll-progress, 0)));
-          backdrop-filter: blur(calc(10px * var(--scroll-progress, 0)));
-          -webkit-backdrop-filter: blur(calc(10px * var(--scroll-progress, 0)));
-          transition: all 0.15s ease;
-        }
-        
-        .nachospoker-navbar-brand {
+        .np-navbar-inner {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 14px 28px;
           display: flex;
           align-items: center;
-          gap: 10px;
+          justify-content: space-between;
+          gap: 16px;
+          position: relative;
+          /* Glassmorphism effect */
+          background: rgba(10, 10, 10, calc(0.75 + 0.2 * var(--scroll-progress, 0)));
+          backdrop-filter: blur(calc(12px + 8px * var(--scroll-progress, 0)));
+          -webkit-backdrop-filter: blur(calc(12px + 8px * var(--scroll-progress, 0)));
+          /* Gold bottom border - 1px solid #a88b46 */
+          border-bottom: 1px solid rgba(168, 139, 70, calc(0.5 + 0.5 * var(--scroll-progress, 0)));
+          transition: all 0.3s ease;
+        }
+        
+        /* ============================================
+           LOGO / BRAND - Two-tone style
+           "Freenachos" in #FFFFFF
+           ".Poker" in #a88b46
+           ============================================ */
+        .np-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
           flex-shrink: 0;
         }
-        .nachospoker-navbar-logo {
-          width: 38px;
-          height: 38px;
-          border-radius: 8px;
-          flex-shrink: 0;
+        
+        .np-brand-logo {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
           overflow: hidden;
+          border: 1px solid rgba(168, 139, 70, 0.3);
+          flex-shrink: 0;
         }
-        .nachospoker-navbar-logo img {
+        
+        .np-brand-logo img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        .nachospoker-navbar-brand-text {
-          display: flex;
-          flex-direction: column;
-        }
-        .nachospoker-navbar-brand-name {
-          color: white;
-          font-size: 16px;
+        
+        .np-brand-text {
+          font-size: 18px;
           font-weight: 700;
-          line-height: 1.1;
+          letter-spacing: -0.02em;
+          display: flex;
+          align-items: baseline;
         }
-        .nachospoker-navbar-brand-suffix {
-          color: #FFB347;
-          font-size: 11px;
+        
+        .np-brand-name {
+          color: #FFFFFF;
+        }
+        
+        .np-brand-suffix {
+          color: #a88b46;
+        }
+        
+        /* ============================================
+           NAVIGATION LINKS
+           ============================================ */
+        .np-nav-links {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+        
+        /* ============================================
+           PRIMARY CTA - Mentorship Program
+           Solid #a88b46 gold background with dark text
+           Matches 'Book Free Introcall' button style
+           ============================================ */
+        .np-nav-cta {
+          position: relative;
+          padding: 10px 20px;
+          background: #a88b46;
+          color: #0a0a0a;
           font-weight: 600;
-          letter-spacing: 0.5px;
-        }
-        .nachospoker-navbar-links {
-          display: flex;
-          gap: 4px;
-          align-items: center;
-        }
-        .nachospoker-nav-item {
-          padding: 8px 12px;
-          color: rgba(255, 255, 255, 0.6);
-          cursor: pointer;
-          border-radius: 8px;
-          transition: all 0.2s;
-          font-weight: 500;
-          font-size: 12px;
+          font-size: 13px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
-          gap: 6px;
-          white-space: nowrap;
+          gap: 8px;
           text-decoration: none;
+          border: 1px solid #a88b46;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          white-space: nowrap;
+          box-shadow: 0 0 20px rgba(168, 139, 70, 0.15);
         }
         
-        .nachospoker-nav-item:hover {
-          color: white;
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .nachospoker-nav-item.active {
-          color: #FFB347;
-          background: rgba(255, 179, 71, 0.15);
+        .np-nav-cta svg {
+          color: #0a0a0a;
+          opacity: 0.85;
+          transition: all 0.25s ease;
         }
         
-        /* Special animated gradient button */
-        .nachospoker-nav-item.special-gradient {
+        .np-nav-cta:hover {
+          background: #bfa050;
+          border-color: #bfa050;
+          box-shadow: 
+            0 0 30px rgba(168, 139, 70, 0.4),
+            0 0 60px rgba(168, 139, 70, 0.2);
+          transform: translateY(-1px);
+        }
+        
+        .np-nav-cta:hover svg {
+          opacity: 1;
+        }
+        
+        /* Spark border shimmer effect */
+        .np-nav-cta::before {
+          content: '';
+          position: absolute;
+          inset: -1px;
+          border-radius: 11px;
+          padding: 1px;
           background: linear-gradient(
-            90deg,
-            #8b5cf6,
-            #a855f7,
-            #d946ef,
-            #ec4899,
-            #d946ef,
-            #a855f7,
-            #8b5cf6
+            135deg,
+            rgba(255, 255, 255, 0.4) 0%,
+            transparent 40%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.15) 100%
           );
-          background-size: 300% 100%;
-          animation: gradientShift 4s ease infinite, subtleGlow 3s ease-in-out infinite;
-          color: white;
-          font-weight: 600;
-          border: none;
-        }
-        .nachospoker-nav-item.special-gradient:hover {
-          background: linear-gradient(
-            90deg,
-            #8b5cf6,
-            #a855f7,
-            #d946ef,
-            #ec4899,
-            #d946ef,
-            #a855f7,
-            #8b5cf6
-          );
-          background-size: 300% 100%;
-          animation: gradientShift 2s ease infinite, subtleGlow 1.5s ease-in-out infinite;
-          transform: scale(1.02);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0.6;
+          transition: opacity 0.3s ease;
         }
         
-        /* External link styling */
-        .nachospoker-nav-item.external-link {
-          border: 1px solid rgba(255, 255, 255, 0.15);
+        .np-nav-cta:hover::before {
+          opacity: 1;
         }
-        .nachospoker-nav-item.external-link:hover {
-          border-color: rgba(255, 179, 71, 0.4);
-          color: #FFB347;
-        }
-
-        /* Desktop: show individual tool links */
-        .desktop-tools {
-          display: flex;
-          gap: 4px;
-        }
-
-        /* Mobile: show dropdown */
-        .tools-dropdown {
-          display: none;
+        
+        /* ============================================
+           TOOLS DROPDOWN
+           Gold-line icons (#a88b46)
+           Gold glow/underline on hover
+           ============================================ */
+        .np-tools-dropdown {
           position: relative;
         }
         
-        .tools-dropdown-btn {
-          padding: 8px 12px;
-          color: rgba(255, 255, 255, 0.6);
+        .np-tools-btn {
+          position: relative;
+          padding: 10px 16px;
+          color: rgba(255, 255, 255, 0.7);
           cursor: pointer;
-          border-radius: 8px;
-          transition: all 0.2s;
+          border-radius: 10px;
+          transition: all 0.25s ease;
           font-weight: 500;
-          font-size: 12px;
+          font-size: 13px;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           white-space: nowrap;
           background: transparent;
-          border: none;
+          border: 1px solid transparent;
           font-family: inherit;
+          text-decoration: none;
         }
         
-        .tools-dropdown-btn:hover {
-          color: white;
-          background: rgba(255, 255, 255, 0.05);
+        .np-tools-btn svg {
+          color: #a88b46;
+          opacity: 0.7;
+          transition: all 0.25s ease;
         }
         
-        .tools-dropdown-btn.active {
-          color: #FFB347;
-          background: rgba(255, 179, 71, 0.15);
+        .np-tools-btn svg.chevron {
+          color: rgba(255, 255, 255, 0.5);
+          transition: transform 0.25s ease, color 0.25s ease;
         }
         
-        .tools-dropdown-btn svg.chevron {
-          transition: transform 0.2s ease;
+        /* Gold underline on hover */
+        .np-tools-btn::after {
+          content: '';
+          position: absolute;
+          bottom: 6px;
+          left: 50%;
+          transform: translateX(-50%) scaleX(0);
+          width: calc(100% - 24px);
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #a88b46, transparent);
+          transition: transform 0.25s ease;
         }
         
-        .tools-dropdown-btn.open svg.chevron {
+        .np-tools-btn:hover {
+          color: #FFFFFF;
+          background: rgba(168, 139, 70, 0.08);
+          border-color: rgba(168, 139, 70, 0.2);
+        }
+        
+        .np-tools-btn:hover svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 4px rgba(168, 139, 70, 0.5));
+        }
+        
+        .np-tools-btn:hover::after {
+          transform: translateX(-50%) scaleX(1);
+        }
+        
+        .np-tools-btn.active {
+          color: #a88b46;
+          background: rgba(168, 139, 70, 0.12);
+          border-color: rgba(168, 139, 70, 0.25);
+        }
+        
+        .np-tools-btn.active svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 6px rgba(168, 139, 70, 0.6));
+        }
+        
+        .np-tools-btn.active::after {
+          transform: translateX(-50%) scaleX(1);
+          background: #a88b46;
+        }
+        
+        .np-tools-btn.open svg.chevron {
           transform: rotate(180deg);
         }
         
-        .tools-dropdown-menu {
+        /* Dropdown menu - glassmorphism */
+        .np-tools-menu {
           position: absolute;
-          top: calc(100% + 8px);
-          right: 0;
-          background: rgba(15, 15, 15, 0.95);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          padding: 8px;
-          min-width: 180px;
+          top: calc(100% + 10px);
+          left: 50%;
+          transform: translateX(-50%) translateY(-8px);
+          /* Glassmorphism */
+          background: rgba(15, 12, 8, 0.95);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(168, 139, 70, 0.3);
+          border-radius: 14px;
+          padding: 10px;
+          min-width: 200px;
           opacity: 0;
           visibility: hidden;
-          transform: translateY(-10px);
-          transition: all 0.2s ease;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+          transition: all 0.25s ease;
+          box-shadow: 
+            0 16px 48px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(168, 139, 70, 0.1) inset;
         }
         
-        .tools-dropdown.open .tools-dropdown-menu {
+        .np-tools-dropdown.open .np-tools-menu {
           opacity: 1;
           visibility: visible;
-          transform: translateY(0);
+          transform: translateX(-50%) translateY(0);
         }
         
-        .tools-dropdown-item {
+        .np-tools-menu-item {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 14px;
+          gap: 12px;
+          padding: 12px 16px;
           color: rgba(255, 255, 255, 0.7);
           text-decoration: none;
-          border-radius: 8px;
+          border-radius: 10px;
           font-size: 13px;
           font-weight: 500;
-          transition: all 0.15s ease;
+          transition: all 0.2s ease;
+          border: 1px solid transparent;
         }
         
-        .tools-dropdown-item:hover {
-          color: white;
-          background: rgba(255, 255, 255, 0.08);
+        .np-tools-menu-item svg {
+          color: #a88b46;
+          opacity: 0.6;
+          transition: all 0.2s ease;
         }
         
-        .tools-dropdown-item.active {
-          color: #FFB347;
-          background: rgba(255, 179, 71, 0.15);
+        .np-tools-menu-item:hover {
+          color: #FFFFFF;
+          background: rgba(168, 139, 70, 0.12);
+          border-color: rgba(168, 139, 70, 0.15);
         }
         
-        .tools-dropdown-item svg {
-          opacity: 0.7;
-        }
-        
-        .tools-dropdown-item:hover svg,
-        .tools-dropdown-item.active svg {
+        .np-tools-menu-item:hover svg {
           opacity: 1;
+          filter: drop-shadow(0 0 4px rgba(168, 139, 70, 0.5));
         }
         
-        /* Breakpoint: switch to dropdown */
-        @media (max-width: 1000px) {
-          .desktop-tools {
-            display: none;
-          }
-          .tools-dropdown {
-            display: block;
-          }
+        .np-tools-menu-item.active {
+          color: #a88b46;
+          background: rgba(168, 139, 70, 0.15);
+          border-color: rgba(168, 139, 70, 0.25);
         }
         
-        @media (max-width: 900px) {
-          .nachospoker-nav-item {
-            padding: 8px 10px;
-            font-size: 11px;
+        .np-tools-menu-item.active svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 6px rgba(168, 139, 70, 0.6));
+        }
+        
+        /* ============================================
+           CFP EXTERNAL LINK
+           Gold border outline style
+           ============================================ */
+        .np-nav-external {
+          position: relative;
+          padding: 10px 16px;
+          color: rgba(255, 255, 255, 0.7);
+          cursor: pointer;
+          border-radius: 10px;
+          transition: all 0.25s ease;
+          font-weight: 500;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
+          text-decoration: none;
+          border: 1px solid rgba(168, 139, 70, 0.35);
+          background: transparent;
+        }
+        
+        .np-nav-external svg {
+          color: #a88b46;
+          opacity: 0.7;
+          transition: all 0.25s ease;
+        }
+        
+        .np-nav-external:hover {
+          color: #a88b46;
+          border-color: rgba(168, 139, 70, 0.6);
+          background: rgba(168, 139, 70, 0.08);
+        }
+        
+        .np-nav-external:hover svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 4px rgba(168, 139, 70, 0.5));
+        }
+        
+        /* ============================================
+           RESPONSIVE BREAKPOINTS
+           ============================================ */
+        @media (max-width: 768px) {
+          .np-navbar {
+            padding: 0 16px;
           }
-          .nachospoker-nav-item svg {
-            display: none;
+          .np-navbar-inner {
+            padding: 12px 20px;
           }
-          .nachospoker-nav-item.special-gradient svg {
-            display: block;
+          .np-nav-cta {
+            padding: 8px 14px;
+            font-size: 12px;
           }
-          .tools-dropdown-btn {
-            padding: 8px 10px;
-            font-size: 11px;
+          .np-tools-btn {
+            padding: 8px 12px;
+            font-size: 12px;
+          }
+          .np-nav-external {
+            padding: 8px 12px;
+            font-size: 12px;
           }
         }
         
         @media (max-width: 600px) {
-          .nachospoker-navbar {
+          .np-navbar {
+            padding: 0 12px;
+          }
+          .np-navbar-inner {
             padding: 10px 16px;
           }
-          .nachospoker-navbar-brand-text {
+          .np-brand-text {
+            font-size: 16px;
+          }
+          .np-brand-logo {
+            width: 36px;
+            height: 36px;
+          }
+          .np-nav-cta span,
+          .np-tools-btn span:first-of-type,
+          .np-nav-external span {
+            display: none;
+          }
+          .np-nav-cta {
+            padding: 10px 12px;
+          }
+          .np-tools-btn {
+            padding: 10px 12px;
+          }
+          .np-nav-external {
+            padding: 10px 12px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .np-brand-text {
             display: none;
           }
         }
         
-        .navbar-spacer {
-          height: 70px;
+        /* Navbar spacer */
+        .np-navbar-spacer {
+          height: 80px;
         }
       `}</style>
       
-      <nav 
-        className="nachospoker-navbar"
-        style={{
-          '--scroll-progress': scrollProgress
-        }}
-      >
-        {/* Logo & Brand */}
-        <div className="nachospoker-navbar-brand">
-          <div className="nachospoker-navbar-logo">
-            <img src="/logo.png" alt="Freenachos Poker" />
-          </div>
-          <div className="nachospoker-navbar-brand-text">
-            <span className="nachospoker-navbar-brand-name">Freenachos</span>
-            <span className="nachospoker-navbar-brand-suffix">.Poker</span>
-          </div>
-        </div>
-        
-        {/* Navigation Links */}
-        <div className="nachospoker-navbar-links">
-          {/* Mentorship Program */}
-          <Link
-            href="/"
-            className={`nachospoker-nav-item special-gradient ${isActive('/') ? 'active' : ''}`}
-          >
-            <GraduationCap size={14} />
-            <span>Mentorship Program</span>
-          </Link>
-          
-          {/* Articles */}
-          <Link
-            href="/articles"
-            className={`nachospoker-nav-item ${isActive('/articles') ? 'active' : ''}`}
-          >
-            <FileText size={14} />
-            <span>Articles</span>
-          </Link>
-          
-          {/* Desktop: Individual tool links */}
-          <div className="desktop-tools">
-            {toolItems.map((tool) => {
-              const Icon = tool.icon;
-              return (
-                <Link
-                  key={tool.href}
-                  href={tool.href}
-                  className={`nachospoker-nav-item ${isActive(tool.href) ? 'active' : ''}`}
-                >
-                  <Icon size={14} />
-                  <span>{tool.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-          
-          {/* Mobile: Tools Dropdown */}
-          <div 
-            className={`tools-dropdown ${toolsOpen ? 'open' : ''}`}
-            ref={toolsRef}
-          >
-            <button 
-              className={`tools-dropdown-btn ${isToolActive ? 'active' : ''} ${toolsOpen ? 'open' : ''}`}
-              onClick={() => setToolsOpen(!toolsOpen)}
-            >
-              <Wrench size={14} />
-              <span>Tools</span>
-              <ChevronDown size={12} className="chevron" />
-            </button>
-            
-            <div className="tools-dropdown-menu">
-              {toolItems.map((tool) => {
-                const Icon = tool.icon;
-                return (
-                  <Link
-                    key={tool.href}
-                    href={tool.href}
-                    className={`tools-dropdown-item ${isActive(tool.href) ? 'active' : ''}`}
-                    onClick={() => setToolsOpen(false)}
-                  >
-                    <Icon size={16} />
-                    <span>{tool.label}</span>
-                  </Link>
-                );
-              })}
+      <nav className="np-navbar" style={{ '--scroll-progress': scrollProgress }}>
+        <div className="np-navbar-inner">
+          {/* Logo & Brand - Two-tone: "Freenachos" white, ".Poker" gold */}
+          <Link href="/" className="np-brand">
+            <div className="np-brand-logo">
+              <img src="/logo.png" alt="Freenachos Poker" />
             </div>
-          </div>
+            <div className="np-brand-text">
+              <span className="np-brand-name">Freenachos</span>
+              <span className="np-brand-suffix">.Poker</span>
+            </div>
+          </Link>
           
-          {/* CFP External Link */}
-          <a
-            href="https://www.nachospoker.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nachospoker-nav-item external-link"
-          >
-            <span>CFP</span>
-            <ExternalLink size={12} />
-          </a>
+          {/* Navigation Links */}
+          <div className="np-nav-links">
+            {/* Primary CTA - Mentorship Program (solid gold button) */}
+            <Link href="/" className="np-nav-cta">
+              <IconGraduation size={15} />
+              <span>Mentorship Program</span>
+            </Link>
+            
+            {/* Tools Dropdown */}
+            <div 
+              className={`np-tools-dropdown ${toolsOpen ? 'open' : ''}`}
+              ref={toolsRef}
+            >
+              <Link
+                href="/tools"
+                className={`np-tools-btn ${isToolActive ? 'active' : ''} ${toolsOpen ? 'open' : ''}`}
+                onClick={(e) => {
+                  // Allow navigation but also toggle dropdown
+                  e.preventDefault();
+                  setToolsOpen(!toolsOpen);
+                }}
+                onMouseEnter={() => setToolsOpen(true)}
+              >
+                <IconWrench size={15} />
+                <span>Tools</span>
+                <IconChevronDown size={12} className="chevron" />
+              </Link>
+              
+              <div 
+                className="np-tools-menu"
+                onMouseLeave={() => setToolsOpen(false)}
+              >
+                {/* Link to main Tools page */}
+                <Link
+                  href="/tools"
+                  className={`np-tools-menu-item ${pathname === '/tools' ? 'active' : ''}`}
+                  onClick={() => setToolsOpen(false)}
+                >
+                  <IconWrench size={17} />
+                  <span>All Tools</span>
+                </Link>
+                
+                {/* Individual tool links */}
+                {toolItems.map((tool) => {
+                  const Icon = tool.icon;
+                  return (
+                    <Link
+                      key={tool.href}
+                      href={tool.href}
+                      className={`np-tools-menu-item ${pathname.startsWith(tool.href) ? 'active' : ''}`}
+                      onClick={() => setToolsOpen(false)}
+                    >
+                      <Icon size={17} />
+                      <span>{tool.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* CFP External Link (gold outline button) */}
+            <a
+              href="https://www.nachospoker.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="np-nav-external"
+            >
+              <span>CFP</span>
+              <IconExternalLink size={13} />
+            </a>
+          </div>
         </div>
       </nav>
       
-      <div className="navbar-spacer" />
+      <div className="np-navbar-spacer" />
     </>
   );
 };
