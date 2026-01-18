@@ -977,16 +977,66 @@ export default function FreenachosArticles() {
     };
     const isScheduled = article.scheduledFor && new Date(article.scheduledFor) > new Date();
     const scheduledDate = isScheduled ? new Date(article.scheduledFor).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : null;
+    const thumbnailIcons = { 'poker-table': Fish, 'chart': BarChart3, 'stats': TrendingUp, 'default': FileText };
+    const ThumbnailIcon = thumbnailIcons[article.thumbnail] || thumbnailIcons['default'];
     
     return (
       <article style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px', flexWrap: 'wrap' }}>
+        {/* Full-width Thumbnail */}
+        {article.thumbnailUrl ? (
+          <div style={{ 
+            width: '100%', 
+            height: '320px', 
+            borderRadius: '16px', 
+            overflow: 'hidden', 
+            marginBottom: '32px',
+            border: '1px solid rgba(168, 139, 70, 0.2)'
+          }}>
+            <img 
+              src={article.thumbnailUrl} 
+              alt={article.title} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            />
+          </div>
+        ) : (
+          <div style={{ 
+            width: '100%', 
+            height: '200px', 
+            borderRadius: '16px', 
+            background: 'linear-gradient(135deg, rgba(168, 139, 70, 0.1) 0%, rgba(168, 139, 70, 0.03) 100%)',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            marginBottom: '32px',
+            border: '1px solid rgba(168, 139, 70, 0.15)'
+          }}>
+            <ThumbnailIcon size={64} color="#a88b46" style={{ opacity: 0.3 }} />
+          </div>
+        )}
+
+        {/* Article Title */}
+        <h1 style={{
+          fontSize: 'clamp(28px, 5vw, 40px)',
+          fontWeight: '800',
+          color: '#FFFFFF',
+          lineHeight: 1.15,
+          letterSpacing: '-0.02em',
+          marginBottom: '24px',
+          fontFamily: 'Manrope, Inter, sans-serif'
+        }}>
+          {article.title}
+        </h1>
+
+        {/* Meta Info */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px', flexWrap: 'wrap' }}>
           <span style={{ background: 'rgba(168, 139, 70, 0.2)', color: '#a88b46', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{article.category}</span>
           {!article.published && (<span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Draft</span>)}
           {isScheduled && (<span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '6px' }}><Calendar size={12} />{scheduledDate}</span>)}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><User size={14} /><span>Freenachos</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><Clock size={14} /><span>{article.readTime}</span></div>
         </div>
+
+        {/* Article Content */}
         {article.blocks.map((block, index) => renderBlock(block, index))}
       </article>
     );
