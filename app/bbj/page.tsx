@@ -20,7 +20,8 @@ import {
   Users,
   Clock,
   Percent,
-  Calculator
+  Calculator,
+  GraduationCap
 } from 'lucide-react';
 import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 
@@ -221,6 +222,103 @@ const scaleIn = {
     scale: 1,
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
   }
+};
+
+// ============================================
+// HELPER COMPONENTS (outside main to prevent re-render)
+// ============================================
+
+// Progress bar component
+const ProgressBar = ({ value, max, color, showLabel = true }: { value: number; max: number; color: string; showLabel?: boolean }) => {
+  const percentage = Math.min((value / max) * 100, 100);
+  return (
+    <div className="w-full">
+      <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
+        <motion.div 
+          className="h-full rounded-full"
+          style={{ background: `linear-gradient(90deg, ${color}88, ${color})` }}
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        />
+      </div>
+      {showLabel && (
+        <div className="text-[11px] text-zinc-500 mt-1 text-right">
+          {percentage.toFixed(1)}%
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Gauge component for EV visualization
+const EVGauge = ({ value, min, max }: { value: number; min: number; max: number }) => {
+  const range = max - min;
+  const normalizedValue = ((value - min) / range) * 100;
+  const clampedValue = Math.max(0, Math.min(100, normalizedValue));
+  
+  const getGaugeColor = (pct: number): string => {
+    if (pct < 50) {
+      const red = 239;
+      const green = Math.round(68 + (pct / 50) * 187);
+      return `rgb(${red}, ${green}, 68)`;
+    } else {
+      const red = Math.round(255 - ((pct - 50) / 50) * 221);
+      const green = Math.round(255 - ((pct - 50) / 50) * 60);
+      return `rgb(${red}, ${green}, 94)`;
+    }
+  };
+
+  return (
+    <div className="relative w-full h-[120px]">
+      <svg viewBox="0 0 200 100" className="w-full h-full">
+        <path
+          d="M 20 90 A 80 80 0 0 1 180 90"
+          fill="none"
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth="12"
+          strokeLinecap="round"
+        />
+        <motion.path
+          d="M 20 90 A 80 80 0 0 1 180 90"
+          fill="none"
+          stroke={getGaugeColor(clampedValue)}
+          strokeWidth="12"
+          strokeLinecap="round"
+          strokeDasharray={`${clampedValue * 2.51} 251`}
+          initial={{ strokeDasharray: '0 251' }}
+          animate={{ strokeDasharray: `${clampedValue * 2.51} 251` }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        />
+        <text
+          x="100"
+          y="70"
+          textAnchor="middle"
+          fill={getGaugeColor(clampedValue)}
+          fontSize="24"
+          fontWeight="700"
+          className="font-bold"
+        >
+          {value >= 0 ? '+' : ''}{value.toFixed(2)}
+        </text>
+        <text
+          x="100"
+          y="88"
+          textAnchor="middle"
+          fill="rgba(255,255,255,0.5)"
+          fontSize="12"
+        >
+          bb/100
+        </text>
+        <text x="20" y="98" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10">
+          {min.toFixed(1)}
+        </text>
+        <text x="180" y="98" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10">
+          +{max.toFixed(1)}
+        </text>
+      </svg>
+    </div>
+  );
 };
 
 // ============================================
@@ -666,99 +764,6 @@ const BBJDashboard: React.FC = () => {
     return '#a1a1aa';
   };
 
-  // Progress bar component
-  const ProgressBar = ({ value, max, color, showLabel = true }: { value: number; max: number; color: string; showLabel?: boolean }) => {
-    const percentage = Math.min((value / max) * 100, 100);
-    return (
-      <div className="w-full">
-        <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
-          <motion.div 
-            className="h-full rounded-full"
-            style={{ background: `linear-gradient(90deg, ${color}88, ${color})` }}
-            initial={{ width: 0 }}
-            animate={{ width: `${percentage}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
-        </div>
-        {showLabel && (
-          <div className="text-[11px] text-zinc-500 mt-1 text-right">
-            {percentage.toFixed(1)}%
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // Gauge component for EV visualization
-  const EVGauge = ({ value, min, max }: { value: number; min: number; max: number }) => {
-    const range = max - min;
-    const normalizedValue = ((value - min) / range) * 100;
-    const clampedValue = Math.max(0, Math.min(100, normalizedValue));
-    
-    const getGaugeColor = (pct: number): string => {
-      if (pct < 50) {
-        const red = 239;
-        const green = Math.round(68 + (pct / 50) * 187);
-        return `rgb(${red}, ${green}, 68)`;
-      } else {
-        const red = Math.round(255 - ((pct - 50) / 50) * 221);
-        const green = Math.round(255 - ((pct - 50) / 50) * 60);
-        return `rgb(${red}, ${green}, 94)`;
-      }
-    };
-
-    return (
-      <div className="relative w-full h-[120px]">
-        <svg viewBox="0 0 200 100" className="w-full h-full">
-          <path
-            d="M 20 90 A 80 80 0 0 1 180 90"
-            fill="none"
-            stroke="rgba(255,255,255,0.1)"
-            strokeWidth="12"
-            strokeLinecap="round"
-          />
-          <motion.path
-            d="M 20 90 A 80 80 0 0 1 180 90"
-            fill="none"
-            stroke={getGaugeColor(clampedValue)}
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeDasharray={`${clampedValue * 2.51} 251`}
-            initial={{ strokeDasharray: '0 251' }}
-            animate={{ strokeDasharray: `${clampedValue * 2.51} 251` }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          />
-          <text
-            x="100"
-            y="70"
-            textAnchor="middle"
-            fill={getGaugeColor(clampedValue)}
-            fontSize="24"
-            fontWeight="700"
-            className="font-bold"
-          >
-            {value >= 0 ? '+' : ''}{value.toFixed(2)}
-          </text>
-          <text
-            x="100"
-            y="88"
-            textAnchor="middle"
-            fill="rgba(255,255,255,0.5)"
-            fontSize="12"
-          >
-            bb/100
-          </text>
-          <text x="20" y="98" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10">
-            {min.toFixed(1)}
-          </text>
-          <text x="180" y="98" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10">
-            +{max.toFixed(1)}
-          </text>
-        </svg>
-      </div>
-    );
-  };
-
   // Line chart for simulation results
   const SimulationLineChart = ({ results }: { results: SimulationResults }) => {
     const chartWidth = 700;
@@ -1198,15 +1203,13 @@ const BBJDashboard: React.FC = () => {
                 BBJ <span style={{ color: '#a88b46' }}>Calculator</span>
               </h2>
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.55)', marginBottom: 0, lineHeight: 1.6 }}>
-                Analyze Bad Beat Jackpot EV, variance, and breakeven thresholds based on 42M+ verified hands. Ready for structured guidance? Explore the Mentorship Program.
+                Understand the true impact of jackpot structures on your long-term EV as a grinder on GGPoker. If you'd rather win by skill than by a clerical error in the deck, let's get to work together!
               </p>
             </div>
             
             <div className="flex gap-3 flex-shrink-0 flex-wrap">
               <a 
-                href="https://www.nachospoker.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
+                href="/"
                 className="hover:-translate-y-0.5 transition-all duration-300"
                 style={{
                   background: '#a88b46',
@@ -1222,10 +1225,10 @@ const BBJDashboard: React.FC = () => {
                   boxShadow: '0 4px 20px rgba(168, 139, 70, 0.3)'
                 }}
               >
-                Join Our CFP <ExternalLink size={14} />
+                <GraduationCap size={16} /> Mentorship Program
               </a>
               <a 
-                href="https://calendly.com/patrickgerritsen90/30min" 
+                href="https://www.nachospoker.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:-translate-y-0.5 transition-all duration-300"
@@ -1243,7 +1246,7 @@ const BBJDashboard: React.FC = () => {
                   gap: '8px'
                 }}
               >
-                Private Coaching <ExternalLink size={14} />
+                Join the CFP <ExternalLink size={14} />
               </a>
             </div>
           </div>
@@ -1285,9 +1288,32 @@ const BBJDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Verdict */}
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-400 leading-relaxed">
-                <strong className="text-[#a88b46]">TL;DR:</strong> When the total pool exceeds ~$2M, playing BBJ tables becomes mathematically +EV. Below that, you're subsidizing other players' jackpot dreams.
+              {/* BBJ Probability Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+                <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center">
+                  <div className="text-2xl mb-2">🏆</div>
+                  <div className="text-[11px] text-zinc-500 uppercase tracking-wide mb-1">Win Jackpot</div>
+                  <div className="text-lg font-bold text-emerald-400">1 in {PROBABILITY_DATA.handsToWinJackpot.toLocaleString()}</div>
+                  <div className="text-[10px] text-zinc-600 mt-1">hands to be the loser with quads+</div>
+                </div>
+                <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center">
+                  <div className="text-2xl mb-2">🥈</div>
+                  <div className="text-[11px] text-zinc-500 uppercase tracking-wide mb-1">Opponent Win</div>
+                  <div className="text-lg font-bold text-blue-400">1 in {PROBABILITY_DATA.handsToBeOpponent.toLocaleString()}</div>
+                  <div className="text-[10px] text-zinc-600 mt-1">hands to beat the quads+</div>
+                </div>
+                <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center">
+                  <div className="text-2xl mb-2">🎫</div>
+                  <div className="text-[11px] text-zinc-500 uppercase tracking-wide mb-1">Table Share</div>
+                  <div className="text-lg font-bold text-purple-400">1 in {PROBABILITY_DATA.handsToGetTableShare.toLocaleString()}</div>
+                  <div className="text-[10px] text-zinc-600 mt-1">hands to be at a BBJ table</div>
+                </div>
+                <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center">
+                  <div className="text-2xl mb-2">👀</div>
+                  <div className="text-[11px] text-zinc-500 uppercase tracking-wide mb-1">Witness Any BBJ</div>
+                  <div className="text-lg font-bold text-[#a88b46]">1 in {PROBABILITY_DATA.handsToSeeOneBBJ.toLocaleString()}</div>
+                  <div className="text-[10px] text-zinc-600 mt-1">hands to see a BBJ trigger</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1305,8 +1331,8 @@ const BBJDashboard: React.FC = () => {
             <Calculator size={28} className="text-[#a88b46]" />
             <h2 className="text-xl md:text-2xl font-bold text-white">Variance Simulator</h2>
           </div>
-          <p className="text-center text-zinc-500 text-sm mb-8">
-            See how BBJ fees and payouts affect your bankroll across thousands of hands
+          <p className="text-center text-zinc-500 text-sm mb-8 max-w-3xl mx-auto">
+            See how the -2.08bb/100 jackpot fee impacts your bankroll over thousands of trials. At a pool size of roughly $2,017,000, the mathematical frequency of hitting the BBJ should offset the fee and brings your theoretical EV back to zero.
           </p>
 
           {/* Simulator Controls */}
@@ -1325,7 +1351,7 @@ const BBJDashboard: React.FC = () => {
                 Hands per Trial
               </h3>
               <div className="grid grid-cols-2 gap-2">
-                {[100000, 500000, 1000000, 5000000].map(preset => (
+                {[100000, 1000000, 10000000, 100000000].map(preset => (
                   <button
                     key={preset}
                     onClick={() => setSimulationHands(preset)}
@@ -1350,7 +1376,7 @@ const BBJDashboard: React.FC = () => {
                 Number of Trials
               </h3>
               <div className="grid grid-cols-2 gap-2">
-                {[50, 100, 200, 500].map(preset => (
+                {[10, 20, 50, 100].map(preset => (
                   <button
                     key={preset}
                     onClick={() => setNumTrials(preset)}
@@ -1423,8 +1449,8 @@ const BBJDashboard: React.FC = () => {
                   onClick={() => setPoolSize(2017000)}
                   className={`py-1 px-2 rounded-md text-[9px] font-bold transition-all duration-200 ${
                     poolSize === 2017000 
-                      ? 'bg-emerald-500 text-zinc-950' 
-                      : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30'
+                      ? 'bg-[#a88b46] text-zinc-950' 
+                      : 'bg-[#a88b46]/20 text-[#a88b46] hover:bg-[#a88b46]/30 border border-[#a88b46]/30'
                   }`}
                 >
                   Break-even
@@ -1746,10 +1772,10 @@ const BBJDashboard: React.FC = () => {
         >
           <div className="flex items-center justify-center gap-3 mb-2">
             <Target size={28} className="text-[#a88b46]" />
-            <h1 className="text-2xl md:text-3xl font-bold text-white">BBJ Dashboard</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">BBJ Pool Size & Expected Value</h1>
           </div>
-          <p className="text-center text-zinc-500 text-sm mb-8">
-            Real-time EV analysis powered by 42.1M verified hands
+          <p className="text-center text-zinc-500 text-sm mb-8 max-w-3xl mx-auto">
+            Adjust the pool size and your stakes to see how they affect your expected value. These calculations are based on historical data and should be used as indicative estimates only—actual results may vary due to the inherent randomness of poker and changing jackpot conditions.
           </p>
 
           {/* Pool Size & Stake Input */}
@@ -1847,7 +1873,7 @@ const BBJDashboard: React.FC = () => {
               }`}>
                 <Activity size={14} /> Your Expected Value
               </h3>
-              <EVGauge value={currentEV.netBBper100} min={-1.5} max={1.5} />
+              <EVGauge key={`ev-${currentEV.netBBper100.toFixed(4)}`} value={currentEV.netBBper100} min={-1.5} max={1.5} />
               <div className="text-center mt-2">
                 <span className="text-[11px] text-zinc-500 bg-zinc-900/50 px-3 py-1 rounded-lg">
                   {currentEV.isProfitable ? 'Playing is +EV at this pool size' : 'You\'re paying to chase the dream'}
@@ -1873,6 +1899,7 @@ const BBJDashboard: React.FC = () => {
                   </span>
                 </div>
                 <ProgressBar 
+                  key={`progress-${poolSize}`}
                   value={poolSize} 
                   max={BBJ_CONSTANTS.breakevenPool_usd * 1.5} 
                   color={currentEV.isProfitable ? '#34d399' : '#a88b46'}
