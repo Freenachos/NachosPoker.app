@@ -44,7 +44,7 @@ import {
 import { articlesApi, authApi, storageApi } from '@/lib/supabaseClient';
 
 /**
- * FreeNachos Articles Page
+ * Freenachos Articles Page
  * Full Supabase integration with authentication and CRUD
  * + Notion paste support
  */
@@ -573,7 +573,7 @@ const renderInlineMarkdown = (text) => {
 // MAIN COMPONENT
 // ============================================
 
-export default function FreeNachosArticles() {
+export default function FreenachosArticles() {
   const [view, setView] = useState('library');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [articles, setArticles] = useState([]);
@@ -984,7 +984,7 @@ export default function FreeNachosArticles() {
           <span style={{ background: 'rgba(168, 139, 70, 0.2)', color: '#a88b46', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{article.category}</span>
           {!article.published && (<span style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Draft</span>)}
           {isScheduled && (<span style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '6px' }}><Calendar size={12} />{scheduledDate}</span>)}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><User size={14} /><span>FreeNachos</span></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><User size={14} /><span>Freenachos</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}><Clock size={14} /><span>{article.readTime}</span></div>
         </div>
         {article.blocks.map((block, index) => renderBlock(block, index))}
@@ -1770,14 +1770,10 @@ Supported formats:
               letterSpacing: '-0.02em',
               fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              {view === 'library' && (<>Knowledge <span style={{ color: '#a88b46' }}>Hub</span></>)}
-              {view === 'reader' && selectedArticle?.title}
-              {view === 'editor' && (isEditing ? 'Edit Article' : 'New Article')}
+              {view === 'editor' ? (isEditing ? 'Edit Article' : 'New Article') : (<>Knowledge <span style={{ color: '#a88b46' }}>Hub</span></>)}
             </h2>
             <p style={{fontSize: '15px', color: 'rgba(255,255,255,0.55)', marginBottom: '0', lineHeight: 1.6}}>
-              {view === 'library' && 'Technical deep dives into poker strategy, solver analysis, and population exploits.'}
-              {view === 'reader' && selectedArticle?.excerpt}
-              {view === 'editor' && 'Construct data driven articles with precision.'}
+              {view === 'editor' ? 'Construct data driven articles with precision.' : 'Technical deep dives into poker strategy, solver analysis, and population exploits.'}
             </p>
           </div>
           <div style={{display: 'flex', gap: '12px', flexShrink: 0, flexWrap: 'wrap'}}>
@@ -1872,7 +1868,7 @@ Supported formats:
                   <Fish size={20} color="#a88b46" />
                 </div>
                 <div>
-                  <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>FreeNachos</div>
+                  <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>Freenachos</div>
                   <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Poker Strategy and Coaching</div>
                 </div>
               </div>
