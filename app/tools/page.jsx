@@ -7,17 +7,8 @@ import {
   Search, 
   ArrowRight, 
   BarChart3, 
-  TrendingUp, 
-  Target, 
-  DollarSign, 
-  Trophy, 
-  BookOpen,
-  Calculator,
-  Percent,
-  Activity,
-  PieChart,
-  Layers,
-  Zap
+  Trophy,
+  Calculator
 } from 'lucide-react';
 
 /**
@@ -53,58 +44,10 @@ const ToolsPage = () => {
     },
     { 
       id: 2, 
-      name: 'Win Rate Dashboard', 
-      description: 'Track and analyze your win rate across different stakes and formats. Identify trends in your performance.', 
-      icon: TrendingUp, 
-      link: '/winrate',
-      category: 'Tracking'
-    },
-    { 
-      id: 3, 
-      name: 'Seat Selection EV', 
-      description: 'Visualize how fish position impacts your win rate at 6-max tables. Optimize your table selection strategy.', 
-      icon: Target, 
-      link: '/seat',
-      category: 'Strategy'
-    },
-    { 
-      id: 4, 
-      name: 'Profits Tracker', 
-      description: 'Monitor your poker profits and track your bankroll growth over time. Set goals and measure progress.', 
-      icon: DollarSign, 
-      link: '/profits',
-      category: 'Tracking'
-    },
-    { 
-      id: 5, 
       name: 'Bad Beat Jackpot', 
       description: 'Track bad beat jackpot sizes and expected value across poker rooms. Find the most +EV tables.', 
       icon: Trophy, 
       link: '/bad-beat-jackpot',
-      category: 'Analysis'
-    },
-    { 
-      id: 6, 
-      name: 'Bankroll Calculator', 
-      description: 'Calculate optimal bankroll requirements for your stakes and risk tolerance. Never go broke again.', 
-      icon: Calculator, 
-      link: '/bankroll',
-      category: 'Analysis'
-    },
-    { 
-      id: 7, 
-      name: 'Rakeback Estimator', 
-      description: 'Estimate your rakeback earnings across different poker sites and VIP programs.', 
-      icon: Percent, 
-      link: '/rakeback',
-      category: 'Tracking'
-    },
-    { 
-      id: 8, 
-      name: 'Session Analyzer', 
-      description: 'Deep dive into individual sessions. Identify leaks and patterns in your play.', 
-      icon: Activity, 
-      link: '/sessions',
       category: 'Analysis'
     }
   ];
