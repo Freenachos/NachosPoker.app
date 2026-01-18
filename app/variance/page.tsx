@@ -357,12 +357,12 @@ const PokerEVSimulation = () => {
   // ============================================
 
   const CartoonNacho = ({ size = 90 }) => (
-    <svg ref={nachoRef} width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(166, 137, 66, 0.4))' }}>
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#D4AF37" stroke="#A68942" strokeWidth="2" />
+    <svg ref={nachoRef} width={size} height={size} viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 4px 12px rgba(168, 139, 70, 0.4))' }}>
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#a88b46" stroke="#a88b46" strokeWidth="2" />
       <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#E0BC47" opacity="0.9" />
       <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#E0BC47" opacity="0.9" />
       <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#E0BC47" opacity="0.9" />
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#D4AF37" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#a88b46" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
       <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#0A0A0A" style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out' }} />
@@ -372,16 +372,16 @@ const PokerEVSimulation = () => {
       <path d="M38 62 Q50 72 62 62" fill="none" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round" />
       <path d="M33 38 Q40 35 47 38" fill="none" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" />
       <path d="M53 38 Q60 35 67 38" fill="none" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="30" cy="30" r="2" fill="#A68942" opacity="0.5" />
-      <circle cx="70" cy="35" r="2.5" fill="#A68942" opacity="0.5" />
-      <circle cx="35" cy="80" r="2" fill="#A68942" opacity="0.5" />
-      <circle cx="65" cy="78" r="1.5" fill="#A68942" opacity="0.5" />
+      <circle cx="30" cy="30" r="2" fill="#a88b46" opacity="0.5" />
+      <circle cx="70" cy="35" r="2.5" fill="#a88b46" opacity="0.5" />
+      <circle cx="35" cy="80" r="2" fill="#a88b46" opacity="0.5" />
+      <circle cx="65" cy="78" r="1.5" fill="#a88b46" opacity="0.5" />
     </svg>
   );
 
   const NachoTriangle = ({ size, opacity }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#D4AF37" opacity="0.8" />
+      <path d="M10 2 L18 17 L2 17 Z" fill="#a88b46" opacity="0.8" />
     </svg>
   );
 
@@ -422,77 +422,108 @@ const PokerEVSimulation = () => {
       overflow: 'hidden', 
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
     }}>
-      {/* Film Grain Overlay */}
+      {/* Noise/Grain Texture Overlay */}
       <div 
-        className="film-grain-overlay"
+        className="noise-overlay"
         style={{
           position: 'fixed',
-          top: '-50%',
-          left: '-50%',
-          width: '200%',
-          height: '200%',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           pointerEvents: 'none',
           zIndex: 9999,
-          opacity: 0.035,
-          mixBlendMode: 'overlay'
+          opacity: 0.03
         }}
       />
 
-      {/* Background Glows */}
+      {/* ==================== BACKGROUND GLOWS ==================== */}
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute',
-          top: '-10%',
-          right: '-8%',
-          width: '900px',
-          height: '900px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.08) 0%, transparent 60%)',
-          filter: 'blur(80px)',
-          opacity: 0.6
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-15%',
-          left: '-12%',
-          width: '1000px',
-          height: '1000px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.06) 0%, transparent 55%)',
-          filter: 'blur(100px)',
-          opacity: 0.5
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '40%',
-          right: '5%',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(166, 137, 66, 0.05) 0%, transparent 50%)',
-          filter: 'blur(60px)',
-          opacity: 0.4
-        }} />
+        <div style={{ position: 'absolute', top: '-10%', right: '-8%', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.08) 0%, transparent 60%)', filter: 'blur(80px)', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', bottom: '-15%', left: '-12%', width: '1000px', height: '1000px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.06) 0%, transparent 55%)', filter: 'blur(100px)', opacity: 0.5 }} />
+        <div style={{ position: 'absolute', top: '40%', right: '5%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.05) 0%, transparent 50%)', filter: 'blur(60px)', opacity: 0.4 }} />
       </div>
 
-      {/* Floating Nachos Background */}
-      <div style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden'}}>
-        {nachos.map(nacho => (
-          <div
-            key={nacho.id}
-            style={{
-              position: 'absolute',
-              left: `${nacho.x}%`,
-              top: `${nacho.y}%`,
-              animation: `floatNacho ${nacho.duration}s ease-in-out infinite`,
-              animationDelay: `${nacho.delay}s`,
-              '--moveX': `${nacho.moveX}px`,
-              '--moveY': `${nacho.moveY}px`
-            }}
-          >
-            <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
-          </div>
-        ))}
+      {/* ==================== PERIPHERAL BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '5%', left: '-8%', width: '180px', height: '180px', opacity: 0.06, filter: 'blur(18px)', animation: 'peripheralWobble1 120s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '40%', left: '-12%', width: '220px', height: '220px', opacity: 0.05, filter: 'blur(22px)', animation: 'peripheralWobble2 140s ease-in-out infinite', animationDelay: '-40s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '10%', left: '-6%', width: '160px', height: '160px', opacity: 0.07, filter: 'blur(16px)', animation: 'peripheralWobble1 100s ease-in-out infinite', animationDelay: '-70s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '8%', right: '-10%', width: '200px', height: '200px', opacity: 0.05, filter: 'blur(20px)', animation: 'peripheralWobble2 130s ease-in-out infinite', animationDelay: '-20s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '50%', right: '-14%', width: '240px', height: '240px', opacity: 0.04, filter: 'blur(24px)', animation: 'peripheralWobble1 150s ease-in-out infinite', animationDelay: '-60s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '15%', right: '-8%', width: '170px', height: '170px', opacity: 0.06, filter: 'blur(17px)', animation: 'peripheralWobble2 110s ease-in-out infinite', animationDelay: '-90s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== FOREGROUND BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '5%', left: '3%', width: '90px', height: '90px', opacity: 0.12, filter: 'blur(12px)', animation: 'foregroundDrift1 80s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: '110px', height: '110px', opacity: 0.10, filter: 'blur(14px)', animation: 'foregroundDrift2 90s ease-in-out infinite', animationDelay: '-30s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '45%', left: '-2%', width: '80px', height: '80px', opacity: 0.08, filter: 'blur(10px)', animation: 'foregroundDrift3 70s ease-in-out infinite', animationDelay: '-45s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '15%', right: '8%', width: '70px', height: '70px', opacity: 0.09, filter: 'blur(11px)', animation: 'foregroundDrift1 85s ease-in-out infinite', animationDelay: '-60s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== MIDGROUND BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 2, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '20%', left: '15%', width: '40px', height: '40px', opacity: 0.18, filter: 'blur(4px)', animation: 'midgroundDrift1 45s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '60%', right: '20%', width: '35px', height: '35px', opacity: 0.16, filter: 'blur(5px)', animation: 'midgroundDrift2 50s ease-in-out infinite', animationDelay: '-15s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '30%', left: '8%', width: '45px', height: '45px', opacity: 0.15, filter: 'blur(4px)', animation: 'midgroundDrift3 55s ease-in-out infinite', animationDelay: '-25s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '35%', right: '12%', width: '38px', height: '38px', opacity: 0.14, filter: 'blur(3px)', animation: 'midgroundDrift1 48s ease-in-out infinite', animationDelay: '-35s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '75%', left: '25%', width: '32px', height: '32px', opacity: 0.17, filter: 'blur(4px)', animation: 'midgroundDrift2 42s ease-in-out infinite', animationDelay: '-40s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '10%', left: '55%', width: '42px', height: '42px', opacity: 0.13, filter: 'blur(4px)', animation: 'midgroundDrift3 52s ease-in-out infinite', animationDelay: '-50s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== BACKGROUND (FOCAL) BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 3, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '25%', left: '20%', width: '18px', height: '18px', opacity: 0.35, filter: 'blur(0.5px)', animation: 'backgroundDart1 25s linear infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '55%', right: '25%', width: '15px', height: '15px', opacity: 0.30, filter: 'blur(0.5px)', animation: 'backgroundDart2 28s linear infinite', animationDelay: '-8s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '35%', left: '35%', width: '20px', height: '20px', opacity: 0.28, filter: 'blur(0.5px)', animation: 'backgroundDart1 22s linear infinite', animationDelay: '-12s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '40%', right: '35%', width: '16px', height: '16px', opacity: 0.32, filter: 'blur(0.5px)', animation: 'backgroundDart2 30s linear infinite', animationDelay: '-18s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '15%', left: '45%', width: '14px', height: '14px', opacity: 0.25, filter: 'blur(0.5px)', animation: 'backgroundDart1 26s linear infinite', animationDelay: '-5s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '20%', right: '40%', width: '17px', height: '17px', opacity: 0.27, filter: 'blur(0.5px)', animation: 'backgroundDart2 24s linear infinite', animationDelay: '-15s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
       </div>
       
       <style>{`
@@ -502,15 +533,89 @@ const PokerEVSimulation = () => {
           scroll-behavior: smooth;
         }
 
-        .film-grain-overlay {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='filmGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='5' stitchTiles='stitch' seed='0'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23filmGrain)'/%3E%3C/svg%3E");
+        .noise-overlay {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
-        
-        @keyframes floatNacho {
-          0%, 100% { transform: translate(0, 0) rotate(0deg); }
-          25% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(90deg); }
-          50% { transform: translate(var(--moveX), var(--moveY)) rotate(180deg); }
-          75% { transform: translate(calc(var(--moveX) * 0.5), calc(var(--moveY) * 0.5)) rotate(270deg); }
+
+        /* === DEPTH-OF-FIELD BOKEH ANIMATIONS === */
+        @keyframes peripheralWobble1 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          15% { transform: translate(3px, -5px) rotate(2deg) scale(1.01); }
+          30% { transform: translate(6px, -3px) rotate(4deg) scale(0.99); }
+          45% { transform: translate(4px, -8px) rotate(6deg) scale(1.02); }
+          60% { transform: translate(2px, -4px) rotate(3deg) scale(0.98); }
+          75% { transform: translate(5px, -6px) rotate(5deg) scale(1.01); }
+          90% { transform: translate(1px, -2px) rotate(1deg) scale(1); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes peripheralWobble2 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          20% { transform: translate(-4px, -6px) rotate(-3deg) scale(1.02); }
+          40% { transform: translate(-2px, -10px) rotate(-5deg) scale(0.98); }
+          60% { transform: translate(-6px, -4px) rotate(-2deg) scale(1.01); }
+          80% { transform: translate(-3px, -7px) rotate(-4deg) scale(0.99); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift1 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          20% { transform: translate(8px, -12px) rotate(8deg) scale(1.02); }
+          40% { transform: translate(15px, -8px) rotate(15deg) scale(0.98); }
+          60% { transform: translate(10px, -18px) rotate(22deg) scale(1.01); }
+          80% { transform: translate(5px, -5px) rotate(12deg) scale(0.99); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift2 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          25% { transform: translate(-10px, -15px) rotate(-12deg) scale(1.03); }
+          50% { transform: translate(-5px, -25px) rotate(-20deg) scale(0.97); }
+          75% { transform: translate(-12px, -10px) rotate(-8deg) scale(1.02); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift3 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          30% { transform: translate(12px, -20px) rotate(18deg) scale(0.98); }
+          60% { transform: translate(6px, -10px) rotate(10deg) scale(1.02); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes midgroundDrift1 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          20% { transform: translate(20px, -30px) rotate(25deg); }
+          40% { transform: translate(35px, -20px) rotate(50deg); }
+          60% { transform: translate(25px, -40px) rotate(75deg); }
+          80% { transform: translate(10px, -15px) rotate(55deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes midgroundDrift2 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-25px, -35px) rotate(-40deg); }
+          50% { transform: translate(-15px, -50px) rotate(-80deg); }
+          75% { transform: translate(-30px, -25px) rotate(-50deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes midgroundDrift3 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(30px, -25px) rotate(60deg); }
+          66% { transform: translate(15px, -45px) rotate(120deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes backgroundDart1 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          10% { transform: translate(25px, -40px) rotate(45deg); }
+          25% { transform: translate(50px, -25px) rotate(90deg); }
+          40% { transform: translate(35px, -60px) rotate(150deg); }
+          55% { transform: translate(60px, -35px) rotate(200deg); }
+          70% { transform: translate(40px, -55px) rotate(270deg); }
+          85% { transform: translate(20px, -30px) rotate(320deg); }
+          100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        @keyframes backgroundDart2 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          15% { transform: translate(-35px, -50px) rotate(-60deg); }
+          30% { transform: translate(-20px, -30px) rotate(-120deg); }
+          50% { transform: translate(-50px, -45px) rotate(-180deg); }
+          70% { transform: translate(-30px, -60px) rotate(-250deg); }
+          85% { transform: translate(-15px, -25px) rotate(-310deg); }
+          100% { transform: translate(0, 0) rotate(-360deg); }
         }
 
         @keyframes traceBorder {
@@ -533,6 +638,43 @@ const PokerEVSimulation = () => {
           100% { background-position: 200% 0; }
         }
 
+        /* Gold Sparkborder Effect */
+        .spark-border-gold { 
+          position: relative; 
+          overflow: hidden; 
+          border-radius: 24px; 
+          background: rgba(18, 18, 18, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        .spark-border-gold::before { 
+          content: ""; 
+          position: absolute; 
+          inset: 0; 
+          border-radius: inherit; 
+          padding: 1px; 
+          background: linear-gradient(135deg, rgba(168, 139, 70, 0.5), rgba(168, 139, 70, 0.15)); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); 
+          -webkit-mask-composite: xor; 
+          mask-composite: exclude; 
+          z-index: 1; 
+          pointer-events: none; 
+        }
+        .spark-border-gold::after { 
+          content: ""; 
+          position: absolute; 
+          top: 0; 
+          left: 0; 
+          width: 80px; 
+          height: 2px; 
+          background: linear-gradient(90deg, transparent 0%, #a88b46 50%, #a88b46 100%); 
+          box-shadow: 0 0 15px 2px rgba(168, 139, 70, 0.6); 
+          offset-path: rect(0 100% 100% 0 round 24px); 
+          animation: traceBorder 6s linear infinite; 
+          z-index: 2; 
+          pointer-events: none; 
+        }
+
         .obsidian-card {
           background: rgba(255, 255, 255, 0.03);
           backdrop-filter: blur(40px);
@@ -544,8 +686,8 @@ const PokerEVSimulation = () => {
         }
 
         .obsidian-card:hover {
-          border-color: rgba(166, 137, 66, 0.4);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.1);
+          border-color: rgba(168, 139, 70, 0.4);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(168, 139, 70, 0.1);
           transform: translateY(-4px);
         }
 
@@ -563,7 +705,7 @@ const PokerEVSimulation = () => {
 
         .card-hover:hover {
           transform: translateY(-6px);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(166, 137, 66, 0.15);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(168, 139, 70, 0.15);
         }
 
         .input-obsidian {
@@ -581,8 +723,8 @@ const PokerEVSimulation = () => {
         }
 
         .input-obsidian:focus {
-          border-color: #A68942;
-          box-shadow: 0 0 0 4px rgba(166, 137, 66, 0.15), 0 0 20px rgba(166, 137, 66, 0.1);
+          border-color: #a88b46;
+          box-shadow: 0 0 0 4px rgba(168, 139, 70, 0.15), 0 0 20px rgba(168, 139, 70, 0.1);
         }
 
         .input-obsidian::placeholder {
@@ -592,14 +734,14 @@ const PokerEVSimulation = () => {
         .btn-primary {
           position: relative;
           overflow: hidden;
-          background: linear-gradient(135deg, #A68942 0%, #D4AF37 100%);
+          background: #a88b46;
           color: #0A0A0A;
           font-weight: 700;
           border: none;
           border-radius: 12px;
           cursor: pointer;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 4px 20px rgba(166, 137, 66, 0.3);
+          box-shadow: 0 4px 20px rgba(168, 139, 70, 0.3);
         }
 
         .btn-primary::before {
@@ -618,21 +760,19 @@ const PokerEVSimulation = () => {
         }
 
         .btn-primary:hover:not(:disabled) {
-          transform: translateY(-4px);
-          box-shadow: 0 0 25px rgba(166, 137, 66, 0.4), 0 12px 45px rgba(166, 137, 66, 0.35);
-          background: linear-gradient(135deg, #E0BC47 0%, #A68942 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 30px rgba(168, 139, 70, 0.4);
         }
 
         .btn-primary:disabled {
           opacity: 0.5;
           cursor: not-allowed;
-          box-shadow: none;
         }
 
         .btn-secondary {
           background: transparent;
-          border: 1px solid rgba(166, 137, 66, 0.5);
-          color: #A68942;
+          border: 1.5px solid #a88b46;
+          color: #a88b46;
           font-weight: 600;
           border-radius: 12px;
           cursor: pointer;
@@ -640,63 +780,88 @@ const PokerEVSimulation = () => {
         }
 
         .btn-secondary:hover {
-          background: rgba(166, 137, 66, 0.1);
-          border-color: #A68942;
-          box-shadow: 0 0 20px rgba(166, 137, 66, 0.2);
+          background: rgba(168, 139, 70, 0.1);
+          transform: translateY(-2px);
         }
 
         .spark-border {
           position: relative;
-          overflow: hidden;
           border-radius: 32px;
           background: rgba(255, 255, 255, 0.03);
           backdrop-filter: blur(40px);
           -webkit-backdrop-filter: blur(40px);
-        }
-
-        .spark-border::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          padding: 2px;
-          background: linear-gradient(135deg, rgba(166, 137, 66, 0.4), rgba(166, 137, 66, 0.1));
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          z-index: 1;
-          pointer-events: none;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          overflow: hidden;
         }
 
         .spark-border::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           left: 0;
-          width: 100px;
+          width: 80px;
           height: 2px;
-          background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, #D4AF37 100%);
-          box-shadow: 0 0 15px 2px rgba(166, 137, 66, 0.7);
+          background: linear-gradient(90deg, transparent 0%, #a88b46 50%, #a88b46 100%);
+          box-shadow: 0 0 15px 2px rgba(168, 139, 70, 0.6);
           offset-path: rect(0 100% 100% 0 round 32px);
-          animation: traceBorder 5s linear infinite;
-          offset-rotate: auto;
-          offset-anchor: center;
-          z-index: 2;
-          pointer-events: none;
+          animation: traceBorder 6s linear infinite;
         }
 
-        .collapsible-content {
-          overflow: hidden;
-          transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        .input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          min-width: 0;
         }
 
-        .toggle-switch {
+        .input-label {
+          color: rgba(240, 240, 240, 0.6);
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .select-wrapper {
           position: relative;
-          display: inline-flex;
+        }
+
+        .select-obsidian {
+          width: 100%;
+          padding: 14px 40px 14px 16px;
+          border-radius: 12px;
           background: rgba(10, 10, 10, 0.8);
+          color: #F0F0F0;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          outline: none;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          appearance: none;
+          transition: all 0.3s ease;
+        }
+
+        .select-obsidian:focus {
+          border-color: #a88b46;
+          box-shadow: 0 0 0 4px rgba(168, 139, 70, 0.15);
+        }
+
+        .select-arrow {
+          position: absolute;
+          right: 16px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+          color: rgba(240, 240, 240, 0.4);
+        }
+
+        /* Unit toggle styles */
+        .unit-toggle {
+          display: flex;
+          background: rgba(10, 10, 10, 0.6);
           border-radius: 8px;
-          padding: 2px;
-          border: 1px solid rgba(255,255,255,0.1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 3px;
           flex-shrink: 0;
         }
 
@@ -712,8 +877,8 @@ const PokerEVSimulation = () => {
         }
 
         .toggle-option.active {
-          background: rgba(166, 137, 66, 0.2);
-          color: #A68942;
+          background: rgba(168, 139, 70, 0.2);
+          color: #a88b46;
         }
 
         /* Header Layout */
@@ -809,93 +974,67 @@ const PokerEVSimulation = () => {
         }
       `}</style>
 
-      <div style={{position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '24px'}}>
+      <div style={{position: 'relative', zIndex: 10, maxWidth: '1200px', margin: '0 auto', padding: '24px'}}>
         <NachosPokerNavBar />
         
-        {/* Hero Header Banner */}
-        <motion.div 
-          className="spark-border header-layout"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            marginBottom: '40px',
-            padding: '36px 40px',
-          }}
-        >
-          <div style={{ flexShrink: 0, animation: 'bounce 3s ease-in-out infinite' }}>
-            <CartoonNacho size={100} />
-          </div>
-          
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: '12px', 
-              color: '#A68942', 
-              fontWeight: '700', 
-              marginBottom: '8px', 
-              letterSpacing: '0.15em', 
-              textTransform: 'uppercase'
-            }}>
-              Crafted by FreeNachos
+        {/* ==================== HERO CTA BAR WITH SPARKBORDER ==================== */}
+        <div className="spark-border-gold" style={{ marginBottom: '40px', padding: '36px 40px' }}>
+          <div className="header-layout" style={{ position: 'relative' }}>
+            <div style={{ flex: 1 }}>
+              <h2 style={{
+                fontSize: 'clamp(28px, 4vw, 36px)', 
+                fontWeight: 800, 
+                color: '#FFFFFF', 
+                marginBottom: '12px', 
+                lineHeight: 1.1,
+                letterSpacing: '-0.02em',
+                fontFamily: 'Manrope, Inter, sans-serif'
+              }}>
+                Variance <span style={{ color: '#a88b46' }}>Calculator</span>
+              </h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.55)', marginBottom: 0, lineHeight: 1.6 }}>
+                Understand your variance with multi-stake weighting and Monte Carlo simulation. Ready for structured guidance? Explore the Mentorship Program.
+              </p>
             </div>
-            <h2 style={{
-              fontSize: '28px', 
-              fontWeight: '800', 
-              color: '#F0F0F0', 
-              marginBottom: '12px', 
-              lineHeight: 1.2,
-              letterSpacing: '-0.02em'
-            }}>
-              Crush the variance, not your bankroll.
-            </h2>
-            <p style={{
-              fontSize: '15px', 
-              color: 'rgba(240, 240, 240, 0.6)', 
-              marginBottom: '0', 
-              lineHeight: 1.6, 
-              maxWidth: '420px'
-            }}>
-              Level up your game with elite coaching or join the fastest-growing CFP in poker.
-            </p>
+            
+            <div className="header-buttons" style={{flexShrink: 0}}>
+              <a 
+                href="https://www.nachospoker.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{
+                  padding: '14px 24px',
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px'
+                }}
+              >
+                Join Our CFP <ExternalLink size={16} />
+              </a>
+              <a 
+                href="https://calendly.com/patrickgerritsen90/30min" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn-secondary"
+                style={{
+                  padding: '14px 24px',
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px'
+                }}
+              >
+                Private Coaching <ExternalLink size={16} />
+              </a>
+            </div>
           </div>
-          
-          <div className="header-buttons" style={{flexShrink: 0}}>
-            <a 
-              href="https://www.nachospoker.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn-primary"
-              style={{
-                padding: '14px 24px',
-                fontSize: '14px',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px'
-              }}
-            >
-              Join Our CFP <ExternalLink size={16} />
-            </a>
-            <a 
-              href="https://www.freenachoscoaching.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn-secondary"
-              style={{
-                padding: '14px 24px',
-                fontSize: '14px',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px'
-              }}
-            >
-              Private Coaching <ExternalLink size={16} />
-            </a>
-          </div>
-        </motion.div>
+        </div>
 
         {/* Main Simulator Card */}
         <motion.div 
@@ -917,11 +1056,11 @@ const PokerEVSimulation = () => {
               width: '64px',
               height: '64px',
               borderRadius: '20px',
-              background: 'rgba(166, 137, 66, 0.1)',
-              border: '1px solid rgba(166, 137, 66, 0.25)',
+              background: 'rgba(168, 139, 70, 0.1)',
+              border: '1px solid rgba(168, 139, 70, 0.25)',
               marginBottom: '20px'
             }}>
-              <Calculator size={28} color="#A68942" strokeWidth={1.5} />
+              <Calculator size={28} color="#a88b46" strokeWidth={1.5} />
             </div>
             <h1 style={{
               fontSize: '36px', 
@@ -961,20 +1100,20 @@ const PokerEVSimulation = () => {
                   width: '40px',
                   height: '40px',
                   borderRadius: '12px',
-                  background: 'rgba(166, 137, 66, 0.1)',
-                  border: '1px solid rgba(166, 137, 66, 0.25)',
+                  background: 'rgba(168, 139, 70, 0.1)',
+                  border: '1px solid rgba(168, 139, 70, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Target size={20} color="#A68942" />
+                  <Target size={20} color="#a88b46" />
                 </div>
-                <h3 style={{color: '#A68942', fontSize: '18px', fontWeight: '700', margin: 0}}>Basic Parameters</h3>
+                <h3 style={{color: '#a88b46', fontSize: '18px', fontWeight: '700', margin: 0}}>Basic Parameters</h3>
               </div>
               
               <div style={{
-                background: 'rgba(166, 137, 66, 0.08)',
-                border: '1px solid rgba(166, 137, 66, 0.2)',
+                background: 'rgba(168, 139, 70, 0.08)',
+                border: '1px solid rgba(168, 139, 70, 0.2)',
                 borderRadius: '12px',
                 padding: '14px 16px',
                 marginBottom: '24px',
@@ -982,7 +1121,7 @@ const PokerEVSimulation = () => {
                 color: 'rgba(240, 240, 240, 0.6)',
                 lineHeight: 1.6
               }}>
-                <strong style={{color: '#A68942'}}>Note:</strong> Set win rate and std dev in the Advanced panel per stake.
+                <strong style={{color: '#a88b46'}}>Note:</strong> Set win rate and std dev in the Advanced panel per stake.
               </div>
 
               <div style={{marginBottom: '20px'}}>
@@ -1055,28 +1194,28 @@ const PokerEVSimulation = () => {
                     width: '40px',
                     height: '40px',
                     borderRadius: '12px',
-                    background: 'rgba(166, 137, 66, 0.1)',
-                    border: '1px solid rgba(166, 137, 66, 0.25)',
+                    background: 'rgba(168, 139, 70, 0.1)',
+                    border: '1px solid rgba(168, 139, 70, 0.25)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <Settings size={20} color="#A68942" />
+                    <Settings size={20} color="#a88b46" />
                   </div>
-                  <h3 style={{color: '#A68942', fontSize: '18px', fontWeight: '700', margin: 0}}>Advanced Stake Settings</h3>
+                  <h3 style={{color: '#a88b46', fontSize: '18px', fontWeight: '700', margin: 0}}>Advanced Stake Settings</h3>
                 </div>
                 <div style={{
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  background: advancedOpen ? 'rgba(166, 137, 66, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                  border: `1px solid ${advancedOpen ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                  background: advancedOpen ? 'rgba(168, 139, 70, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                  border: `1px solid ${advancedOpen ? 'rgba(168, 139, 70, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   transition: 'all 0.3s ease'
                 }}>
-                  {advancedOpen ? <ChevronUp size={20} color="#A68942" /> : <ChevronDown size={20} color="#A68942" />}
+                  {advancedOpen ? <ChevronUp size={20} color="#a88b46" /> : <ChevronDown size={20} color="#a88b46" />}
                 </div>
               </button>
               
@@ -1241,12 +1380,12 @@ const PokerEVSimulation = () => {
                 padding: '20px',
                 background: 'rgba(10, 10, 10, 0.5)',
                 borderRadius: '16px',
-                border: '1px solid rgba(166, 137, 66, 0.15)'
+                border: '1px solid rgba(168, 139, 70, 0.15)'
               }}>
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center'}}>
                   <div>
                     <div style={{fontSize: '11px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Avg BB</div>
-                    <div style={{fontSize: '20px', fontWeight: '800', color: '#A68942'}}>${getWeightedAverageBB().toFixed(2)}</div>
+                    <div style={{fontSize: '20px', fontWeight: '800', color: '#a88b46'}}>${getWeightedAverageBB().toFixed(2)}</div>
                   </div>
                   <div>
                     <div style={{fontSize: '11px', color: 'rgba(240, 240, 240, 0.4)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '600'}}>Avg WR</div>
@@ -1311,7 +1450,7 @@ const PokerEVSimulation = () => {
               Nacho Bankroll Analysis
             </h2>
             <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '15px', marginTop: '12px'}}>
-              Minimum bankroll requirements based on Risk of Ruin • Primary stake: <span style={{color: '#A68942', fontWeight: '600'}}>{getPrimaryStake().label}</span>
+              Minimum bankroll requirements based on Risk of Ruin • Primary stake: <span style={{color: '#a88b46', fontWeight: '600'}}>{getPrimaryStake().label}</span>
             </p>
           </div>
           
@@ -1330,7 +1469,7 @@ const PokerEVSimulation = () => {
                     padding: '28px',
                     borderRadius: '24px',
                     textAlign: 'center',
-                    border: isRecommended ? '2px solid rgba(166, 137, 66, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
+                    border: isRecommended ? '2px solid rgba(168, 139, 70, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
                     position: 'relative',
                     overflow: 'visible'
                   }}
@@ -1341,7 +1480,7 @@ const PokerEVSimulation = () => {
                       top: '-14px',
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      background: 'linear-gradient(135deg, #A68942 0%, #D4AF37 100%)',
+                      background: 'linear-gradient(135deg, #a88b46 0%, #a88b46 100%)',
                       color: '#0A0A0A',
                       fontSize: '10px',
                       fontWeight: '800',
@@ -1349,7 +1488,7 @@ const PokerEVSimulation = () => {
                       borderRadius: '20px',
                       textTransform: 'uppercase',
                       letterSpacing: '0.1em',
-                      boxShadow: '0 4px 12px rgba(166, 137, 66, 0.4)'
+                      boxShadow: '0 4px 12px rgba(168, 139, 70, 0.4)'
                     }}>
                       Recommended
                     </div>
@@ -1366,7 +1505,7 @@ const PokerEVSimulation = () => {
                     borderRadius: '16px',
                     padding: '16px'
                   }}>
-                    <div style={{fontSize: '26px', fontWeight: '800', color: '#A68942', marginBottom: '6px'}}>
+                    <div style={{fontSize: '26px', fontWeight: '800', color: '#a88b46', marginBottom: '6px'}}>
                       {requirement.dollars === Infinity ? '∞' : `$${requirement.dollars.toLocaleString()}`}
                     </div>
                     <div style={{fontSize: '13px', color: 'rgba(240, 240, 240, 0.5)'}}>
@@ -1387,7 +1526,7 @@ const PokerEVSimulation = () => {
             textAlign: 'center'
           }}>
             <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '13px', margin: 0, lineHeight: 1.7}}>
-              <strong style={{color: '#A68942'}}>Formula:</strong> B = (σ² / 2WR) × ln(1/RoR) where σ = std dev per hand, WR = win rate per hand
+              <strong style={{color: '#a88b46'}}>Formula:</strong> B = (σ² / 2WR) × ln(1/RoR) where σ = std dev per hand, WR = win rate per hand
             </p>
           </div>
         </motion.div>
@@ -1411,13 +1550,13 @@ const PokerEVSimulation = () => {
                   width: '48px',
                   height: '48px',
                   borderRadius: '16px',
-                  background: 'rgba(166, 137, 66, 0.1)',
-                  border: '1px solid rgba(166, 137, 66, 0.25)',
+                  background: 'rgba(168, 139, 70, 0.1)',
+                  border: '1px solid rgba(168, 139, 70, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <BarChart3 size={24} color="#A68942" />
+                  <BarChart3 size={24} color="#a88b46" />
                 </div>
                 <h2 style={{fontSize: '24px', fontWeight: '800', color: '#F0F0F0', margin: 0}}>
                   Simulation Results
@@ -1427,9 +1566,9 @@ const PokerEVSimulation = () => {
                 <button
                   onClick={() => setDisplayInDollars(true)}
                   style={{
-                    background: displayInDollars ? 'rgba(166, 137, 66, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                    border: `1px solid ${displayInDollars ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
-                    color: displayInDollars ? '#A68942' : 'rgba(240, 240, 240, 0.6)',
+                    background: displayInDollars ? 'rgba(168, 139, 70, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${displayInDollars ? 'rgba(168, 139, 70, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    color: displayInDollars ? '#a88b46' : 'rgba(240, 240, 240, 0.6)',
                     padding: '10px 18px',
                     borderRadius: '10px',
                     cursor: 'pointer',
@@ -1443,9 +1582,9 @@ const PokerEVSimulation = () => {
                 <button
                   onClick={() => setDisplayInDollars(false)}
                   style={{
-                    background: !displayInDollars ? 'rgba(166, 137, 66, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                    border: `1px solid ${!displayInDollars ? 'rgba(166, 137, 66, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
-                    color: !displayInDollars ? '#A68942' : 'rgba(240, 240, 240, 0.6)',
+                    background: !displayInDollars ? 'rgba(168, 139, 70, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${!displayInDollars ? 'rgba(168, 139, 70, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    color: !displayInDollars ? '#a88b46' : 'rgba(240, 240, 240, 0.6)',
                     padding: '10px 18px',
                     borderRadius: '10px',
                     cursor: 'pointer',
@@ -1559,12 +1698,12 @@ const PokerEVSimulation = () => {
                     <Tooltip 
                       contentStyle={{
                         background: 'rgba(10, 10, 10, 0.95)',
-                        border: '1px solid rgba(166, 137, 66, 0.4)',
+                        border: '1px solid rgba(168, 139, 70, 0.4)',
                         borderRadius: '16px',
                         boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
                         backdropFilter: 'blur(20px)'
                       }}
-                      labelStyle={{color: '#A68942', fontWeight: '700', marginBottom: '10px'}}
+                      labelStyle={{color: '#a88b46', fontWeight: '700', marginBottom: '10px'}}
                       labelFormatter={(value) => `Hand ${value.toLocaleString()}`}
                       formatter={(value, name) => {
                         if (name === 'theoreticalEV') return [formatNumber(value, displayInDollars), 'Theoretical'];
@@ -1583,19 +1722,19 @@ const PokerEVSimulation = () => {
                         return (
                           <div style={{
                             background: 'rgba(10, 10, 10, 0.95)',
-                            border: '1px solid rgba(166, 137, 66, 0.4)',
+                            border: '1px solid rgba(168, 139, 70, 0.4)',
                             borderRadius: '16px',
                             padding: '18px 22px',
                             boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
                           }}>
-                            <div style={{color: '#A68942', fontWeight: '700', marginBottom: '12px', fontSize: '14px'}}>
+                            <div style={{color: '#a88b46', fontWeight: '700', marginBottom: '12px', fontSize: '14px'}}>
                               Hand {label.toLocaleString()}
                             </div>
                             {[
                               theoreticalEV && { name: 'Theoretical EV', value: theoreticalEV.value, color: 'rgba(240, 240, 240, 0.6)' },
                               upper && { name: '95% Upper', value: upper.value, color: '#22c55e' },
                               lower && { name: '95% Lower', value: lower.value, color: '#22c55e' },
-                              hoveredSamplePayload && { name: `Sample ${hoveredSample}`, value: hoveredSamplePayload.value, color: '#A68942' }
+                              hoveredSamplePayload && { name: `Sample ${hoveredSample}`, value: hoveredSamplePayload.value, color: '#a88b46' }
                             ].filter(Boolean).map((item, i) => (
                               <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '24px', marginBottom: '6px'}}>
                                 <span style={{color: item.color, fontSize: '13px'}}>{item.name}</span>
@@ -1617,7 +1756,7 @@ const PokerEVSimulation = () => {
                       let strokeWidth = 1;
                       
                       if (isHovered) {
-                        strokeColor = "#A68942";
+                        strokeColor = "#a88b46";
                         strokeWidth = 4;
                       } else if (isBest) {
                         strokeColor = "#22c55e";
@@ -1667,7 +1806,7 @@ const PokerEVSimulation = () => {
                     <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>All Samples ({results.samples.length})</span>
                   </div>
                   <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                    <div style={{width: '28px', height: '3px', background: '#A68942', borderRadius: '2px'}}></div>
+                    <div style={{width: '28px', height: '3px', background: '#a88b46', borderRadius: '2px'}}></div>
                     <span style={{color: 'rgba(240, 240, 240, 0.6)', fontSize: '13px'}}>Hovered Sample</span>
                   </div>
                 </div>
@@ -1692,13 +1831,13 @@ const PokerEVSimulation = () => {
               width: '56px',
               height: '56px',
               borderRadius: '18px',
-              background: 'rgba(166, 137, 66, 0.1)',
-              border: '1px solid rgba(166, 137, 66, 0.25)',
+              background: 'rgba(168, 139, 70, 0.1)',
+              border: '1px solid rgba(168, 139, 70, 0.25)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <Brain size={28} color="#A68942" strokeWidth={1.5} />
+              <Brain size={28} color="#a88b46" strokeWidth={1.5} />
             </div>
             <h2 style={{fontSize: '26px', fontWeight: '800', color: '#F0F0F0', margin: 0}}>
               How to Use & Read Results
@@ -1711,17 +1850,17 @@ const PokerEVSimulation = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               style={{
-                background: 'rgba(166, 137, 66, 0.08)',
+                background: 'rgba(168, 139, 70, 0.08)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
                 padding: '28px',
                 borderRadius: '24px',
-                border: '1px solid rgba(166, 137, 66, 0.2)'
+                border: '1px solid rgba(168, 139, 70, 0.2)'
               }}
             >
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px'}}>
-                <Target size={22} color="#A68942" />
-                <h3 style={{color: '#A68942', fontSize: '16px', fontWeight: '700', margin: 0}}>Input Parameters</h3>
+                <Target size={22} color="#a88b46" />
+                <h3 style={{color: '#a88b46', fontSize: '16px', fontWeight: '700', margin: 0}}>Input Parameters</h3>
               </div>
               <ul style={{color: 'rgba(240, 240, 240, 0.7)', fontSize: '14px', lineHeight: 2, margin: 0, paddingLeft: '20px'}}>
                 <li><strong style={{color: '#F0F0F0'}}>Win Rate:</strong> Your expected BB/100</li>
@@ -1791,8 +1930,8 @@ const PokerEVSimulation = () => {
             textAlign: 'center'
           }}>
             <p style={{color: 'rgba(240, 240, 240, 0.5)', fontSize: '14px', margin: 0, lineHeight: 1.8}}>
-              <strong style={{color: '#A68942'}}>Pro Tip:</strong> Run multiple simulations with different sample sizes to truly understand your variance. 
-              Even winning players can experience significant downswings — this tool helps you prepare mentally and financially.
+              <strong style={{color: '#a88b46'}}>Pro Tip:</strong> Run multiple simulations with different sample sizes to truly understand your variance. 
+              Even winning players can experience significant downswings , this tool helps you prepare mentally and financially.
             </p>
           </div>
         </motion.div>
