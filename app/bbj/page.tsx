@@ -27,7 +27,7 @@ import NachosPokerNavBar from '@/components/NachosPokerNavBar';
 /**
  * BBJ Dashboard & Variance Calculator
  * 
- * Part of the FreeNachos App Suite
+ * Part of the Freenachos App Suite
  * Analyzes Bad Beat Jackpot odds, EV, and variance based on 8M+ hand sample
  */
 
@@ -581,12 +581,12 @@ const BBJDashboard: React.FC = () => {
   // ============================================
 
   const CartoonNacho = () => (
-    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" className="drop-shadow-[0_4px_12px_rgba(212,175,55,0.4)]">
-      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#D4AF37" stroke="#A68942" strokeWidth="2"/>
+    <svg ref={nachoRef} width="90" height="90" viewBox="0 0 100 100" className="drop-shadow-[0_4px_12px_rgba(168,139,70,0.4)]">
+      <path d="M50 8 L88 85 Q90 92 82 92 L18 92 Q10 92 12 85 Z" fill="#a88b46" stroke="#A68942" strokeWidth="2"/>
       <path d="M25 70 Q20 75 22 82 Q24 88 28 85 Q30 80 28 75 Z" fill="#E5C158" opacity="0.9"/>
       <path d="M72 65 Q78 72 76 80 Q74 86 70 82 Q68 76 70 70 Z" fill="#E5C158" opacity="0.9"/>
       <path d="M48 75 Q45 82 48 88 Q52 92 55 86 Q56 80 52 76 Z" fill="#E5C158" opacity="0.9"/>
-      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#D4AF37" />
+      <ellipse cx="50" cy="50" rx="22" ry="18" fill="#a88b46" />
       <ellipse cx="40" cy="48" rx="8" ry="9" fill="white" />
       <ellipse cx="60" cy="48" rx="8" ry="9" fill="white" />
       <circle cx={40 + eyeOffset.x} cy={48 + eyeOffset.y} r="4" fill="#0a0a0a" className="transition-all duration-100"/>
@@ -601,7 +601,7 @@ const BBJDashboard: React.FC = () => {
 
   const NachoTriangle = ({ size, opacity }: { size: number; opacity: number }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" style={{ opacity }}>
-      <path d="M10 2 L18 17 L2 17 Z" fill="#D4AF37" opacity="0.6"/>
+      <path d="M10 2 L18 17 L2 17 Z" fill="#a88b46" opacity="0.6"/>
     </svg>
   );
 
@@ -860,7 +860,7 @@ const BBJDashboard: React.FC = () => {
               <polyline
                 points={points}
                 fill="none"
-                stroke="#D4AF37"
+                stroke="#a88b46"
                 strokeWidth="3"
                 strokeLinejoin="round"
                 opacity="0.9"
@@ -928,7 +928,7 @@ const BBJDashboard: React.FC = () => {
           {/* Legend */}
           <g transform={`translate(${padding.left + innerWidth - 120}, ${padding.top + 10})`}>
             <rect x="-5" y="-5" width="130" height="50" fill="rgba(0,0,0,0.5)" rx="4" />
-            <line x1="0" y1="8" x2="25" y2="8" stroke="#D4AF37" strokeWidth="3" />
+            <line x1="0" y1="8" x2="25" y2="8" stroke="#a88b46" strokeWidth="3" />
             <text x="30" y="12" fill="rgba(255,255,255,0.7)" fontSize="10">Average</text>
             <line x1="0" y1="25" x2="25" y2="25" stroke="rgba(34, 197, 94, 0.6)" strokeWidth="1.5" />
             <text x="30" y="29" fill="rgba(255,255,255,0.7)" fontSize="10">Winning Trial</text>
@@ -945,92 +945,309 @@ const BBJDashboard: React.FC = () => {
   // ============================================
 
   return (
-    <div className="min-h-screen bg-zinc-950 relative overflow-hidden font-['Inter',_-apple-system,_BlinkMacSystemFont,_sans-serif]">
-      {/* Floating Nachos Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        {nachos.map(nacho => (
-          <motion.div
-            key={nacho.id}
-            className="absolute"
-            style={{
-              left: `${nacho.x}%`,
-              top: `${nacho.y}%`,
-            }}
-            animate={{
-              x: [0, nacho.moveX, 0],
-              y: [0, nacho.moveY, 0],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: nacho.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: nacho.delay,
-            }}
-          >
-            <NachoTriangle size={nacho.size} opacity={nacho.opacity} />
-          </motion.div>
-        ))}
+    <div className="min-h-screen bg-[#0A0A0A] relative overflow-hidden font-['Inter',_-apple-system,_BlinkMacSystemFont,_sans-serif]">
+      {/* Noise/Grain Texture Overlay */}
+      <div 
+        className="noise-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          opacity: 0.03
+        }}
+      />
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+        
+        .noise-overlay {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Gold Sparkborder Effect */
+        @keyframes traceBorder { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+        
+        .spark-border-gold { 
+          position: relative; 
+          overflow: hidden; 
+          border-radius: 24px; 
+          background: rgba(18, 18, 18, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        .spark-border-gold::before { 
+          content: ""; 
+          position: absolute; 
+          inset: 0; 
+          border-radius: inherit; 
+          padding: 1px; 
+          background: linear-gradient(135deg, rgba(168, 139, 70, 0.5), rgba(168, 139, 70, 0.15)); 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); 
+          -webkit-mask-composite: xor; 
+          mask-composite: exclude; 
+          z-index: 1; 
+          pointer-events: none; 
+        }
+        .spark-border-gold::after { 
+          content: ""; 
+          position: absolute; 
+          top: 0; 
+          left: 0; 
+          width: 80px; 
+          height: 2px; 
+          background: linear-gradient(90deg, transparent 0%, #a88b46 50%, #a88b46 100%); 
+          box-shadow: 0 0 15px 2px rgba(168, 139, 70, 0.6); 
+          offset-path: rect(0 100% 100% 0 round 24px); 
+          animation: traceBorder 6s linear infinite; 
+          z-index: 2; 
+          pointer-events: none; 
+        }
+
+        /* === DEPTH-OF-FIELD BOKEH ANIMATIONS === */
+        @keyframes peripheralWobble1 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          15% { transform: translate(3px, -5px) rotate(2deg) scale(1.01); }
+          30% { transform: translate(6px, -3px) rotate(4deg) scale(0.99); }
+          45% { transform: translate(4px, -8px) rotate(6deg) scale(1.02); }
+          60% { transform: translate(2px, -4px) rotate(3deg) scale(0.98); }
+          75% { transform: translate(5px, -6px) rotate(5deg) scale(1.01); }
+          90% { transform: translate(1px, -2px) rotate(1deg) scale(1); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes peripheralWobble2 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          20% { transform: translate(-4px, -6px) rotate(-3deg) scale(1.02); }
+          40% { transform: translate(-2px, -10px) rotate(-5deg) scale(0.98); }
+          60% { transform: translate(-6px, -4px) rotate(-2deg) scale(1.01); }
+          80% { transform: translate(-3px, -7px) rotate(-4deg) scale(0.99); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift1 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          20% { transform: translate(8px, -12px) rotate(8deg) scale(1.02); }
+          40% { transform: translate(15px, -8px) rotate(15deg) scale(0.98); }
+          60% { transform: translate(10px, -18px) rotate(22deg) scale(1.01); }
+          80% { transform: translate(5px, -5px) rotate(12deg) scale(0.99); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift2 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          25% { transform: translate(-10px, -15px) rotate(-12deg) scale(1.03); }
+          50% { transform: translate(-5px, -25px) rotate(-20deg) scale(0.97); }
+          75% { transform: translate(-12px, -10px) rotate(-8deg) scale(1.02); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes foregroundDrift3 {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+          30% { transform: translate(12px, -20px) rotate(18deg) scale(0.98); }
+          60% { transform: translate(6px, -10px) rotate(10deg) scale(1.02); }
+          100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+        @keyframes midgroundDrift1 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          20% { transform: translate(20px, -30px) rotate(25deg); }
+          40% { transform: translate(35px, -20px) rotate(50deg); }
+          60% { transform: translate(25px, -40px) rotate(75deg); }
+          80% { transform: translate(10px, -15px) rotate(55deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes midgroundDrift2 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-25px, -35px) rotate(-40deg); }
+          50% { transform: translate(-15px, -50px) rotate(-80deg); }
+          75% { transform: translate(-30px, -25px) rotate(-50deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes midgroundDrift3 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(30px, -25px) rotate(60deg); }
+          66% { transform: translate(15px, -45px) rotate(120deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        @keyframes backgroundDart1 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          10% { transform: translate(25px, -40px) rotate(45deg); }
+          25% { transform: translate(50px, -25px) rotate(90deg); }
+          40% { transform: translate(35px, -60px) rotate(150deg); }
+          55% { transform: translate(60px, -35px) rotate(200deg); }
+          70% { transform: translate(40px, -55px) rotate(270deg); }
+          85% { transform: translate(20px, -30px) rotate(320deg); }
+          100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        @keyframes backgroundDart2 {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          15% { transform: translate(-35px, -50px) rotate(-60deg); }
+          30% { transform: translate(-20px, -30px) rotate(-120deg); }
+          50% { transform: translate(-50px, -45px) rotate(-180deg); }
+          70% { transform: translate(-30px, -60px) rotate(-250deg); }
+          85% { transform: translate(-15px, -25px) rotate(-310deg); }
+          100% { transform: translate(0, 0) rotate(-360deg); }
+        }
+      `}</style>
+
+      {/* ==================== BACKGROUND GLOWS ==================== */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '-10%', right: '-8%', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.08) 0%, transparent 60%)', filter: 'blur(80px)', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', bottom: '-15%', left: '-12%', width: '1000px', height: '1000px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.06) 0%, transparent 55%)', filter: 'blur(100px)', opacity: 0.5 }} />
+        <div style={{ position: 'absolute', top: '40%', right: '5%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 139, 70, 0.05) 0%, transparent 50%)', filter: 'blur(60px)', opacity: 0.4 }} />
       </div>
 
-      {/* Radial gradient overlay */}
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(212,175,55,0.08)_0%,transparent_50%)] pointer-events-none z-0" />
+      {/* ==================== PERIPHERAL BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '5%', left: '-8%', width: '180px', height: '180px', opacity: 0.06, filter: 'blur(18px)', animation: 'peripheralWobble1 120s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '40%', left: '-12%', width: '220px', height: '220px', opacity: 0.05, filter: 'blur(22px)', animation: 'peripheralWobble2 140s ease-in-out infinite', animationDelay: '-40s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '10%', left: '-6%', width: '160px', height: '160px', opacity: 0.07, filter: 'blur(16px)', animation: 'peripheralWobble1 100s ease-in-out infinite', animationDelay: '-70s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '8%', right: '-10%', width: '200px', height: '200px', opacity: 0.05, filter: 'blur(20px)', animation: 'peripheralWobble2 130s ease-in-out infinite', animationDelay: '-20s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '50%', right: '-14%', width: '240px', height: '240px', opacity: 0.04, filter: 'blur(24px)', animation: 'peripheralWobble1 150s ease-in-out infinite', animationDelay: '-60s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '15%', right: '-8%', width: '170px', height: '170px', opacity: 0.06, filter: 'blur(17px)', animation: 'peripheralWobble2 110s ease-in-out infinite', animationDelay: '-90s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== FOREGROUND BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '5%', left: '3%', width: '90px', height: '90px', opacity: 0.12, filter: 'blur(12px)', animation: 'foregroundDrift1 80s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: '110px', height: '110px', opacity: 0.10, filter: 'blur(14px)', animation: 'foregroundDrift2 90s ease-in-out infinite', animationDelay: '-30s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '45%', left: '-2%', width: '80px', height: '80px', opacity: 0.08, filter: 'blur(10px)', animation: 'foregroundDrift3 70s ease-in-out infinite', animationDelay: '-45s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '15%', right: '8%', width: '70px', height: '70px', opacity: 0.09, filter: 'blur(11px)', animation: 'foregroundDrift1 85s ease-in-out infinite', animationDelay: '-60s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== MIDGROUND BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 2, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '20%', left: '15%', width: '40px', height: '40px', opacity: 0.18, filter: 'blur(4px)', animation: 'midgroundDrift1 45s ease-in-out infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '60%', right: '20%', width: '35px', height: '35px', opacity: 0.16, filter: 'blur(5px)', animation: 'midgroundDrift2 50s ease-in-out infinite', animationDelay: '-15s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '30%', left: '8%', width: '45px', height: '45px', opacity: 0.15, filter: 'blur(4px)', animation: 'midgroundDrift3 55s ease-in-out infinite', animationDelay: '-25s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '35%', right: '12%', width: '38px', height: '38px', opacity: 0.14, filter: 'blur(3px)', animation: 'midgroundDrift1 48s ease-in-out infinite', animationDelay: '-35s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '75%', left: '25%', width: '32px', height: '32px', opacity: 0.17, filter: 'blur(4px)', animation: 'midgroundDrift2 42s ease-in-out infinite', animationDelay: '-40s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '10%', left: '55%', width: '42px', height: '42px', opacity: 0.13, filter: 'blur(4px)', animation: 'midgroundDrift3 52s ease-in-out infinite', animationDelay: '-50s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
+
+      {/* ==================== BACKGROUND (FOCAL) BOKEH NACHOS ==================== */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 3, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '25%', left: '20%', width: '18px', height: '18px', opacity: 0.35, filter: 'blur(0.5px)', animation: 'backgroundDart1 25s linear infinite' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '55%', right: '25%', width: '15px', height: '15px', opacity: 0.30, filter: 'blur(0.5px)', animation: 'backgroundDart2 28s linear infinite', animationDelay: '-8s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '35%', left: '35%', width: '20px', height: '20px', opacity: 0.28, filter: 'blur(0.5px)', animation: 'backgroundDart1 22s linear infinite', animationDelay: '-12s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '40%', right: '35%', width: '16px', height: '16px', opacity: 0.32, filter: 'blur(0.5px)', animation: 'backgroundDart2 30s linear infinite', animationDelay: '-18s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', top: '15%', left: '45%', width: '14px', height: '14px', opacity: 0.25, filter: 'blur(0.5px)', animation: 'backgroundDart1 26s linear infinite', animationDelay: '-5s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+        <div style={{ position: 'absolute', bottom: '20%', right: '40%', width: '17px', height: '17px', opacity: 0.27, filter: 'blur(0.5px)', animation: 'backgroundDart2 24s linear infinite', animationDelay: '-15s' }}>
+          <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}><polygon points="50,5 95,95 5,95" fill="#a88b46" /></svg>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-5 py-6">
         <NachosPokerNavBar />
         
-        {/* Header Banner */}
-        <motion.div 
-          className="relative mb-8 p-7 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 overflow-hidden"
-          variants={fadeInUp}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Animated border glow */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-yellow-500/20 via-transparent to-yellow-500/20 opacity-50" />
-          
-          <div className="relative flex items-center gap-6 flex-wrap">
-            <motion.div 
-              className="flex-shrink-0"
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <CartoonNacho />
-            </motion.div>
-            
+        {/* ==================== HERO CTA BAR WITH SPARKBORDER ==================== */}
+        <div className="spark-border-gold mb-8 p-8 md:p-10">
+          <div className="relative flex items-center gap-8 flex-wrap">
             <div className="flex-1 min-w-[280px]">
-              <div className="text-xs text-yellow-500 font-semibold mb-1.5 tracking-[0.1em] uppercase">
-                Crafted by FreeNachos
-              </div>
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">
-                The house always wins. <span className="text-zinc-500">But by how much?</span>
+              <h2 style={{
+                fontSize: 'clamp(28px, 4vw, 36px)', 
+                fontWeight: 800, 
+                color: '#FFFFFF', 
+                marginBottom: '12px', 
+                lineHeight: 1.1,
+                letterSpacing: '-0.02em',
+                fontFamily: 'Manrope, Inter, sans-serif'
+              }}>
+                BBJ <span style={{ color: '#a88b46' }}>Calculator</span>
               </h2>
-              <p className="text-sm text-zinc-400 leading-relaxed max-w-lg">
-                Bad Beat Jackpots look tempting — until you do the math. See exactly when the pool makes it worth chasing, and when you're just padding the casino's pockets.
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.55)', marginBottom: 0, lineHeight: 1.6 }}>
+                Analyze Bad Beat Jackpot EV, variance, and breakeven thresholds based on 42M+ verified hands. Ready for structured guidance? Explore the Mentorship Program.
               </p>
             </div>
             
-            <div className="flex flex-col gap-3 flex-shrink-0">
+            <div className="flex gap-3 flex-shrink-0 flex-wrap">
               <a 
                 href="https://www.nachospoker.com/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950 px-5 py-3 rounded-xl font-semibold text-sm inline-flex items-center gap-2 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all duration-300 hover:-translate-y-0.5"
+                className="hover:-translate-y-0.5 transition-all duration-300"
+                style={{
+                  background: '#a88b46',
+                  color: '#0a0a0a',
+                  padding: '14px 24px',
+                  borderRadius: '12px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 20px rgba(168, 139, 70, 0.3)'
+                }}
               >
                 Join Our CFP <ExternalLink size={14} />
               </a>
               <a 
-                href="https://www.freenachoscoaching.com/" 
+                href="https://calendly.com/patrickgerritsen90/30min" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-transparent border border-yellow-500/50 text-yellow-500 px-5 py-2.5 rounded-xl font-semibold text-sm inline-flex items-center gap-2 hover:bg-yellow-500/10 hover:border-yellow-500 transition-all duration-300"
+                className="hover:-translate-y-0.5 transition-all duration-300"
+                style={{
+                  background: 'transparent',
+                  border: '1.5px solid #a88b46',
+                  color: '#a88b46',
+                  padding: '14px 24px',
+                  borderRadius: '12px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
               >
                 Private Coaching <ExternalLink size={14} />
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Data Methodology Section */}
         <motion.div 
@@ -1041,19 +1258,19 @@ const BBJDashboard: React.FC = () => {
           transition={{ delay: 0.1 }}
         >
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 bg-yellow-500/15 rounded-2xl p-3">
-              <Database size={24} className="text-yellow-500" />
+            <div className="flex-shrink-0 bg-[#a88b46]/15 rounded-2xl p-3">
+              <Database size={24} className="text-[#a88b46]" />
             </div>
             <div className="flex-1">
               <h3 className="text-white text-lg font-bold mb-3">About This Data</h3>
               
               <p className="text-zinc-400 text-sm leading-relaxed mb-3">
-                Based on <strong className="text-yellow-500">42.1 million hands</strong> from GGPoker NL100+. 
-                We found <strong className="text-yellow-500">624 BBJ triggers</strong> — a frequency of <strong>1 in 67,500 hands</strong>.
+                Based on <strong className="text-[#a88b46]">42.1 million hands</strong> from GGPoker NL100+. 
+                We found <strong className="text-[#a88b46]">624 BBJ triggers</strong> , a frequency of <strong>1 in 67,500 hands</strong>.
               </p>
               
               <p className="text-zinc-500 text-xs leading-relaxed mb-5">
-                Sample: 8.2M regular hands + 33.9M Rush & Cash. Rush plays faster (new table each hand) but BBJ rules are identical — combining both ensures robust data.
+                Sample: 8.2M regular hands + 33.9M Rush & Cash. Rush plays faster (new table each hand) but BBJ rules are identical , combining both ensures robust data.
               </p>
               
               {/* Key Numbers */}
@@ -1062,15 +1279,15 @@ const BBJDashboard: React.FC = () => {
                   <div className="text-[11px] text-zinc-500 mb-1.5 uppercase tracking-wide">Your Jackpot "Rake"</div>
                   <div className="text-2xl md:text-3xl text-red-400 font-bold">2.08 bb/100</div>
                 </div>
-                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-4 text-center">
+                <div className="bg-[#a88b46]/10 border border-[#a88b46]/20 rounded-2xl p-4 text-center">
                   <div className="text-[11px] text-zinc-500 mb-1.5 uppercase tracking-wide">Break-Even Pool</div>
-                  <div className="text-2xl md:text-3xl text-yellow-500 font-bold">~$2.02M</div>
+                  <div className="text-2xl md:text-3xl text-[#a88b46] font-bold">~$2.02M</div>
                 </div>
               </div>
 
               {/* Verdict */}
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-400 leading-relaxed">
-                <strong className="text-yellow-500">TL;DR:</strong> When the total pool exceeds ~$2M, playing BBJ tables becomes mathematically +EV. Below that, you're subsidizing other players' jackpot dreams.
+                <strong className="text-[#a88b46]">TL;DR:</strong> When the total pool exceeds ~$2M, playing BBJ tables becomes mathematically +EV. Below that, you're subsidizing other players' jackpot dreams.
               </div>
             </div>
           </div>
@@ -1085,7 +1302,7 @@ const BBJDashboard: React.FC = () => {
           transition={{ delay: 0.15 }}
         >
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Calculator size={28} className="text-yellow-500" />
+            <Calculator size={28} className="text-[#a88b46]" />
             <h2 className="text-xl md:text-2xl font-bold text-white">Variance Simulator</h2>
           </div>
           <p className="text-center text-zinc-500 text-sm mb-8">
@@ -1104,7 +1321,7 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-3 text-xs font-semibold uppercase tracking-wider">
+              <h3 className="text-[#a88b46] mb-3 text-xs font-semibold uppercase tracking-wider">
                 Hands per Trial
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -1114,7 +1331,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setSimulationHands(preset)}
                     className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-200 ${
                       simulationHands === preset 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-700'
                     }`}
                   >
@@ -1129,7 +1346,7 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-3 text-xs font-semibold uppercase tracking-wider">
+              <h3 className="text-[#a88b46] mb-3 text-xs font-semibold uppercase tracking-wider">
                 Number of Trials
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -1139,7 +1356,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setNumTrials(preset)}
                     className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-200 ${
                       numTrials === preset 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-700'
                     }`}
                   >
@@ -1154,7 +1371,7 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-3 text-xs font-semibold uppercase tracking-wider">
+              <h3 className="text-[#a88b46] mb-3 text-xs font-semibold uppercase tracking-wider">
                 Your Stakes
               </h3>
               <div className="grid grid-cols-2 gap-1">
@@ -1164,7 +1381,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setSelectedStake(stake.value)}
                     className={`py-1.5 px-2 rounded-md text-[10px] font-semibold transition-all duration-200 ${
                       selectedStake === stake.value 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-700'
                     }`}
                   >
@@ -1179,12 +1396,12 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-3 text-xs font-semibold uppercase tracking-wider">
+              <h3 className="text-[#a88b46] mb-3 text-xs font-semibold uppercase tracking-wider">
                 BBJ Pool Size
               </h3>
               <input
                 type="number"
-                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 outline-none transition-all"
+                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2 focus:border-[#a88b46] focus:ring-1 focus:ring-[#a88b46]/30 outline-none transition-all"
                 value={poolSize}
                 onChange={(e) => setPoolSize(parseFloat(e.target.value) || 0)}
               />
@@ -1195,7 +1412,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setPoolSize(preset)}
                     className={`py-1 px-2 rounded-md text-[9px] font-semibold transition-all duration-200 ${
                       poolSize === preset 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 border border-zinc-700'
                     }`}
                   >
@@ -1223,8 +1440,8 @@ const BBJDashboard: React.FC = () => {
               disabled={isCalculating}
               className={`px-12 py-4 rounded-2xl font-bold text-base inline-flex items-center gap-3 transition-all duration-300 ${
                 isCalculating 
-                  ? 'bg-yellow-500/30 text-zinc-600 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950 hover:shadow-[0_0_30px_rgba(234,179,8,0.4)] hover:-translate-y-1'
+                  ? 'bg-[#a88b46]/30 text-zinc-600 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950 hover:shadow-[0_0_30px_rgba(168,139,70,0.4)] hover:-translate-y-1'
               }`}
               whileTap={{ scale: isCalculating ? 1 : 0.98 }}
             >
@@ -1249,7 +1466,7 @@ const BBJDashboard: React.FC = () => {
               >
                 <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                   <motion.div 
-                    className="h-full bg-gradient-to-r from-yellow-500 to-emerald-500 rounded-full"
+                    className="h-full bg-gradient-to-r from-[#a88b46] to-emerald-500 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${simulationProgress}%` }}
                     transition={{ duration: 0.3 }}
@@ -1267,7 +1484,7 @@ const BBJDashboard: React.FC = () => {
               animate="visible"
             >
               <h3 className="text-white text-lg font-semibold mb-4 text-center flex items-center justify-center gap-3">
-                <BarChart3 size={20} className="text-yellow-500" />
+                <BarChart3 size={20} className="text-[#a88b46]" />
                 Results: {simulationResults.totalTrials} simulations of {simulationResults.handsPerTrial >= 1000000 ? `${(simulationResults.handsPerTrial / 1000000)}M` : `${(simulationResults.handsPerTrial / 1000)}K`} hands each
               </h3>
               
@@ -1278,7 +1495,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setDisplayInDollars(false)}
                     className={`px-5 py-2 text-xs font-semibold transition-all duration-200 ${
                       !displayInDollars 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -1288,7 +1505,7 @@ const BBJDashboard: React.FC = () => {
                     onClick={() => setDisplayInDollars(true)}
                     className={`px-5 py-2 text-xs font-semibold transition-all duration-200 ${
                       displayInDollars 
-                        ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                        ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                         : 'bg-zinc-800/50 text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -1299,7 +1516,7 @@ const BBJDashboard: React.FC = () => {
 
               {/* Line Chart */}
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 mb-6">
-                <h4 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+                <h4 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                   <LineChart size={16} /> Bankroll Over Time ({simulationResults.totalTrials} trials shown)
                 </h4>
                 <SimulationLineChart results={simulationResults} />
@@ -1357,7 +1574,7 @@ const BBJDashboard: React.FC = () => {
 
               {/* Range Statistics */}
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5">
-                <h4 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider">
+                <h4 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider">
                   Outcome Range
                 </h4>
                 <div className="flex justify-between items-center flex-wrap gap-5">
@@ -1373,7 +1590,7 @@ const BBJDashboard: React.FC = () => {
                         className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-500 to-emerald-500 rounded-full opacity-60"
                       />
                       <motion.div 
-                        className="absolute top-[-4px] w-1 h-4 bg-yellow-500 rounded"
+                        className="absolute top-[-4px] w-1 h-4 bg-[#a88b46] rounded"
                         style={{
                           left: `${((simulationResults.averageProfit - simulationResults.minProfit) / (simulationResults.maxProfit - simulationResults.minProfit)) * 100}%`,
                           transform: 'translateX(-50%)'
@@ -1430,7 +1647,7 @@ const BBJDashboard: React.FC = () => {
                     className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 mt-6"
                     variants={fadeIn}
                   >
-                    <h4 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider">
+                    <h4 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider">
                       What Makes the Difference? (Top 20% vs Bottom 20%)
                     </h4>
                     
@@ -1456,7 +1673,7 @@ const BBJDashboard: React.FC = () => {
                           <div 
                             key={row.label}
                             className={`grid grid-cols-3 py-3 px-5 ${
-                              row.highlight ? 'bg-yellow-500/10 border-b border-yellow-500/20' : 
+                              row.highlight ? 'bg-[#a88b46]/10 border-b border-[#a88b46]/20' : 
                               idx < 5 ? 'border-b border-zinc-800' : ''
                             }`}
                           >
@@ -1474,11 +1691,11 @@ const BBJDashboard: React.FC = () => {
                     
                     {/* Summary */}
                     <div className="flex items-center gap-4 p-4 bg-zinc-800/30 rounded-xl mt-5 text-sm text-zinc-300">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center text-xl">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#a88b46]/20 flex items-center justify-center text-xl">
                         📊
                       </div>
                       <div>
-                        <strong className="text-yellow-500">The Gap: </strong>
+                        <strong className="text-[#a88b46]">The Gap: </strong>
                         <strong className="text-white">{formatSimValue(top20Avg.netProfit - bottom20Avg.netProfit)}</strong> difference.
                         {simulationResults.profitableTrials < simulationResults.totalTrials && simulationResults.profitableTrials > 0 && (
                           <span>
@@ -1528,7 +1745,7 @@ const BBJDashboard: React.FC = () => {
           transition={{ delay: 0.2 }}
         >
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Target size={28} className="text-yellow-500" />
+            <Target size={28} className="text-[#a88b46]" />
             <h1 className="text-2xl md:text-3xl font-bold text-white">BBJ Dashboard</h1>
           </div>
           <p className="text-center text-zinc-500 text-sm mb-8">
@@ -1540,7 +1757,7 @@ const BBJDashboard: React.FC = () => {
             className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 mb-8"
             variants={scaleIn}
           >
-            <h3 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <DollarSign size={16} /> Pool Size & Your Stakes
             </h3>
             <div className="flex gap-5 flex-wrap mb-4">
@@ -1550,7 +1767,7 @@ const BBJDashboard: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white text-lg font-semibold focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 outline-none transition-all"
+                  className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white text-lg font-semibold focus:border-[#a88b46] focus:ring-1 focus:ring-[#a88b46]/30 outline-none transition-all"
                   placeholder="e.g., 2172588"
                   value={poolSize}
                   onChange={(e) => setPoolSize(parseFloat(e.target.value) || 0)}
@@ -1567,7 +1784,7 @@ const BBJDashboard: React.FC = () => {
                       onClick={() => setSelectedStake(stake.value)}
                       className={`py-2 px-1 rounded-lg text-[10px] font-semibold transition-all duration-200 whitespace-nowrap ${
                         selectedStake === stake.value 
-                          ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                          ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                           : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-700'
                       }`}
                     >
@@ -1584,7 +1801,7 @@ const BBJDashboard: React.FC = () => {
                   onClick={() => setPoolSize(preset)}
                   className={`px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
                     poolSize === preset 
-                      ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-zinc-950' 
+                      ? 'bg-gradient-to-r from-[#a88b46] to-[#a88b46] text-zinc-950' 
                       : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-700'
                   }`}
                 >
@@ -1594,7 +1811,7 @@ const BBJDashboard: React.FC = () => {
             </div>
             <div className="flex justify-between items-center flex-wrap gap-3">
               <span className="text-xs text-zinc-500">
-                Your stake pool: <span className="text-yellow-500 font-semibold">{formatCurrency(currentEV.stakePoolSize)}</span>
+                Your stake pool: <span className="text-[#a88b46] font-semibold">{formatCurrency(currentEV.stakePoolSize)}</span>
                 <span className="text-zinc-600 ml-2">
                   ({(STAKE_OPTIONS.find(s => s.value === selectedStake)?.poolPercent || 0).toFixed(2)}% of total)
                 </span>
@@ -1643,7 +1860,7 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                 <TrendingUp size={14} /> Pool vs Breakeven
               </h3>
               <div className="mb-4">
@@ -1658,12 +1875,12 @@ const BBJDashboard: React.FC = () => {
                 <ProgressBar 
                   value={poolSize} 
                   max={BBJ_CONSTANTS.breakevenPool_usd * 1.5} 
-                  color={currentEV.isProfitable ? '#34d399' : '#D4AF37'}
+                  color={currentEV.isProfitable ? '#34d399' : '#a88b46'}
                   showLabel={false}
                 />
                 <div className="flex justify-between mt-1.5 text-[10px] text-zinc-600">
                   <span>$0</span>
-                  <span className="text-yellow-500">Breakeven</span>
+                  <span className="text-[#a88b46]">Breakeven</span>
                   <span>{formatCurrency(BBJ_CONSTANTS.breakevenPool_usd * 1.5)}</span>
                 </div>
               </div>
@@ -1674,11 +1891,11 @@ const BBJDashboard: React.FC = () => {
               className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                 <Zap size={14} /> When BBJ Hits at Your Stake
               </h3>
               <div className="text-xs text-zinc-500 mb-3">
-                Total distributed: <span className="text-yellow-500 font-semibold">{formatCurrency(currentEV.totalPayoutAtStake)}</span>
+                Total distributed: <span className="text-[#a88b46] font-semibold">{formatCurrency(currentEV.totalPayoutAtStake)}</span>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center bg-emerald-500/10 rounded-xl p-3">
@@ -1711,7 +1928,7 @@ const BBJDashboard: React.FC = () => {
             className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6"
             variants={fadeIn}
           >
-            <h3 className="text-yellow-500 mb-5 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-[#a88b46] mb-5 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
               <TrendingUp size={16} /> EV at Different Pool Sizes ({STAKE_OPTIONS.find(s => s.value === selectedStake)?.label})
             </h3>
             
@@ -1731,7 +1948,7 @@ const BBJDashboard: React.FC = () => {
                     <tr 
                       key={row.pool}
                       className={`border-b border-zinc-800/50 ${
-                        row.pool === poolSize ? 'bg-yellow-500/10' : ''
+                        row.pool === poolSize ? 'bg-[#a88b46]/10' : ''
                       }`}
                     >
                       <td className="py-3 px-2 text-sm text-white font-medium">
@@ -1777,7 +1994,7 @@ const BBJDashboard: React.FC = () => {
           transition={{ delay: 0.25 }}
         >
           <div className="flex items-center justify-center gap-3 mb-7">
-            <AlertTriangle size={24} className="text-yellow-500" />
+            <AlertTriangle size={24} className="text-[#a88b46]" />
             <h2 className="text-xl font-semibold text-white">Reality Check</h2>
           </div>
 
@@ -1797,17 +2014,17 @@ const BBJDashboard: React.FC = () => {
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 To WIN the main jackpot (lose with AAATT or better), you need to play <strong className="text-white">~{PROBABILITY_DATA.handsToWinJackpot.toLocaleString()} hands</strong>. 
-                At 500 hands/hour, that's <strong className="text-white">{Math.round(PROBABILITY_DATA.handsToWinJackpot / 500).toLocaleString()} hours</strong> — 
+                At 500 hands/hour, that's <strong className="text-white">{Math.round(PROBABILITY_DATA.handsToWinJackpot / 500).toLocaleString()} hours</strong> , 
                 or about <strong className="text-white">{Math.round(PROBABILITY_DATA.handsToWinJackpot / 500 / 8)} days</strong> of 8-hour sessions.
               </p>
             </motion.div>
 
             {/* Insight 2 */}
             <motion.div 
-              className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6"
+              className="bg-[#a88b46]/10 border border-[#a88b46]/20 rounded-2xl p-6"
               variants={scaleIn}
             >
-              <h3 className="text-yellow-500 text-sm font-semibold mb-3">
+              <h3 className="text-[#a88b46] text-sm font-semibold mb-3">
                 Most Players Never Win It
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
@@ -1826,7 +2043,7 @@ const BBJDashboard: React.FC = () => {
                 Table Share is Your Best Bet
               </h3>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                You'll get a table share once every <strong className="text-white">~{PROBABILITY_DATA.handsToGetTableShare.toLocaleString()} hands</strong> — 
+                You'll get a table share once every <strong className="text-white">~{PROBABILITY_DATA.handsToGetTableShare.toLocaleString()} hands</strong> , 
                 about <strong className="text-white">4x more often</strong> than winning the main prize. 
                 It's small ({formatCurrency(currentEV.tableSharePayout)} at your stake), but it's something!
               </p>
@@ -1835,7 +2052,7 @@ const BBJDashboard: React.FC = () => {
 
           <div className="mt-6 p-5 bg-zinc-900/50 rounded-2xl border border-zinc-800 text-center">
             <p className="text-zinc-400 text-sm leading-relaxed">
-              <strong className="text-yellow-500">Bottom Line:</strong> At current pool levels, you're paying <strong className="text-red-400">{BBJ_CONSTANTS.bbPer100Fees.toFixed(2)} bb/100</strong> in fees. 
+              <strong className="text-[#a88b46]">Bottom Line:</strong> At current pool levels, you're paying <strong className="text-red-400">{BBJ_CONSTANTS.bbPer100Fees.toFixed(2)} bb/100</strong> in fees. 
               Your expected return is <strong className={currentEV.netBBper100 >= 0 ? 'text-emerald-400' : 'text-red-400'}>{currentEV.netBBper100 >= 0 ? '+' : ''}{currentEV.netBBper100.toFixed(3)} bb/100</strong>. 
               {currentEV.isProfitable 
                 ? " The pool is high enough to make BBJ tables mathematically +EV!"
@@ -1857,7 +2074,7 @@ const BBJDashboard: React.FC = () => {
             Data based on 42.1M verified hands from GGPoker (NL100+) • 624 BBJ triggers analyzed
           </p>
           <p className="mt-2">
-            Built with 🌮 by FreeNachos
+            Built with 🌮 by Freenachos
           </p>
         </motion.div>
       </div>
