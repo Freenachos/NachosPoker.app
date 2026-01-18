@@ -3285,10 +3285,10 @@ The 3-month program consists of:
               letterSpacing: '-0.025em',
               fontFamily: 'Manrope, Inter, sans-serif'
             }}>
-              Proof in the <span style={{ 
+              My Thought Process <span style={{ 
                 color: '#A78A43',
                 textShadow: '0 0 60px rgba(167, 138, 67, 0.4)'
-              }}>Process.</span>
+              }}>in Action.</span>
             </h2>
             <p style={{
               fontSize: '18px',
@@ -3298,7 +3298,7 @@ The 3-month program consists of:
               lineHeight: 1.85,
               fontWeight: '400'
             }}>
-              Watch the high-stakes logic in action. No theory—just raw execution and population exploits.
+              Before you commit, you need to know if our ways of thinking actually align. These videos give you a clear look at how I break down the game and use data to find an edge. If this approach makes sense to you, you're in the right place.
             </p>
           </div>
 
