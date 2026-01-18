@@ -50,6 +50,7 @@ interface BBJConstants {
   winnerSharePercent: number;
   loserSharePercent: number;
   tableSharePercent: number;
+  stakeFundCoefficient: number;
 }
 
 interface EVResult {
@@ -130,6 +131,7 @@ const BBJ_CONSTANTS: BBJConstants = {
   winnerSharePercent: 10,
   loserSharePercent: 3,
   tableSharePercent: 0.8,
+  stakeFundCoefficient: 0.026658, // Stake Fund = Pool × BB × this coefficient
 };
 
 const STAKE_POOL_PERCENTAGES: Record<string, number> = {
@@ -349,19 +351,28 @@ const BBJDashboard: React.FC = () => {
 
   const calculateEV = (pool: number, stake: string = selectedStake): EVResult => {
     const stakeOption = STAKE_OPTIONS.find(s => s.value === stake) || STAKE_OPTIONS[4];
-    const stakePoolSize = pool * (stakeOption.poolPercent / 100);
+    const bbValue = stakeOption.bbValue;
     const avgTablePlayers = BBJ_CONSTANTS.avgPlayersPerTable;
     const otherPlayers = avgTablePlayers - 2;
     
-    const jackpotWinnerPayout = stakePoolSize * 0.10;
-    const opponentPayout = stakePoolSize * 0.03;
-    const tableSharePayout = stakePoolSize * 0.008;
-    const totalPayoutAtStake = jackpotWinnerPayout + opponentPayout + (tableSharePayout * otherPlayers);
+    // New formula: Stake Fund = Pool × BB × coefficient
+    const stakeFund = pool * bbValue * BBJ_CONSTANTS.stakeFundCoefficient;
     
-    const bbValue = stakeOption.bbValue;
+    // Individual payouts from the Stake Fund
+    const jackpotWinnerPayout = stakeFund * 0.10;  // 10% of Fund
+    const opponentPayout = stakeFund * 0.03;       // 3% of Fund
+    const tableSharePayout = stakeFund * 0.008;   // 0.8% of Fund per person
+    const totalPayoutAtStake = stakeFund * 0.162; // 16.2% of Fund (10% + 3% + 4×0.8%)
+    
+    // Convert to BBs
     const jackpotWinnerBB = jackpotWinnerPayout / bbValue;
     const opponentBB = opponentPayout / bbValue;
     const tableShareBB = tableSharePayout / bbValue;
+    
+    // Convert to buy-ins: Prize / (BB × 100)
+    const jackpotWinnerBuyins = jackpotWinnerPayout / (bbValue * 100);
+    const opponentBuyins = opponentPayout / (bbValue * 100);
+    const tableShareBuyins = tableSharePayout / (bbValue * 100);
     
     const expectedPayoutPerBBJ = 
       (1 / avgTablePlayers) * jackpotWinnerBB +
@@ -392,7 +403,7 @@ const BBJDashboard: React.FC = () => {
       opponentPayout,
       tableSharePayout,
       totalPayoutAtStake,
-      stakePoolSize,
+      stakePoolSize: stakeFund, // Now represents the Stake Fund
     };
   };
 
@@ -401,13 +412,16 @@ const BBJDashboard: React.FC = () => {
     const bbValue = stakeOption.bbValue;
     const lambda = hands / BBJ_CONSTANTS.handsPerBBJ;
     const totalFeesPaid = (hands / 100) * BBJ_CONSTANTS.bbPer100Fees;
-    const stakePoolSize = pool * (stakeOption.poolPercent / 100);
     const avgTablePlayers = BBJ_CONSTANTS.avgPlayersPerTable;
     const otherPlayers = avgTablePlayers - 2;
     
-    const jackpotWinnerBB = (stakePoolSize * 0.10) / bbValue;
-    const opponentBB = (stakePoolSize * 0.03) / bbValue;
-    const tableShareBB = (stakePoolSize * 0.008) / bbValue;
+    // New formula: Stake Fund = Pool × BB × coefficient
+    const stakeFund = pool * bbValue * BBJ_CONSTANTS.stakeFundCoefficient;
+    
+    // Individual payouts in BBs
+    const jackpotWinnerBB = (stakeFund * 0.10) / bbValue;
+    const opponentBB = (stakeFund * 0.03) / bbValue;
+    const tableShareBB = (stakeFund * 0.008) / bbValue;
     
     const expectedPayoutPerBBJ = 
       (1 / avgTablePlayers) * jackpotWinnerBB +
@@ -490,13 +504,16 @@ const BBJDashboard: React.FC = () => {
   const runMonteCarloSimulation = useCallback(() => {
     const stakeOption = STAKE_OPTIONS.find(s => s.value === selectedStake) || STAKE_OPTIONS[4];
     const bbValue = stakeOption.bbValue;
-    const stakePoolSize = poolSize * (stakeOption.poolPercent / 100);
     const avgTablePlayers = BBJ_CONSTANTS.avgPlayersPerTable;
     const otherPlayers = avgTablePlayers - 2;
     
-    const jackpotWinnerBB = (stakePoolSize * 0.10) / bbValue;
-    const opponentBB = (stakePoolSize * 0.03) / bbValue;
-    const tableShareBB = (stakePoolSize * 0.008) / bbValue;
+    // New formula: Stake Fund = Pool × BB × coefficient
+    const stakeFund = poolSize * bbValue * BBJ_CONSTANTS.stakeFundCoefficient;
+    
+    // Individual payouts in BBs
+    const jackpotWinnerBB = (stakeFund * 0.10) / bbValue;
+    const opponentBB = (stakeFund * 0.03) / bbValue;
+    const tableShareBB = (stakeFund * 0.008) / bbValue;
     
     const bbjProbability = 1 / BBJ_CONSTANTS.handsPerBBJ;
     const feesPer100 = BBJ_CONSTANTS.bbPer100Fees;
@@ -1833,7 +1850,7 @@ const BBJDashboard: React.FC = () => {
             </div>
             <div className="flex justify-between items-center flex-wrap gap-3">
               <span className="text-xs text-zinc-500">
-                Your stake pool: <span className="text-[#a88b46] font-semibold">{formatCurrency(currentEV.stakePoolSize)}</span>
+                Your stake fund: <span className="text-[#a88b46] font-semibold">{formatCurrency(currentEV.stakePoolSize)}</span>
                 <span className="text-zinc-600 ml-2">
                   ({(STAKE_OPTIONS.find(s => s.value === selectedStake)?.poolPercent || 0).toFixed(2)}% of total)
                 </span>
@@ -1960,7 +1977,7 @@ const BBJDashboard: React.FC = () => {
                 <thead>
                   <tr className="border-b border-zinc-700">
                     <th className="py-3 px-2 text-left text-[11px] text-zinc-500 font-semibold">Total Pool</th>
-                    <th className="py-3 px-2 text-right text-[11px] text-zinc-500 font-semibold">Your Stake Pool</th>
+                    <th className="py-3 px-2 text-right text-[11px] text-zinc-500 font-semibold">Your Stake Fund</th>
                     <th className="py-3 px-2 text-right text-[11px] text-zinc-500 font-semibold">Jackpot Win</th>
                     <th className="py-3 px-2 text-right text-[11px] text-zinc-500 font-semibold">Net BB/100</th>
                     <th className="py-3 px-2 text-center text-[11px] text-zinc-500 font-semibold">Status</th>
