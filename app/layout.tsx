@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'NachosPoker.App',
-  description: 'Free poker tools, calculators, and strategy resources',
+  title: 'Freenachos.Poker',
+  description: 'Elite private poker coaching. Master high-stakes theory and exploit the population with data-driven strategies.',
 };
 
 export default function RootLayout({
