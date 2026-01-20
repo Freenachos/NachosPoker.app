@@ -338,13 +338,13 @@ const EVGauge = ({ value, min, max }: { value: number; min: number; max: number 
   );
 };
 
-// BBJ Distribution Barcode Graph - Weather-style visualization
+// BBJ Distribution Barcode Graph - True barcode style visualization
 const BBJBarcodeGraph = () => {
   const [hoveredBin, setHoveredBin] = useState<number | null>(null);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
   
-  // Aggregate intervals into bins for display (target ~200 bins for good visual)
-  const BINS_COUNT = 200;
+  // Aggregate intervals into bins for display (target ~300 bins for good visual density)
+  const BINS_COUNT = 300;
   const intervalsPerBin = Math.ceil(BBJ_INTERVALS.length / BINS_COUNT);
   
   const aggregatedBins = useMemo(() => {
@@ -374,26 +374,18 @@ const BBJBarcodeGraph = () => {
   
   const maxBBJ = Math.max(...aggregatedBins.map(b => b.bbjCount));
   
+  // True barcode: color intensity based on BBJ count (0=grey, more BBJs = brighter yellow)
   const getBarColor = (count: number): string => {
-    if (count === 0) return 'rgba(39, 39, 42, 0.6)';
-    const intensity = count / maxBBJ;
-    if (intensity < 0.25) return '#a88b46';
-    if (intensity < 0.5) return '#c9a84c';
-    if (intensity < 0.75) return '#e5c158';
-    return '#fcd34d';
-  };
-  
-  const getBarOpacity = (count: number): number => {
-    if (count === 0) return 0.3;
-    return 0.6 + (count / maxBBJ) * 0.4;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent, binIndex: number) => {
-    const rect = (e.currentTarget as HTMLElement).closest('.barcode-container')?.getBoundingClientRect();
-    if (rect) {
-      setTooltipPos({ x: e.clientX - rect.left, y: 0 });
-    }
-    setHoveredBin(binIndex);
+    if (count === 0) return '#3f3f46'; // zinc-700 grey
+    if (count === 1) return '#a88b46'; // base gold
+    if (count === 2) return '#b9994d'; // slightly brighter
+    if (count === 3) return '#c9a854'; // brighter
+    if (count === 4) return '#d9b65b'; // more bright
+    if (count === 5) return '#e5c463'; // even brighter
+    if (count === 6) return '#efd26b'; // bright yellow-gold
+    if (count === 7) return '#f5dc73'; // brighter
+    if (count >= 8) return '#fde047'; // bright yellow
+    return '#fde047';
   };
 
   const hoveredData = hoveredBin !== null ? aggregatedBins[hoveredBin] : null;
@@ -418,99 +410,78 @@ const BBJBarcodeGraph = () => {
   }, []);
 
   return (
-    <div className="w-full">
-      {/* Stats Row */}
-      <div className="flex flex-wrap justify-between items-center mb-3 text-[10px] text-zinc-500 gap-2">
-        <span>{(totalHands / 1000000).toFixed(1)}M hands • {totalBBJs.toLocaleString()} BBJs</span>
+    <div className="w-full mt-6">
+      {/* Header */}
+      <div className="flex flex-wrap justify-between items-center mb-2 text-[10px] text-zinc-500 gap-2">
+        <span className="text-zinc-400 font-medium">BBJ Distribution Timeline</span>
         <div className="flex gap-4">
-          <span>Hit rate: <span className="text-[#a88b46]">{((intervalsWithBBJ / BBJ_INTERVALS.length) * 100).toFixed(1)}%</span> of 50K intervals</span>
-          <span>Longest drought: <span className="text-red-400">{(longestDrought * 50000 / 1000).toFixed(0)}K hands</span></span>
+          <span>Hit rate: <span className="text-[#a88b46]">{((intervalsWithBBJ / BBJ_INTERVALS.length) * 100).toFixed(1)}%</span></span>
+          <span>Max drought: <span className="text-zinc-400">{(longestDrought * 50000 / 1000000).toFixed(1)}M hands</span></span>
         </div>
       </div>
       
       {/* Barcode Container */}
       <div 
-        className="barcode-container relative w-full h-20 bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800"
+        ref={containerRef}
+        className="relative w-full h-12 bg-zinc-900/30 rounded-lg overflow-hidden border border-zinc-800/50"
         onMouseLeave={() => setHoveredBin(null)}
       >
-        {/* Bars */}
-        <div className="flex h-full items-end">
+        {/* Bars - true barcode style: all full height, color varies */}
+        <div className="flex h-full">
           {aggregatedBins.map((bin) => (
             <div
               key={bin.binIndex}
-              className="flex-1 h-full flex items-end cursor-pointer"
-              onMouseMove={(e) => handleMouseMove(e, bin.binIndex)}
-            >
-              <div
-                className="w-full transition-all duration-100"
-                style={{
-                  height: bin.bbjCount === 0 ? '15%' : `${20 + (bin.bbjCount / maxBBJ) * 80}%`,
-                  backgroundColor: getBarColor(bin.bbjCount),
-                  opacity: hoveredBin === bin.binIndex ? 1 : getBarOpacity(bin.bbjCount),
-                  transform: hoveredBin === bin.binIndex ? 'scaleY(1.1)' : 'scaleY(1)',
-                  transformOrigin: 'bottom',
-                  boxShadow: bin.bbjCount > 0 && hoveredBin === bin.binIndex 
-                    ? `0 0 10px ${getBarColor(bin.bbjCount)}` 
-                    : 'none'
-                }}
-              />
-            </div>
+              className="flex-1 h-full cursor-pointer transition-opacity duration-75"
+              onMouseEnter={() => setHoveredBin(bin.binIndex)}
+              style={{
+                backgroundColor: getBarColor(bin.bbjCount),
+                opacity: hoveredBin === null ? 1 : hoveredBin === bin.binIndex ? 1 : 0.4,
+              }}
+            />
           ))}
         </div>
         
-        {/* Tooltip */}
+        {/* Tooltip - positioned above the bar */}
         {hoveredData && (
           <div 
-            className="absolute z-10 pointer-events-none bg-zinc-950/95 border border-zinc-700 rounded-lg px-3 py-2 text-xs shadow-xl backdrop-blur-sm whitespace-nowrap"
+            className="absolute z-50 pointer-events-none bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-xs shadow-2xl"
             style={{ 
-              left: Math.min(Math.max(tooltipPos.x - 60, 10), window.innerWidth - 200),
-              top: -65,
+              left: `${Math.min(Math.max((hoveredBin || 0) / aggregatedBins.length * 100, 10), 85)}%`,
+              bottom: '100%',
+              marginBottom: '8px',
+              transform: 'translateX(-50%)',
             }}
           >
-            <div className="text-zinc-400 mb-1">
-              ~{((hoveredData.startHand + hoveredData.endHand) / 2 / 1000000).toFixed(1)}M hands mark
+            <div className="text-zinc-400 text-[11px] font-medium mb-1">
+              {(hoveredData.startHand / 1000000).toFixed(1)}M – {(hoveredData.endHand / 1000000).toFixed(1)}M hands
             </div>
-            <div className="text-[10px] text-zinc-500 mb-1">
-              Hands {(hoveredData.startHand / 1000).toFixed(0)}K - {(hoveredData.endHand / 1000).toFixed(0)}K
-            </div>
-            <div className={`font-semibold ${hoveredData.bbjCount > 0 ? 'text-[#a88b46]' : 'text-zinc-500'}`}>
-              {hoveredData.bbjCount === 0 ? 'No BBJ in this range' : `${hoveredData.bbjCount} BBJ${hoveredData.bbjCount > 1 ? 's' : ''}`}
+            <div className={`font-bold ${hoveredData.bbjCount > 0 ? 'text-[#a88b46]' : 'text-zinc-500'}`}>
+              {hoveredData.bbjCount === 0 ? 'No BBJ' : `${hoveredData.bbjCount} BBJ${hoveredData.bbjCount > 1 ? 's' : ''}`}
             </div>
           </div>
         )}
-        
-        {/* X-axis labels */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 pb-0.5 text-[8px] text-zinc-600 pointer-events-none">
-          <span>0</span>
-          <span>{(totalHands / 4 / 1000000).toFixed(0)}M</span>
-          <span>{(totalHands / 2 / 1000000).toFixed(0)}M</span>
-          <span>{(totalHands * 3 / 4 / 1000000).toFixed(0)}M</span>
-          <span>{(totalHands / 1000000).toFixed(0)}M</span>
-        </div>
+      </div>
+      
+      {/* X-axis labels */}
+      <div className="flex justify-between mt-1 text-[9px] text-zinc-600">
+        <span>0</span>
+        <span>45M</span>
+        <span>89M</span>
+        <span>134M</span>
+        <span>178M hands</span>
       </div>
       
       {/* Legend */}
-      <div className="flex justify-center gap-4 mt-3 text-[10px] text-zinc-500">
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(39, 39, 42, 0.6)' }} />
-          <span>0 BBJ</span>
+      <div className="flex justify-center items-center gap-1 mt-2">
+        <span className="text-[9px] text-zinc-600 mr-1">0 BBJ</span>
+        <div className="flex h-2 rounded-sm overflow-hidden">
+          <div className="w-4 h-full" style={{ backgroundColor: '#3f3f46' }} />
+          <div className="w-4 h-full" style={{ backgroundColor: '#a88b46' }} />
+          <div className="w-4 h-full" style={{ backgroundColor: '#c9a854' }} />
+          <div className="w-4 h-full" style={{ backgroundColor: '#e5c463' }} />
+          <div className="w-4 h-full" style={{ backgroundColor: '#fde047' }} />
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#a88b46' }} />
-          <span>1-2 BBJ</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#c9a84c' }} />
-          <span>3-5 BBJ</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#e5c158' }} />
-          <span>6-8 BBJ</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#fcd34d' }} />
-          <span>9+ BBJ</span>
-        </div>
+        <span className="text-[9px] text-zinc-600 ml-1">8+ BBJ</span>
       </div>
     </div>
   );
@@ -1521,6 +1492,9 @@ const BBJDashboard: React.FC = () => {
                   <div className="text-sm font-bold text-[#a88b46]">1 in {PROBABILITY_DATA.handsToSeeOneBBJ.toLocaleString()}</div>
                 </div>
               </div>
+
+              {/* BBJ Distribution Barcode */}
+              <BBJBarcodeGraph />
             </div>
           </div>
         </motion.div>
@@ -2154,20 +2128,6 @@ const BBJDashboard: React.FC = () => {
                 </div>
               </div>
             </motion.div>
-          </motion.div>
-
-          {/* BBJ Distribution Barcode */}
-          <motion.div 
-            className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 mb-8"
-            variants={scaleIn}
-          >
-            <h3 className="text-[#a88b46] mb-4 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-              <BarChart3 size={14} /> BBJ Distribution Timeline
-            </h3>
-            <p className="text-xs text-zinc-500 mb-4">
-              Each bar represents 50,000 hands. Brighter = more BBJs hit. Visualizes the clustering and droughts in our {PROBABILITY_DATA.totalHandsAnalyzed.toLocaleString()} hand sample.
-            </p>
-            <BBJBarcodeGraph />
           </motion.div>
 
           {/* EV by Pool Size Table */}
