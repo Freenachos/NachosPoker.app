@@ -56,6 +56,13 @@ const IconExternalLink = ({ size = 12 }) => (
   </svg>
 );
 
+const IconNewsletter = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
+  </svg>
+);
+
 const NachosPokerNavBar = () => {
   const pathname = usePathname();
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -424,6 +431,56 @@ const NachosPokerNavBar = () => {
         }
         
         /* ============================================
+           NEWSLETTER LINK
+           Subtle style matching nav aesthetic
+           ============================================ */
+        .np-nav-link {
+          position: relative;
+          padding: 10px 16px;
+          color: rgba(255, 255, 255, 0.7);
+          cursor: pointer;
+          border-radius: 10px;
+          transition: all 0.25s ease;
+          font-weight: 500;
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
+          text-decoration: none;
+          border: 1px solid transparent;
+          background: transparent;
+        }
+        
+        .np-nav-link svg {
+          color: #a88b46;
+          opacity: 0.6;
+          transition: all 0.25s ease;
+        }
+        
+        .np-nav-link:hover {
+          color: #a88b46;
+          background: rgba(168, 139, 70, 0.08);
+          border-color: rgba(168, 139, 70, 0.25);
+        }
+        
+        .np-nav-link:hover svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 4px rgba(168, 139, 70, 0.5));
+        }
+        
+        .np-nav-link.active {
+          color: #a88b46;
+          background: rgba(168, 139, 70, 0.12);
+          border-color: rgba(168, 139, 70, 0.3);
+        }
+        
+        .np-nav-link.active svg {
+          opacity: 1;
+          filter: drop-shadow(0 0 6px rgba(168, 139, 70, 0.6));
+        }
+        
+        /* ============================================
            RESPONSIVE BREAKPOINTS
            ============================================ */
         @media (max-width: 768px) {
@@ -445,6 +502,10 @@ const NachosPokerNavBar = () => {
             padding: 8px 12px;
             font-size: 12px;
           }
+          .np-nav-link {
+            padding: 8px 12px;
+            font-size: 12px;
+          }
         }
         
         @media (max-width: 600px) {
@@ -463,7 +524,8 @@ const NachosPokerNavBar = () => {
           }
           .np-nav-cta span,
           .np-tools-btn span:first-of-type,
-          .np-nav-external span {
+          .np-nav-external span,
+          .np-nav-link span {
             display: none;
           }
           .np-nav-cta {
@@ -473,6 +535,9 @@ const NachosPokerNavBar = () => {
             padding: 10px 12px;
           }
           .np-nav-external {
+            padding: 10px 12px;
+          }
+          .np-nav-link {
             padding: 10px 12px;
           }
         }
@@ -557,6 +622,15 @@ const NachosPokerNavBar = () => {
               <span>CFP</span>
               <IconExternalLink size={13} />
             </a>
+            
+            {/* Newsletter Link */}
+            <Link
+              href="/newsletter"
+              className={`np-nav-link ${isActive('/newsletter') ? 'active' : ''}`}
+            >
+              <IconNewsletter size={15} />
+              <span>Newsletter</span>
+            </Link>
           </div>
         </div>
       </nav>
